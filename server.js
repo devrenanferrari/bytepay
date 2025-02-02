@@ -17,12 +17,13 @@ const port = 3004;  // Ou qualquer outra porta de sua preferência
 
 const { Pool } = require('pg');
 
-// Configuração do PostgreSQL para nuvem (Railway)
+// Configuração do PostgreSQL
 const pool = new Pool({
-  connectionString: 'postgresql://postgres:rwucRgVMkTFFtMeBBamGWlXPNLdLbnIN@postgres.railway.internal:5432/railway',
-  ssl: {
-    rejectUnauthorized: false
-  }
+  user: 'postgres',           // Substitua pelo seu usuário do PostgreSQL
+  host: 'localhost',
+  database: 'bytepay',
+  password: 'admin',         // Substitua pela sua senha do PostgreSQL
+  port: 5432,
 });
 
 // Middleware
