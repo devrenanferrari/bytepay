@@ -15,13 +15,14 @@ const app = express();
 app.use(express.static('public')); // Servir arquivos estáticos
 const port = 3004;  // Ou qualquer outra porta de sua preferência
 
-// Configuração do PostgreSQL
+const { Pool } = require('pg');
+
+// Configuração do PostgreSQL para nuvem (Railway)
 const pool = new Pool({
-  user: 'postgres',           // Substitua pelo seu usuário do PostgreSQL
-  host: 'localhost',
-  database: 'bytepay',
-  password: 'admin',         // Substitua pela sua senha do PostgreSQL
-  port: 5432,
+  connectionString: 'postgresql://postgres:rwucRgVMkTFFtMeBBamGWlXPNLdLbnIN@postgres.railway.internal:5432/railway',
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 // Middleware
