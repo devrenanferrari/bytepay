@@ -1,0 +1,58 @@
+{%- comment -%}
+BUY BUTTONS
+----------------------------------------------------------------------------------------------------------------
+{%- endcomment -%}
+{%- when 'buy_buttons' -%}
+  {%- if request.page_type != 'password' -%}
+    <div class="product-form__buy-buttons" {{ block.shopify_attributes }}>
+      {%- form 'product', product, is: 'product-form', id: product_form_id -%}
+        <input type="hidden" disabled name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+        <product-payment-container form-id="{{ product_form_id }}" {% if update_url %}id="MainPaymentContainer"{% endif %} class="product-form__payment-container" {{ block.shopify_attributes }}>
+          <button id="StickyAddToCart" type="button" is="loader-button" class="product-form__add-button button {% unless product.selected_or_first_available_variant.available %}button--ternary{% else %}{% if block.settings.show_payment_button and template.suffix != 'quick-buy-popover' %}button--secondary{% else %}button--primary{% endif %}{% endunless %} button--full" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+            {%- if product.selected_or_first_available_variant.available -%}
+              {%- if product.template_suffix == 'pre-order' -%}
+                {{- 'product.form.pre_order' | t -}}
+              {%- else -%}
+                {{- 'product.form.add_to_cart' | t -}}
+              {%- endif -%}
+            {%- else -%}
+              {{- 'product.form.sold_out' | t -}}
+            {%- endif -%}
+          </button>
+
+          <script type="text/javascript">
+            document.getElementById("StickyAddToCart").addEventListener("click", function() {
+              var variantId = "{{ product.selected_or_first_available_variant.id }}";
+              var quantity = 1;  // Ajuste conforme a necessidade
+              var checkoutToken = "some_token";  // Adicione a lógica para capturar o token do checkout, se necessário
+
+              // URL do checkout desejado
+              var url = "https://checkout.com.br/teste/" + variantId + "/" + quantity + "/" + checkoutToken;
+
+              // Redirecionar para a URL gerada
+              window.location.href = url;
+            });
+          </script>
+
+          {%- if block.settings.show_payment_button and template.suffix != 'quick-buy-popover' -%}
+            {{ form | payment_button }}
+
+            {%- unless product.selected_or_first_available_variant.available -%}
+             
+            {%- endunless -%}
+          {%- endif -%}
+        </product-payment-container>
+      {%- endform -%}
+    </div>
+  {%- endif -%}
+
+  {%- if template.suffix != 'quick-buy-popover' -%}
+    <store-pickup form-id="{{ product_form_id }}" class="product-form__store-availability-container">
+      {%- render 'store-availability', product_variant: product.selected_or_first_available_variant -%}
+    </store-pickup>
+  {%- endif -%}
+{%- endcase -%}
+{%- endfor -%}
+
+{%- comment -%}

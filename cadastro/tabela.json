@@ -1,0 +1,92 @@
+[
+    {
+        "user_id": 1,
+        "email": "gomesrenan514@gmail.com",
+        "store": "byte",
+        "password": "$2a$10$5JcKSYnN0qXraV6S6ShKI.ufGPP/fhQZzPtedb6eWMUWe7JDLp7jy",
+        "created_at": "2025-01-18T11:41:51.12317",
+        "updated_at": "2025-01-18T11:41:51.12317",
+        "username": "renan"
+    },
+    {
+        "user_id": 2,
+        "email": "marcela@r.com",
+        "store": "byte1",
+        "password": "$2a$10$N4Gm67rRsOqyfeZk/x546eKG0gvNVUGgCu3bYCmghzOronnnnMgDi",
+        "created_at": "2025-01-18T11:47:12.174377",
+        "updated_at": "2025-01-18T11:47:12.174377",
+        "username": "admin"
+    },
+    {
+        "user_id": 3,
+        "email": "brandon@g.com",
+        "store": "lojatal",
+        "password": "$2a$10$CiFvy8dJu8N.YFBaV19CB.6tj2dA7hszwgdghdq8CzMpAawpBCUoG",
+        "created_at": "2025-01-18T11:51:17.929982",
+        "updated_at": "2025-01-18T11:51:17.929982",
+        "username": "brandon"
+    },
+    {
+        "user_id": 4,
+        "email": "teste@teste.com",
+        "store": "teste",
+        "password": "$2a$10$eqlyD633wstfD2SWtoUToOhTrLaZ0nxbGAMPQ1KMe.GbeSW2M8equ",
+        "created_at": "2025-01-18T12:20:36.933038",
+        "updated_at": "2025-01-18T12:20:36.933038",
+        "username": "testeteste"
+    },
+    {
+        "user_id": 5,
+        "email": "usuario1@exemplo.com",
+        "store": "Loja Exemplo 1",
+        "password": "senha123",
+        "created_at": "2025-01-18T12:28:25.717501",
+        "updated_at": "2025-01-18T12:28:25.717501",
+        "username": "usuario1"
+    },
+    {
+        "user_id": 6,
+        "email": "usuario2@exemplo.com",
+        "store": "Loja Exemplo 2",
+        "password": "senha456",
+        "created_at": "2025-01-18T12:28:25.717501",
+        "updated_at": "2025-01-18T12:28:25.717501",
+        "username": "usuario2"
+    },
+    {
+        "user_id": 7,
+        "email": "usuario3@exemplo.com",
+        "store": "Loja Exemplo 3",
+        "password": "senha789",
+        "created_at": "2025-01-18T12:28:25.717501",
+        "updated_at": "2025-01-18T12:28:25.717501",
+        "username": "usuario3"
+    },
+    {
+        "user_id": 8,
+        "email": "usuario4@exemplo.com",
+        "store": "Loja Exemplo 4",
+        "password": "senha101",
+        "created_at": "2025-01-18T12:28:25.717501",
+        "updated_at": "2025-01-18T12:28:25.717501",
+        "username": "usuario4"
+    },
+    {
+        "user_id": 9,
+        "email": "usuario5@exemplo.com",
+        "store": "Loja Exemplo 5",
+        "password": "senha202",
+        "created_at": "2025-01-18T12:28:25.717501",
+        "updated_at": "2025-01-18T12:28:25.717501",
+        "username": "usuario5"
+    },
+    {
+        "user_id": 10,
+        "email": "marcelo@marcelo.com",
+        "store": "loja do marcelo",
+        "password": "$2a$10$bmbAZzAn58q9/Klm.G2OcuyHxOXURqZLddeKkiwZk67JnHwHkc4wi",
+        "created_at": "2025-01-18T13:56:58.462094",
+        "updated_at": "2025-01-18T13:56:58.462094",
+        "username": "marcelo"
+    }
+]

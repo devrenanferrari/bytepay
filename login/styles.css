@@ -1,0 +1,110 @@
+/* Estilo global */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url('background-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #fff;
+}
+
+/* Container principal */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+/* Logo */
+.logo {
+    margin-bottom: 0px; /* Espaço para melhorar a separação */
+}
+
+/* Ajuste da logo */
+.logo img {
+    max-width: 180px; /* Define uma largura máxima */
+    height: 120px;    /* Altura fixa */
+    object-fit: contain;
+}
+
+/* Título */
+.container h2 {
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+    color: #00ffcc;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Inputs */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px; /* Espaçamento geral entre o grupo de inputs */
+}
+
+.input-group input {
+    margin-bottom: 15px; /* Espaçamento individual entre inputs */
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #222;
+    color: #fff;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.input-group input::placeholder {
+    color: #aaa;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #00ffcc;
+}
+
+/* Botão de login */
+.btn {
+    padding: 12px;
+    background: #4bc0ff;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+    background: #00ffcc;
+    transform: scale(1.05);
+}
+
+/* Link de login */
+.login-link {
+    margin-top: 20px; /* Espaçamento maior abaixo do botão */
+    font-size: 0.9rem;
+}
+
+.login-link a {
+    color: #4bc0ff;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}

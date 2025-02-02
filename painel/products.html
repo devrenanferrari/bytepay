@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos Loja</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 20px;
+    }
+    .product-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin: 10px;
+      width: 250px;
+      text-align: center;
+      padding: 20px;
+    }
+    .product-card img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .product-card h2 {
+      font-size: 18px;
+      color: #333;
+    }
+    .product-card p {
+      font-size: 16px;
+      color: #777;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin: 20px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Produtos da Loja</h1>
+</header>
+
+<div class="product-container" id="productContainer">
+  <!-- Produtos serão carregados aqui -->
+</div>
+
+<button id="loadMoreBtn">Atualizar Produtos</button>
+
+<script>
+  // Função para buscar os produtos
+  const fetchProducts = async () => {
+    try {
+      // Obtém o token de autenticação do localStorage
+      const token = localStorage.getItem('authToken'); // Substitua 'authToken' pelo nome real do seu token no localStorage
+
+      if (!token) {
+        console.log('Token não encontrado! Autenticação necessária.');
+        return;
+      }
+
+      const response = await fetch('/api/products', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho
+          'Content-Type': 'application/json', // Define o tipo de conteúdo para JSON
+        },
+      });
+
+      if (!response.ok) {
+        console.log('Erro ao listar os produtos:', response.statusText);
+        return;
+      }
+
+      const data = await response.json();
+      const productsContainer = document.getElementById('productContainer');
+      
+      // Limpa a tela antes de adicionar novos produtos
+      productsContainer.innerHTML = '';
+
+      console.log(`Produtos encontrados: ${data.length}`);
+      
+      // Exibindo informações dos produtos
+      data.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card');
+        
+        const productName = document.createElement('h2');
+        productName.textContent = product.name;
+        
+        const productPrice = document.createElement('p');
+        productPrice.textContent = `Preço: R$ ${product.price}`;
+        
+        const productImage = document.createElement('img');
+        productImage.src = 'https://via.placeholder.com/250'; // Adicionar imagem se disponível no back-end
+        productImage.alt = product.name;
+
+        productCard.appendChild(productImage);
+        productCard.appendChild(productName);
+        productCard.appendChild(productPrice);
+        
+        productsContainer.appendChild(productCard);
+      });
+    } catch (error) {
+      console.error('Erro ao fazer a requisição:', error);
+    }
+  };
+
+  // Inicializa a página carregando os produtos
+  fetchProducts();
+
+  // Evento para carregar mais produtos ao clicar no botão
+  document.getElementById('loadMoreBtn').addEventListener('click', fetchProducts);
+</script>
+
+</body>
+</html>

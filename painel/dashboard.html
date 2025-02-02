@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BytePay - Painel de Controle</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<script>
+    // Verificar se o token JWT está presente no localStorage
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        // Se não houver token, redireciona para a página de login
+        window.location.href = "../login/index.html";
+    }
+</script>
+<body>
+    <div class="dashboard">
+        <!-- Barra lateral -->
+        <nav class="sidebar">
+            <div class="logo">
+                <img src="logo.png" alt="BytePay Logo">
+                <h2></h2>
+            </div>
+            <ul class="menu">
+                <li><a href="#" class="active"><i class="icon">🏠</i> Início</a></li>
+                <li><a href="#"><i class="icon">💵</i> Vendas</a></li>
+                <li><a href="products.html"><i class="icon">📦</i> Produtos</a></li>
+            </ul>
+            <div class="settings">
+                <a href="#"><i class="icon">⚙️</i> Configurações</a>
+            </div>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <div class="main-content">
+            <header>
+                <h1>Início</h1>
+                <div class="header-actions">
+                    <button id="refreshButton"><i class="icon">🔄</i> Atualizar</button>
+                    <button id="logoutButton"><i class="icon">🚪</i> Sair</button>
+                </div>
+            </header>
+            <section class="alerts">
+                <p><strong>Avisos:</strong> Configure todas as etapas abaixo para garantir o funcionamento de seu checkout.</p>
+            </section>
+            <section class="config-options">
+                <h2>Comece a configurar por aqui:</h2>
+                <div class="cards">
+                    <div class="card">
+                        <h3>Plataforma</h3>
+                        <p>Primeiro integre com sua plataforma Shopify</p>
+                        <button class="btn">Integrar</button>
+                    </div>
+                    <div class="card">
+                        <h3>Adquirente</h3>
+                        <p>Configure suas plataformas de pagamento</p>
+                        <button class="btn" id="configureAdquirente">Configurar</button>
+                    </div>
+                    <div class="card">
+                        <h3>Produto</h3>
+                        <p>Configure seus produtos, logística e link do produto</p>
+                        <button class="btn">Configurar</button>
+                    </div>
+                </div>
+            </section>
+            <section class="progress">
+                <h3>Seu progresso:</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 40%;"></div>
+                </div>
+            </section>
+            
+            <!-- Faturamento Total -->
+            <section class="faturamento">
+                <h3>Faturamento Total</h3>
+                <div class="faturamento-box">
+                    <p id="faturamentoTotal">R$ 0,00</p>
+                </div>
+            </section>
+
+            <!-- Faturamento Mensal -->
+            <section class="faturamento-mensal">
+                <h3>Faturamento Mensal</h3>
+                <div class="faturamento-box">
+                    <p id="faturamentoMensal">R$ 0,00</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Janela Modal de Integração com Shopify -->
+    <div id="integrationModal" class="modal">
+        <div class="modal-content">
+            <h2>Integração Shopify</h2>
+            <form id="integrationForm">
+                <label for="shopifyDomain">Domínio Shopify:</label>
+                <input type="text" id="shopifyDomain" name="shopifyDomain" required>
+
+                <label for="shopifyToken">Token Shopify:</label>
+                <input type="text" id="shopifyToken" name="shopifyToken" required>
+
+                <button type="submit" class="btn">Salvar</button>
+                <button type="button" class="btn cancel" onclick="closeModal()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Janela Modal de Integração com Adquirente -->
+    <div id="adquirenteModal" class="modal">
+        <div class="modal-content">
+            <h2>Integração Adquirente</h2>
+            <form id="adquirenteForm">
+                <label for="apiKey">Chave API BytePay:</label>
+                <input type="text" id="apiKey" name="apiKey" required>
+
+                <button type="submit" class="btn">Salvar</button>
+                <button type="button" class="btn cancel" onclick="closeAdquirenteModal()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            localStorage.removeItem('authToken');
+            sessionStorage.removeItem('authToken');
+            window.location.href = '../login/index.html';
+        });
+
+        // Função para enviar os dados de integração Shopify
+        document.getElementById('integrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const shopifyDomain = document.getElementById('shopifyDomain').value;
+            const shopifyToken = document.getElementById('shopifyToken').value;
+
+            try {
+                const response = await fetch('http://localhost:3004/api/integrations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({
+                        domain: shopifyDomain,
+                        shopifyToken: shopifyToken,
+                        bytepayToken: "" // Deixe em branco para a integração inicial do Shopify
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao integrar com Shopify');
+                }
+
+                const result = await response.json();
+                alert('Integração com Shopify realizada com sucesso!');
+                closeModal(); // Fecha a janela modal
+            } catch (error) {
+                console.error('Erro ao integrar Shopify:', error);
+                alert('Falha na integração, tente novamente.');
+            }
+        });
+
+        // Função para enviar os dados de integração Adquirente
+        document.getElementById('adquirenteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const bytepayToken = document.getElementById('apiKey').value;
+
+            try {
+                const response = await fetch('http://localhost:3004/api/integrations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({
+                        domain: "", // Deixe em branco para a integração inicial do Adquirente
+                        shopifyToken: "", // Deixe em branco para a integração inicial do Adquirente
+                        bytepayToken: bytepayToken
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao integrar com Adquirente');
+                }
+
+                const result = await response.json();
+                alert('Integração com Adquirente realizada com sucesso!');
+                closeAdquirenteModal(); // Fecha a janela modal
+            } catch (error) {
+                console.error('Erro ao integrar Adquirente:', error);
+                alert('Falha na integração, tente novamente.');
+            }
+        });
+
+        // Função para abrir a janela modal de integração do Shopify
+        document.querySelector('.card button').addEventListener('click', function() {
+            document.getElementById('integrationModal').style.display = 'block';
+        });
+
+        // Função para abrir a janela modal de integração do Adquirente
+        document.getElementById('configureAdquirente').addEventListener('click', function() {
+            document.getElementById('adquirenteModal').style.display = 'block';
+        });
+
+        // Função para fechar a janela modal do Shopify
+        function closeModal() {
+            document.getElementById('integrationModal').style.display = 'none';
+        }
+
+        // Função para fechar a janela modal do Adquirente
+        function closeAdquirenteModal() {
+            document.getElementById('adquirenteModal').style.display = 'none';
+        }
+    </script>
+
+    <style>
+        /* Estilos para o modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .modal-content h2 {
+            text-align: center;
+        }
+
+        .modal-content label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .modal-content input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal-content .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .modal-content .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .modal-content .cancel {
+            background-color: #ccc;
+        }
+    </style>
+</body>
+</html>

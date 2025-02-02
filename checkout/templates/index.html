@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .product {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .product img {
+            max-width: 100px;
+            max-height: 100px;
+            width: auto;
+            height: auto;
+            margin-right: 15px;
+        }
+        .total {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Checkout</h1>
+    <div id="products">
+        {% for produto in produtos %}
+        <div class="product">
+            <img src="{{ produto.image }}" alt="Imagem do produto">
+            <div>
+                <h2>{{ produto.name }}</h2>
+                <p>Preço: {{ produto.price }} {{ moeda }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="total">
+        <strong>Total:</strong> {{ total }} {{ moeda }}
+    </div>
+
+    <form id="payment-form">
+        <h2>Informações de Pagamento</h2>
+        <input type="text" name="email" placeholder="Email" required><br>
+        <input type="text" name="telefone" placeholder="Telefone" required><br>
+        <input type="text" name="nome" placeholder="Nome Completo" required><br>
+        <input type="text" name="cpf" placeholder="CPF" required><br>
+        <input type="number" name="valor" value="{{ total }}" readonly><br>
+        <input type="text" name="cardNumber" placeholder="Número do Cartão" required><br>
+        <input type="text" name="holderName" placeholder="Nome no Cartão" required><br>
+        <input type="text" name="expirationMonth" placeholder="Mês de Expiração (MM)" required><br>
+        <input type="text" name="expirationYear" placeholder="Ano de Expiração (AAAA)" required><br>
+        <input type="text" name="cvv" placeholder="CVV" required><br>
+        <button type="submit">Pagar</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = {
+                email: formData.get('email'),
+                telefone: formData.get('telefone'),
+                nome: formData.get('nome'),
+                cpf: formData.get('cpf'),
+                valor: parseFloat(formData.get('valor')),
+                id: "pedido12345", // ID do pedido, pode ser gerado dinamicamente
+                installments: 1, // Número de parcelas
+                card: {
+                    number: formData.get('cardNumber'),
+                    holderName: formData.get('holderName'),
+                    expirationMonth: formData.get('expirationMonth'),
+                    expirationYear: formData.get('expirationYear'),
+                    cvv: formData.get('cvv'),
+                },
+                utms: {}, // Pode adicionar dados UTM conforme necessário
+            };
+
+            try {
+                const response = await fetch('/pagamento', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.json();
+                alert(result.mensagem || 'Pagamento processado com sucesso!');
+            } catch (error) {
+                alert('Erro ao processar pagamento!');
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
