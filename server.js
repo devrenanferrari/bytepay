@@ -15,8 +15,6 @@ const app = express();
 app.use(express.static('public')); // Servir arquivos estáticos
 const port = 3004;  // Ou qualquer outra porta de sua preferência
 
-const { Pool } = require('pg');
-
 // Configuração do PostgreSQL
 const pool = new Pool({
   user: 'postgres',           // Substitua pelo seu usuário do PostgreSQL
