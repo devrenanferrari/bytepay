@@ -320,17 +320,21 @@ app.post('/get-products', async (req, res) => {
 });
 
 
-// Exemplo de rota que chama a função com os parâmetros passados na URL
+// Importando a função fetchThemes do arquivo apis/conseguirIDtema.js
+const fetchThemes = require('./apis/conseguirIDtema');
+
+// Rota que chama a função com os parâmetros passados na URL
 app.get('/getThemes', (req, res) => {
-  const accessToken = req.query.accessToken;  // Obtendo o accessToken da URL
-  const domain = req.query.domain;  // Obtendo o domain da URL
+    const accessToken = req.query.accessToken;  // Obtendo o accessToken da URL
+    const domain = req.query.domain;  // Obtendo o domain da URL
 
-  if (!accessToken || !domain) {
-    return res.status(400).json({ error: 'AccessToken e domain são necessários!' });
-  }
+    if (!accessToken || !domain) {
+        return res.status(400).json({ error: 'AccessToken e domain são necessários!' });
+    }
 
-  // Chamando a função com os parâmetros recebidos
-  fetchThemes(accessToken, domain);
+    // Chamando a função com os parâmetros recebidos
+    fetchThemes(accessToken, domain);
 
-  res.json({ message: 'Função chamada com sucesso! Verifique o console.' });
+    res.json({ message: 'Função chamada com sucesso! Verifique o console.' });
 });
+
