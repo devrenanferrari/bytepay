@@ -1,11 +1,8 @@
-// apis/conseguirIDtema.js
-const { Client } = require('pg'); // Importando o cliente do PostgreSQL
+const { Client } = require('pg');
 
-// Função para obter os temas via API GraphQL
 function fetchThemes(accessToken, domain) {
   const url = `https://${domain}/admin/api/2025-01/graphql.json`;
-  const query = `
-  {
+  const query = `{
     themes(first: 5) {
       edges {
         node {
@@ -14,16 +11,15 @@ function fetchThemes(accessToken, domain) {
         }
       }
     }
-  }
-  `;
-  
-  const data = {
-    query: query
-  };
+  }`;
+
+  const data = { query: query };
 
   const headers = {
     'Content-Type': 'application/json',
-    'X-Shopify-Access-Token': accessToken
+    'X-Shopify-Access-Token': accessToken,
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache'
   };
 
   fetch(url, {
@@ -32,6 +28,7 @@ function fetchThemes(accessToken, domain) {
     body: JSON.stringify(data)
   })
     .then(response => {
+      console.log('Resposta da API:', response);
       if (response.ok) {
         return response.json();
       } else {
@@ -54,12 +51,9 @@ function fetchThemes(accessToken, domain) {
     });
 }
 
-// Função para gravar o ID do tema no banco de dados
 function saveThemeIdToDatabase(themeId) {
   const connectionString = 'postgresql://postgres:yTIfpgaftZdLNzahJvJlVNpMoAlwInbL@monorail.proxy.rlwy.net:12369/railway';
-  const client = new Client({
-    connectionString: connectionString
-  });
+  const client = new Client({ connectionString: connectionString });
 
   client.connect((err) => {
     if (err) {
@@ -76,6 +70,7 @@ function saveThemeIdToDatabase(themeId) {
     if (err) {
       console.error('Erro ao gravar no banco de dados:', err);
     } else {
+      console.log('Resultado da query:', results);
       console.log('ID do tema gravado na tabela "users" com sucesso!');
     }
   });
@@ -83,5 +78,4 @@ function saveThemeIdToDatabase(themeId) {
   client.end();
 }
 
-// Exportando as funções
 module.exports = { fetchThemes };
