@@ -17,11 +17,11 @@ const port = 3004;  // Ou qualquer outra porta de sua preferência
 
 // Configuração do PostgreSQL
 const pool = new Pool({
-  user: 'postgres',           // Substitua pelo seu usuário do PostgreSQL
-  host: 'localhost',
-  database: 'bytepay',
-  password: 'admin',         // Substitua pela sua senha do PostgreSQL
-  port: 5432,
+  user: 'postgres',
+  host: 'monorail.proxy.rlwy.net',
+  database: 'railway',
+  password: 'yTIfpgaftZdLNzahJvJlVNpMoAlwInbL',
+  port: 12369,
 });
 
 // Middleware
