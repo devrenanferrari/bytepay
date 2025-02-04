@@ -136,7 +136,7 @@
             const shopifyToken = document.getElementById('shopifyToken').value;
 
             try {
-                const response = await fetch('https://bytepay-production.up.railway.app/api/integrations', {
+                const response = await fetch('https://bytepay-production.up.railway.app/apis/conseguirID', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -145,7 +145,6 @@
                     body: JSON.stringify({
                         domain: shopifyDomain,
                         shopifyToken: shopifyToken,
-                        bytepayToken: "" // Deixe em branco para a integração inicial do Shopify
                     })
                 });
 
@@ -167,14 +166,6 @@
 document.getElementById('adquirenteForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    const bytepayToken = document.getElementById('apiKey').value;
-
-    // Verificar se o bytepayToken não está vazio
-    if (!bytepayToken) {
-        alert('Por favor, insira o bytepayToken.');
-        return; // Não envia o formulário se o token não for fornecido
-    }
-
     try {
         const response = await fetch('https://bytepay-production.up.railway.app/api/integrations', {
             method: 'POST',
@@ -185,7 +176,6 @@ document.getElementById('adquirenteForm').addEventListener('submit', async funct
             body: JSON.stringify({
                 domain: "", // Deixe em branco para a integração inicial do Adquirente
                 shopifyToken: "", // Deixe em branco para a integração inicial do Adquirente
-                bytepayToken: bytepayToken // Envia o bytepayToken
             })
         });
 
