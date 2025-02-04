@@ -121,98 +121,106 @@
     </div>
 
     <!-- Scripts -->
-    <script>
-        document.getElementById('logoutButton').addEventListener('click', function() {
-            localStorage.removeItem('authToken');
-            sessionStorage.removeItem('authToken');
-            window.location.href = '../login/index.html';
-        });
+<!-- Scripts -->
+<script>
+    // Função para deslogar
+    document.getElementById('logoutButton').addEventListener('click', function() {
+        localStorage.removeItem('authToken');
+        sessionStorage.removeItem('authToken');
+        window.location.href = '../login/index.html';
+    });
 
-        // Função para enviar os dados de integração Shopify
-        document.getElementById('integrationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+    // Função para enviar os dados de integração Shopify
+    document.getElementById('integrationForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-            const shopifyDomain = document.getElementById('shopifyDomain').value;
-            const shopifyToken = document.getElementById('shopifyToken').value;
+        const shopifyDomain = document.getElementById('shopifyDomain').value;
+        const shopifyToken = document.getElementById('shopifyToken').value;
 
-            try {
-                const response = await fetch('https://bytepay-production.up.railway.app/apis/conseguirID', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                    },
-                    body: JSON.stringify({
-                        domain: shopifyDomain,
-                        shopifyToken: shopifyToken,
-                    })
-                });
+        // Verifica se os campos estão preenchidos
+        if (!shopifyDomain || !shopifyToken) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
 
-                if (!response.ok) {
-                    throw new Error('Erro ao integrar com Shopify');
+        try {
+            // Monta a URL com os parâmetros
+            const url = new URL('https://bytepay-production.up.railway.app/getThemes');
+            url.searchParams.append('accessToken', shopifyToken);  // Token da Shopify
+            url.searchParams.append('domain', shopifyDomain);  // Domínio da Shopify
+
+            // Faz a requisição GET para a API
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`  // Usando o authToken do localStorage
                 }
+            });
 
-                const result = await response.json();
-                alert('Integração com Shopify realizada com sucesso!');
-                closeModal(); // Fecha a janela modal
-            } catch (error) {
-                console.error('Erro ao integrar Shopify:', error);
-                alert('Falha na integração, tente novamente.');
+            if (!response.ok) {
+                throw new Error('Erro ao integrar com Shopify');
             }
-        });
 
-        // Função para enviar os dados de integração Adquirente
-// Função para enviar os dados de integração Adquirente
-document.getElementById('adquirenteForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    try {
-        const response = await fetch('https://bytepay-production.up.railway.app/api/integrations', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-            },
-            body: JSON.stringify({
-                domain: "", // Deixe em branco para a integração inicial do Adquirente
-                shopifyToken: "", // Deixe em branco para a integração inicial do Adquirente
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Erro ao integrar com Adquirente');
+            const result = await response.json();
+            alert('Integração com Shopify realizada com sucesso!');
+            closeModal(); // Fecha a janela modal
+        } catch (error) {
+            console.error('Erro ao integrar Shopify:', error);
+            alert('Falha na integração, tente novamente.');
         }
+    });
 
-        const result = await response.json();
-        alert('Integração com Adquirente realizada com sucesso!');
-        closeAdquirenteModal(); // Fecha a janela modal
-    } catch (error) {
-        console.error('Erro ao integrar Adquirente:', error);
-        alert('Falha na integração, tente novamente.');
+    // Função para enviar os dados de integração Adquirente
+    document.getElementById('adquirenteForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        try {
+            const response = await fetch('https://bytepay-production.up.railway.app/api/integrations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                },
+                body: JSON.stringify({
+                    domain: "", // Deixe em branco para a integração inicial do Adquirente
+                    shopifyToken: "", // Deixe em branco para a integração inicial do Adquirente
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao integrar com Adquirente');
+            }
+
+            const result = await response.json();
+            alert('Integração com Adquirente realizada com sucesso!');
+            closeAdquirenteModal(); // Fecha a janela modal
+        } catch (error) {
+            console.error('Erro ao integrar Adquirente:', error);
+            alert('Falha na integração, tente novamente.');
+        }
+    });
+
+    // Função para abrir a janela modal de integração do Shopify
+    document.getElementById('integrarShopify').addEventListener('click', function() {
+        document.getElementById('integrationModal').style.display = 'block';
+    });
+
+    // Função para abrir a janela modal de integração do Adquirente
+    document.getElementById('configureAdquirente').addEventListener('click', function() {
+        document.getElementById('adquirenteModal').style.display = 'block';
+    });
+
+    // Função para fechar a janela modal do Shopify
+    function closeModal() {
+        document.getElementById('integrationModal').style.display = 'none';
     }
-});
 
+    // Função para fechar a janela modal do Adquirente
+    function closeAdquirenteModal() {
+        document.getElementById('adquirenteModal').style.display = 'none';
+    }
+</script>
 
-        // Função para abrir a janela modal de integração do Shopify
-        document.getElementById('integrarShopify').addEventListener('click', function() {
-            document.getElementById('integrationModal').style.display = 'block';
-        });
-
-        // Função para abrir a janela modal de integração do Adquirente
-        document.getElementById('configureAdquirente').addEventListener('click', function() {
-            document.getElementById('adquirenteModal').style.display = 'block';
-        });
-
-        // Função para fechar a janela modal do Shopify
-        function closeModal() {
-            document.getElementById('integrationModal').style.display = 'none';
-        }
-
-        // Função para fechar a janela modal do Adquirente
-        function closeAdquirenteModal() {
-            document.getElementById('adquirenteModal').style.display = 'none';
-        }
-    </script>
 
     <style>
         /* Estilos para o modal */
