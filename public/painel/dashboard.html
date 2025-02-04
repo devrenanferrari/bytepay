@@ -163,37 +163,45 @@
         });
 
         // Função para enviar os dados de integração Adquirente
-        document.getElementById('adquirenteForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+// Função para enviar os dados de integração Adquirente
+document.getElementById('adquirenteForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-            const bytepayToken = document.getElementById('apiKey').value;
+    const bytepayToken = document.getElementById('apiKey').value;
 
-            try {
-                const response = await fetch('https://bytepay-production.up.railway.app/api/integrations', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                    },
-                    body: JSON.stringify({
-                        domain: "", // Deixe em branco para a integração inicial do Adquirente
-                        shopifyToken: "", // Deixe em branco para a integração inicial do Adquirente
-                        bytepayToken: bytepayToken
-                    })
-                });
+    // Verificar se o bytepayToken não está vazio
+    if (!bytepayToken) {
+        alert('Por favor, insira o bytepayToken.');
+        return; // Não envia o formulário se o token não for fornecido
+    }
 
-                if (!response.ok) {
-                    throw new Error('Erro ao integrar com Adquirente');
-                }
-
-                const result = await response.json();
-                alert('Integração com Adquirente realizada com sucesso!');
-                closeAdquirenteModal(); // Fecha a janela modal
-            } catch (error) {
-                console.error('Erro ao integrar Adquirente:', error);
-                alert('Falha na integração, tente novamente.');
-            }
+    try {
+        const response = await fetch('https://bytepay-production.up.railway.app/api/integrations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            },
+            body: JSON.stringify({
+                domain: "", // Deixe em branco para a integração inicial do Adquirente
+                shopifyToken: "", // Deixe em branco para a integração inicial do Adquirente
+                bytepayToken: bytepayToken // Envia o bytepayToken
+            })
         });
+
+        if (!response.ok) {
+            throw new Error('Erro ao integrar com Adquirente');
+        }
+
+        const result = await response.json();
+        alert('Integração com Adquirente realizada com sucesso!');
+        closeAdquirenteModal(); // Fecha a janela modal
+    } catch (error) {
+        console.error('Erro ao integrar Adquirente:', error);
+        alert('Falha na integração, tente novamente.');
+    }
+});
+
 
         // Função para abrir a janela modal de integração do Shopify
         document.getElementById('integrarShopify').addEventListener('click', function() {
