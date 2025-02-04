@@ -1,10 +1,9 @@
+// apis/conseguirIDtema.js
 const { Client } = require('pg'); // Importando o cliente do PostgreSQL
 
+// Função para obter os temas via API GraphQL
 function fetchThemes(accessToken, domain) {
-  // URL para a API GraphQL
   const url = `https://${domain}/admin/api/2025-01/graphql.json`;
-
-  // Query GraphQL para obter dados dos temas
   const query = `
   {
     themes(first: 5) {
@@ -17,19 +16,16 @@ function fetchThemes(accessToken, domain) {
     }
   }
   `;
-
-  // Corpo da requisição com a query GraphQL
+  
   const data = {
     query: query
   };
 
-  // Configuração da requisição
   const headers = {
     'Content-Type': 'application/json',
     'X-Shopify-Access-Token': accessToken
   };
 
-  // Realizando a requisição POST com fetch
   fetch(url, {
     method: 'POST',
     headers: headers,
@@ -47,12 +43,8 @@ function fetchThemes(accessToken, domain) {
       themes.forEach(theme => {
         console.log(`ID do tema: ${theme.node.id}, Nome do tema: ${theme.node.name}`);
 
-        // Verificando se o nome do tema é "sabino-nichado"
         if (theme.node.name === 'sabino-nichado') {
-          // Extraindo o número do ID
           const themeId = theme.node.id.split('/').pop();
-
-          // Gravar o ID do tema na tabela 'users' do banco de dados
           saveThemeIdToDatabase(themeId);
         }
       });
@@ -62,15 +54,13 @@ function fetchThemes(accessToken, domain) {
     });
 }
 
-// Função para gravar o ID do tema na tabela 'users'
+// Função para gravar o ID do tema no banco de dados
 function saveThemeIdToDatabase(themeId) {
-  // Configuração de conexão com o banco de dados PostgreSQL
   const connectionString = 'postgresql://postgres:yTIfpgaftZdLNzahJvJlVNpMoAlwInbL@monorail.proxy.rlwy.net:12369/railway';
   const client = new Client({
     connectionString: connectionString
   });
 
-  // Conectar ao banco de dados
   client.connect((err) => {
     if (err) {
       console.error('Erro ao conectar ao banco de dados:', err);
@@ -79,9 +69,8 @@ function saveThemeIdToDatabase(themeId) {
     console.log('Conectado ao banco de dados!');
   });
 
-  // Atualizar a tabela 'users' com o ID do tema
-  const query = `UPDATE users SET idtheme = $1 WHERE id = $2`; // Usando parâmetro $1 para evitar SQL injection
-  const userId = 1; // Você pode substituir isso com o ID real do usuário, se necessário
+  const query = `UPDATE users SET idtheme = $1 WHERE id = $2`;
+  const userId = 1; // Alterar conforme necessário
 
   client.query(query, [themeId, userId], (err, results) => {
     if (err) {
@@ -91,9 +80,8 @@ function saveThemeIdToDatabase(themeId) {
     }
   });
 
-  // Fechar a conexão com o banco de dados
   client.end();
 }
 
-// Exemplo de chamada da função
-// fetchThemes('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', '0t9rr0-yq.myshopify.com');
+// Exportando as funções
+module.exports = { fetchThemes };
