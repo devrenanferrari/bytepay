@@ -7,7 +7,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const data = { email, password };
 
     // Enviar requisição POST para a API de login
-    fetch('http://localhost:3004/api/login', {
+    fetch('https://bytepay-production.up.railway.app/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
