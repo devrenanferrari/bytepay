@@ -321,7 +321,7 @@ app.post('/get-products', async (req, res) => {
 
 
 // Importando a função fetchThemes do arquivo apis/conseguirIDtema.js
-const fetchThemes = require('./apis/conseguirIDtema');
+const { fetchThemes } = require('./apis/conseguirIDtema');
 
 // Rota que chama a função com os parâmetros passados na URL
 app.get('/getThemes', (req, res) => {
