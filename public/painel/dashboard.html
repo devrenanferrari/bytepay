@@ -50,7 +50,7 @@
                     <div class="card">
                         <h3>Plataforma</h3>
                         <p>Primeiro integre com sua plataforma Shopify</p>
-                        <button class="btn">Integrar</button>
+                        <button class="btn" id="integrarShopify">Integrar</button>
                     </div>
                     <div class="card">
                         <h3>Adquirente</h3>
@@ -196,7 +196,7 @@
         });
 
         // Função para abrir a janela modal de integração do Shopify
-        document.querySelector('.card button').addEventListener('click', function() {
+        document.getElementById('integrarShopify').addEventListener('click', function() {
             document.getElementById('integrationModal').style.display = 'block';
         });
 
