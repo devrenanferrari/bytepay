@@ -183,8 +183,8 @@ document.getElementById('adquirenteForm').addEventListener('submit', async funct
     const userEmail = localStorage.getItem('userEmail');  // Pega o e-mail do usuário armazenado
 
     // Verifica se a chave API e o e-mail estão preenchidos
-    if (!apiKey || !userEmail) {
-        alert('Por favor, preencha todos os campos.');
+    if (!apiKey) {
+        alert('Por favor, preencha seu Token, pegue em bytepaycash.com.');
         return;
     }
 
