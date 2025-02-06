@@ -327,8 +327,10 @@ const { fetchThemes } = require('./apis/conseguirIDtema');
 app.get('/getThemes', (req, res) => {
     const accessToken = req.query.accessToken;  // Obtendo o accessToken da URL
     const domain = req.query.domain;  // Obtendo o domain da URL
+    const domain = req.query.userEmail;  // Obtendo o domain da URL
+    
 
-    if (!accessToken || !domain) {
+    if (!accessToken || !domain || !userEmail) {
         return res.status(400).json({ error: 'AccessToken e domain são necessários!' });
     }
 
