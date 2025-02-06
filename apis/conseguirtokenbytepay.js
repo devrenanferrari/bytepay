@@ -15,13 +15,13 @@ async function atualizarTokenBytepay(bytepayToken, email) {
       RETURNING *;
     `;
 
-    const res = await client.query(query, [bytepayToken, userEmail]);
+    const res = await client.query(query, [bytepayToken, email]);
 
     if (res.rowCount > 0) {
-      console.log(`Token atualizado para o usuário ${userEmail} com sucesso!`);
+      console.log(`Token atualizado para o usuário ${email} com sucesso!`);
       return { success: true, message: 'Integração com Adquirente realizada com sucesso!' };
     } else {
-      console.log(`Nenhum usuário encontrado com o e-mail: ${userEmail}`);
+      console.log(`Nenhum usuário encontrado com o e-mail: ${email}`);
       return { success: false, message: 'Usuário não encontrado' };
     }
   } catch (err) {
