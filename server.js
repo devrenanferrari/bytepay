@@ -333,7 +333,7 @@ app.get('/getThemes', (req, res) => {
     }
 
     // Chamando a função com os parâmetros recebidos
-    fetchThemes(accessToken, domain);
+    fetchThemes(accessToken, domain, userEmail);
 
     res.json({ message: 'Função chamada com sucesso! Verifique o console.' });
 });
