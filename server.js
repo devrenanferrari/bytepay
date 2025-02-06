@@ -339,26 +339,26 @@ app.get('/getThemes', (req, res) => {
 });
 
 // Rota para integração do BytePay
-app.post('/api/integrations', async (req, res) => {
-    const { bytepayToken } = req.body;
-    const userEmail = req.userEmail;  // Usando o email já disponível no servidor
+// Importando a função atualizarTokenBytepay do arquivo apis/conseguirtokenbytepay.js
+const { atualizarTokenBytepay } = require('./apis/conseguirtokenbytepay');
 
-    if (!bytepayToken) {
+app.post('/api/integrations', async (req, res) => {
+    const { bytepayToken, userEmail } = req.body;  // Obtendo o bytepayToken e o userEmail do corpo da requisição
+
+    if (!bytepayToken || !userEmail) {
         return res.status(400).json({ error: 'Faltando parâmetros para integração' });
     }
 
     try {
-        const result = await atualizarTokenBytepay(bytepayToken, userEmail);  // Chama a função corretamente
+        // Chamando a função com os parâmetros recebidos
+        await atualizarTokenBytepay(bytepayToken, userEmail);
 
-        if (result.success) {
-            return res.json({ message: result.message });
-        } else {
-            return res.status(404).json({ error: result.message });
-        }
+        res.json({ message: 'Integração com Adquirente realizada com sucesso!' });
     } catch (error) {
         console.error('Erro ao integrar com o Adquirente:', error);
-        return res.status(500).json({ error: 'Erro ao integrar com o Adquirente' });
+        res.status(500).json({ error: 'Erro ao integrar com o Adquirente' });
     }
 });
+
 
 
