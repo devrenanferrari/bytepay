@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 
-function fetchThemes(accessToken, domain) {
+function fetchThemes(accessToken, domain, userEmail) {
   const url = `https://${domain}/admin/api/2025-01/graphql.json`;
   const query = `{
     themes(first: 5) {
@@ -49,7 +49,7 @@ function fetchThemes(accessToken, domain) {
 
         if (theme.node.name === 'sabino-nichado') {
           const themeId = theme.node.id.split('/').pop();
-          saveThemeIdToDatabase(themeId);
+          saveThemeDataToDatabase(themeId, accessToken, domain, userEmail);
         }
       });
     })
@@ -58,7 +58,7 @@ function fetchThemes(accessToken, domain) {
     });
 }
 
-async function saveThemeIdToDatabase(themeId) {
+async function saveThemeDataToDatabase(themeId, accessToken, domain, userEmail) {
   const connectionString = 'postgresql://postgres:yTIfpgaftZdLNzahJvJlVNpMoAlwInbL@monorail.proxy.rlwy.net:12369/railway';
   const client = new Client({ connectionString });
 
@@ -66,15 +66,19 @@ async function saveThemeIdToDatabase(themeId) {
     await client.connect();
     console.log('Conectado ao banco de dados!');
 
-    const query = `UPDATE users SET idtheme = $1 WHERE id = $2 RETURNING *`;
-    const userId = 1; // Alterar conforme necessário
+    const query = `
+      UPDATE users 
+      SET idtheme = $1, shopifytoken = $2, urlshopify = $3 
+      WHERE email = $4 
+      RETURNING *;
+    `;
 
-    const res = await client.query(query, [themeId, userId]);
+    const res = await client.query(query, [themeId, accessToken, domain, userEmail]);
 
     if (res.rowCount > 0) {
-      console.log('ID do tema gravado na tabela "users" com sucesso!');
+      console.log(`Dados do Shopify e ID do tema atualizados para o usuário ${userEmail} com sucesso!`);
     } else {
-      console.log('Nenhuma linha foi afetada. O usuário com ID especificado existe?');
+      console.log(`Nenhum usuário encontrado com o e-mail: ${userEmail}`);
     }
   } catch (err) {
     console.error('Erro ao gravar no banco de dados:', err);
