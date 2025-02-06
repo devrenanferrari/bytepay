@@ -339,3 +339,34 @@ app.get('/getThemes', (req, res) => {
 });
 
 
+// Rota de integração para atualizar o bytepayToken no banco de dados
+app.post('/api/integrations', async (req, res) => {
+    const { bytepayToken, userEmail } = req.body; // Obtendo os parâmetros do corpo da requisição
+
+    // Verificando se os parâmetros necessários foram fornecidos
+    if (!bytepayToken || !userEmail) {
+        return res.status(400).json({ error: 'Faltando parâmetros para integração' });
+    }
+
+    try {
+        // Atualizando o campo bytepaytoken na tabela users com o valor fornecido
+        const result = await db.query(
+            'UPDATE users SET bytepaytoken = $1 WHERE email = $2 RETURNING *',
+            [bytepayToken, userEmail]
+        );
+
+        // Verificando se o usuário foi encontrado
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+
+        // Resposta de sucesso caso a atualização seja bem-sucedida
+        return res.json({ message: 'Integração com Adquirente realizada com sucesso!' });
+    } catch (error) {
+        // Em caso de erro ao tentar atualizar no banco de dados
+        console.error('Erro ao atualizar o bytepaytoken:', error);
+        return res.status(500).json({ error: 'Erro ao atualizar o token no banco de dados' });
+    }
+});
+
+
