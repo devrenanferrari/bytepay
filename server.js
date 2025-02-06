@@ -343,7 +343,7 @@ app.post('/api/integrations', async (req, res) => {
     const { bytepayToken } = req.body;
     const userEmail = req.userEmail;  // Usando o email já disponível no servidor
 
-    if (!bytepayToken || !userEmail) {
+    if (!bytepayToken) {
         return res.status(400).json({ error: 'Faltando parâmetros para integração' });
     }
 
