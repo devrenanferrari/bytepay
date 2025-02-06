@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 
-async function atualizarTokenBytepay(bytepayToken, userEmail) {
+async function atualizarTokenBytepay(bytepayToken, email) {
   const connectionString = 'postgresql://postgres:yTIfpgaftZdLNzahJvJlVNpMoAlwInbL@monorail.proxy.rlwy.net:12369/railway';
   const client = new Client({ connectionString });
 
