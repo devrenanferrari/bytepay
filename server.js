@@ -345,10 +345,6 @@ const { atualizarTokenBytepay } = require('./apis/conseguirtokenbytepay');
 app.post('/api/integrations', async (req, res) => {
     const { bytepayToken, email } = req.body;  // Obtendo o bytepayToken e o userEmail do corpo da requisição
 
-    if (!bytepayToken || email) {
-        return res.status(400).json({ error: 'Faltando parâmetros para integração' });
-    }
-
     try {
         // Chamando a função com os parâmetros recebidos
         await atualizarTokenBytepay(bytepayToken, email);
