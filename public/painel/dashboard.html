@@ -100,6 +100,9 @@
                 <label for="shopifyToken">Token Shopify:</label>
                 <input type="text" id="shopifyToken" name="shopifyToken" required>
 
+                <label for="userEmail">Email:</label>
+                <input type="text" id="userEmail" name="userEmail" required>
+
                 <button type="submit" class="btn">Salvar</button>
                 <button type="button" class="btn cancel" onclick="closeModal()">Cancelar</button>
             </form>
@@ -136,9 +139,10 @@
 
         const shopifyDomain = document.getElementById('shopifyDomain').value;
         const shopifyToken = document.getElementById('shopifyToken').value;
+        const shopifyToken = document.getElementById('userEmail').value;
 
         // Verifica se os campos estão preenchidos
-        if (!shopifyDomain || !shopifyToken) {
+        if (!shopifyDomain || !shopifyToken || !userEmail) {
             alert('Por favor, preencha todos os campos.');
             return;
         }
@@ -148,6 +152,7 @@
             const url = new URL('https://bytepay-production.up.railway.app/getThemes');
             url.searchParams.append('accessToken', shopifyToken);  // Token da Shopify
             url.searchParams.append('domain', shopifyDomain);  // Domínio da Shopify
+            url.searchParams.append('domain', userEmail);  // Domínio da Shopify
 
             // Faz a requisição GET para a API
             const response = await fetch(url, {
