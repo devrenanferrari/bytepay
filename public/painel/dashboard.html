@@ -192,7 +192,8 @@ document.getElementById('adquirenteForm').addEventListener('submit', async funct
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    bytepayToken: bytepayToken  // Não precisamos mais passar o userEmail, ele será extraído automaticamente no backend
+                    bytepayToken: bytepayToken,  // Não precisamos mais passar o userEmail, ele será extraído automaticamente no backend
+                    email: email
                 })
             });
 
