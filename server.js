@@ -348,7 +348,7 @@ app.post('/api/integrations', async (req, res) => {
     }
 
     try {
-        const result = await atualizarTokenBytepay(bytepayToken, userEmail);
+        const result = await atualizarTokenBytepay(bytepayToken, userEmail);  // Chama a função corretamente
 
         if (result.success) {
             return res.json({ message: result.message });
