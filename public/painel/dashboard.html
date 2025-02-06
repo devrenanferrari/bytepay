@@ -116,6 +116,9 @@
         <form id="adquirenteForm">
             <label for="apiKey">Chave API BytePay:</label>
             <input type="text" id="apiKey" name="apiKey" required>
+
+            <label for="email">E-mail:</label>
+            <input type="text" id="email" name="email" required>
             
             <button type="submit" class="btn">Salvar</button>
             <button type="button" class="btn cancel" onclick="closeAdquirenteModal()">Cancelar</button>
@@ -180,6 +183,7 @@ document.getElementById('adquirenteForm').addEventListener('submit', async funct
         e.preventDefault();
 
         const bytepayToken = document.getElementById('apiKey').value;
+        const email = document.getElementById('email').value;
         
         try {
             const response = await fetch('/api/integrations', {
