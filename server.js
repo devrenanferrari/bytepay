@@ -343,15 +343,15 @@ app.get('/getThemes', (req, res) => {
 const { atualizarTokenBytepay } = require('./apis/conseguirtokenbytepay');
 
 app.post('/api/integrations', async (req, res) => {
-    const { bytepayToken, userEmail } = req.body;  // Obtendo o bytepayToken e o userEmail do corpo da requisição
+    const { bytepayToken, email } = req.body;  // Obtendo o bytepayToken e o userEmail do corpo da requisição
 
-    if (!bytepayToken) {
+    if (!bytepayToken || email) {
         return res.status(400).json({ error: 'Faltando parâmetros para integração' });
     }
 
     try {
         // Chamando a função com os parâmetros recebidos
-        await atualizarTokenBytepay(bytepayToken, userEmail);
+        await atualizarTokenBytepay(bytepayToken, email);
 
         res.json({ message: 'Integração com Adquirente realizada com sucesso!' });
     } catch (error) {
