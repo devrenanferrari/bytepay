@@ -1,92 +1,215 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #007bff;
+        }
+        .section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
         .product {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
             display: flex;
             align-items: center;
+            gap: 15px;
         }
         .product img {
-            max-width: 100px;
-            max-height: 100px;
-            width: auto;
-            height: auto;
-            margin-right: 15px;
+            border-radius: 8px;
         }
-        .total {
-            font-size: 1.5em;
-            margin-top: 20px;
+        input {
+            border-radius: 8px;
         }
-        form {
-            margin-top: 20px;
+        input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        input:invalid {
+            border-color: #dc3545;
+        }
+        button {
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            font-size: 14px;
+            color: #007bff;
         }
     </style>
 </head>
 <body>
-    <h1>Checkout</h1>
-    <div id="products">
-        {% for produto in produtos %}
-        <div class="product">
-            <img src="{{ produto.image }}" alt="Imagem do produto">
-            <div>
-                <h2>{{ produto.name }}</h2>
-                <p>Preço: {{ produto.price }} {{ moeda }}</p>
-            </div>
+    <div class="container">
+        <div class="header text-center mb-4">
+            <h1>Checkout</h1>
         </div>
-        {% endfor %}
-    </div>
-    <div class="total">
-        <strong>Total:</strong> {{ total }} {{ moeda }}
-    </div>
 
-    <form id="payment-form">
-        <h2>Informações de Pagamento</h2>
-        <input type="text" name="email" placeholder="Email" required><br>
-        <input type="text" name="telefone" placeholder="Telefone" required><br>
-        <input type="text" name="nome" placeholder="Nome Completo" required><br>
-        <input type="text" name="cpf" placeholder="CPF" required><br>
-        <input type="number" name="valor" value="{{ total }}" readonly><br>
-        <input type="text" name="cardNumber" placeholder="Número do Cartão" required><br>
-        <input type="text" name="holderName" placeholder="Nome no Cartão" required><br>
-        <input type="text" name="expirationMonth" placeholder="Mês de Expiração (MM)" required><br>
-        <input type="text" name="expirationYear" placeholder="Ano de Expiração (AAAA)" required><br>
-        <input type="text" name="cvv" placeholder="CVV" required><br>
-        <button type="submit">Pagar</button>
-    </form>
+        <!-- Total Information -->
+        <div class="section total-info text-center">
+            <h4 class="text-dark">Total:</h4>
+            <p id="total-info" class="text-success fw-bold">R$ 299,90</p>
+        </div>
+
+        <!-- Product Section -->
+        <div id="products" class="section">
+            {% for produto in produtos %}
+            <div class="product">
+                <img src="{{ produto.image }}" alt="Imagem do produto">
+                <div>
+                    <h2>{{ produto.name }}</h2>
+                    <p>Preço: {{ produto.price }} {{ moeda }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Formulário de Pagamento -->
+        <form id="payment-form">
+            <!-- Personal Data Section -->
+            <div id="personal-data" class="section">
+                <h4 class="text-primary mb-3">Dados Pessoais</h4>
+                <div class="mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="telefone">Telefone</label>
+                    <input type="text" id="telefone" name="telefone" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" name="cpf" class="form-control" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" required>
+                </div>
+            </div>
+
+            <!-- Address Section -->
+            <div id="address" class="section">
+                <h4 class="text-primary mb-3">Endereço de Entrega</h4>
+                <div class="mb-3">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" class="form-control" required>
+                    <p class="loading" id="cep-loading">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Buscando endereço...
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <label for="rua">Rua</label>
+                    <input type="text" id="rua" name="rua" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="numero">Número</label>
+                    <input type="text" id="numero" name="numero" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" name="bairro" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" name="cidade" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="estado">Estado</label>
+                    <input type="text" id="estado" name="estado" class="form-control" readonly>
+                </div>
+            </div>
+
+            <!-- Card Data Section -->
+            <div id="card-data" class="section">
+                <h4 class="text-primary mb-3">Dados do Cartão</h4>
+                <div class="mb-3">
+                    <label for="cardNumber">Número do Cartão</label>
+                    <input type="text" id="cardNumber" name="cardNumber" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="holderName">Nome no Cartão</label>
+                    <input type="text" id="holderName" name="holderName" class="form-control" required>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label for="expirationMonth">Mês</label>
+                        <input type="text" id="expirationMonth" name="expirationMonth" class="form-control" required>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="expirationYear">Ano</label>
+                        <input type="text" id="expirationYear" name="expirationYear" class="form-control" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- Final Submit Button -->
+            <button type="submit" class="btn btn-primary w-100">Finalizar Compra</button>
+        </form>
+    </div>
 
     <script>
+        document.getElementById('cep').addEventListener('blur', function () {
+            const cep = this.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                document.getElementById('cep-loading').style.display = 'block';
+
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('cep-loading').style.display = 'none';
+
+                        if (!data.erro) {
+                            document.getElementById('rua').value = data.logradouro;
+                            document.getElementById('bairro').value = data.bairro;
+                            document.getElementById('cidade').value = data.localidade;
+                            document.getElementById('estado').value = data.uf;
+                        } else {
+                            alert('CEP não encontrado!');
+                        }
+                    })
+                    .catch(() => {
+                        document.getElementById('cep-loading').style.display = 'none';
+                        alert('Erro ao buscar o CEP!');
+                    });
+            }
+        });
+
         const form = document.getElementById('payment-form');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(form);
-            const data = {
-                email: formData.get('email'),
-                telefone: formData.get('telefone'),
-                nome: formData.get('nome'),
-                cpf: formData.get('cpf'),
-                valor: parseFloat(formData.get('valor')),
-                id: "pedido12345", // ID do pedido, pode ser gerado dinamicamente
-                installments: 1, // Número de parcelas
-                card: {
-                    number: formData.get('cardNumber'),
-                    holderName: formData.get('holderName'),
-                    expirationMonth: formData.get('expirationMonth'),
-                    expirationYear: formData.get('expirationYear'),
-                    cvv: formData.get('cvv'),
-                },
-                utms: {}, // Pode adicionar dados UTM conforme necessário
-            };
+            const data = Object.fromEntries(formData.entries());
 
             try {
                 const response = await fetch('/pagamento', {
@@ -94,6 +217,9 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
                 });
+                if (!response.ok) {
+                    throw new Error('Erro ao processar pagamento');
+                }
                 const result = await response.json();
                 alert(result.mensagem || 'Pagamento processado com sucesso!');
             } catch (error) {
