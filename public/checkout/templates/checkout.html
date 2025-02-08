@@ -69,18 +69,19 @@
             <p id="total-info" class="text-success fw-bold">R$ 299,90</p>
         </div>
 
-        <!-- Product Section -->
-         <div id="products">
-        {% for produto in produtos %}
-        <div class="product">
-            <img src="{{ produto.image }}" alt="Imagem do produto">
-            <div>
-                <h2>{{ produto.name }}</h2>
-                <p>Preço: {{ produto.price }} {{ moeda }}</p>
-            </div>
+<!-- Product Section -->
+<div id="products" class="section">
+    {% for produto in produtos %}
+    <div class="product">
+        <img src="{{ produto.image }}" alt="Imagem do produto">
+        <div>
+            <h2>{{ produto.name }}</h2>
+            <p>Preço: {{ produto.price }} {{ moeda }}</p>
         </div>
-        {% endfor %}
-        </div>
+    </div>
+    {% endfor %}
+</div>
+
 
         <!-- Personal Data Section -->
         <div id="personal-data" class="section">
