@@ -23,11 +23,12 @@
             font-weight: 700;
             color: #007bff;
         }
-        .total-info, .product, #payment-form {
+        .section {
             background: #fff;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
         .product {
             display: flex;
@@ -64,13 +65,13 @@
         </div>
 
         <!-- Total Information -->
-        <div class="total-info mb-4 text-center">
+        <div class="section total-info text-center">
             <h4 class="text-dark">Total:</h4>
             <p id="total-info" class="text-success fw-bold">R$ 299,90</p>
         </div>
 
         <!-- Product Section -->
-        <div id="products" class="mb-4">
+        <div id="products" class="section">
             <div class="product">
                 <img src="https://via.placeholder.com/100" alt="Produto" width="80">
                 <div>
@@ -86,7 +87,7 @@
         </div>
 
         <!-- Personal Data Section -->
-        <div id="personal-data" class="mb-4">
+        <div id="personal-data" class="section">
             <h4 class="text-primary mb-3">Dados Pessoais</h4>
             <div class="mb-3">
                 <label>Email</label>
@@ -107,7 +108,7 @@
         </div>
 
         <!-- Address Section -->
-        <div id="address" class="mb-4">
+        <div id="address" class="section">
             <h4 class="text-primary mb-3">Endereço de Entrega</h4>
             <div class="mb-3">
                 <label>CEP</label>
@@ -137,7 +138,7 @@
         </div>
 
         <!-- Card Data Section -->
-        <div id="card-data" class="mb-4">
+        <div id="card-data" class="section">
             <h4 class="text-primary mb-3">Dados do Cartão</h4>
             <div class="mb-3">
                 <label>Número do Cartão</label>
