@@ -63,25 +63,31 @@
             <h1>Finalizar Compra</h1>
         </div>
 
+        <!-- Total Information -->
         <div class="total-info mb-4 text-center">
             <h4 class="text-dark">Total:</h4>
             <p id="total-info" class="text-success fw-bold">R$ 299,90</p>
         </div>
 
+        <!-- Product Section -->
         <div id="products" class="mb-4">
             <div class="product">
                 <img src="https://via.placeholder.com/100" alt="Produto" width="80">
                 <div>
                     <h3>Produto Exemplo</h3>
                     <p class="text-muted">Preço: R$ 149,95</p>
+                    <!-- Quantity Selector -->
+                    <div class="mb-3">
+                        <label for="quantity">Quantidade</label>
+                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <form id="payment-form">
-            <h4 class="text-center text-primary mb-3">Informações de Pagamento</h4>
-
-            <h5>Dados Pessoais</h5>
+        <!-- Personal Data Section -->
+        <div id="personal-data" class="mb-4">
+            <h4 class="text-primary mb-3">Dados Pessoais</h4>
             <div class="mb-3">
                 <label>Email</label>
                 <input type="email" name="email" class="form-control" required>
@@ -98,8 +104,11 @@
                 <label>CPF</label>
                 <input type="text" name="cpf" class="form-control" required>
             </div>
+        </div>
 
-            <h5>Endereço de Entrega</h5>
+        <!-- Address Section -->
+        <div id="address" class="mb-4">
+            <h4 class="text-primary mb-3">Endereço de Entrega</h4>
             <div class="mb-3">
                 <label>CEP</label>
                 <input type="text" id="cep" name="cep" class="form-control" required>
@@ -125,8 +134,11 @@
                 <label>Estado</label>
                 <input type="text" id="estado" name="estado" class="form-control" readonly>
             </div>
+        </div>
 
-            <h5>Dados do Cartão</h5>
+        <!-- Card Data Section -->
+        <div id="card-data" class="mb-4">
+            <h4 class="text-primary mb-3">Dados do Cartão</h4>
             <div class="mb-3">
                 <label>Número do Cartão</label>
                 <input type="text" name="cardNumber" class="form-control" required>
@@ -149,9 +161,10 @@
                 <label>CVV</label>
                 <input type="text" name="cvv" class="form-control" required>
             </div>
+        </div>
 
-            <button type="submit" class="btn btn-primary w-100">Finalizar Compra</button>
-        </form>
+        <!-- Final Submit Button -->
+        <button type="submit" class="btn btn-primary w-100">Finalizar Compra</button>
     </div>
 
     <script>
