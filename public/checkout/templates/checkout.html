@@ -70,19 +70,16 @@
         </div>
 
         <!-- Product Section -->
-        <div id="products" class="section">
-            <div class="product">
-                <img src="https://via.placeholder.com/100" alt="Produto" width="80">
-                <div>
-                    <h3>Produto Exemplo</h3>
-                    <p class="text-muted">Preço: R$ 149,95</p>
-                    <!-- Quantity Selector -->
-                    <div class="mb-3">
-                        <label for="quantity">Quantidade</label>
-                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1">
-                    </div>
-                </div>
+         <div id="products">
+        {% for produto in produtos %}
+        <div class="product">
+            <img src="{{ produto.image }}" alt="Imagem do produto">
+            <div>
+                <h2>{{ produto.name }}</h2>
+                <p>Preço: {{ produto.price }} {{ moeda }}</p>
             </div>
+        </div>
+        {% endfor %}
         </div>
 
         <!-- Personal Data Section -->
