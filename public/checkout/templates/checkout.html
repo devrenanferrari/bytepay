@@ -23,33 +23,19 @@
             font-weight: 700;
             color: #007bff;
         }
-        .total-info {
+        .total-info, .product, #payment-form {
             background: #fff;
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .product {
-            background: #fff;
-            padding: 15px;
-            border-radius: 10px;
             display: flex;
             align-items: center;
             gap: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .product img {
             border-radius: 8px;
-        }
-        .product h3 {
-            font-size: 18px;
-            margin: 0;
-        }
-        #payment-form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         input {
             border-radius: 8px;
@@ -95,50 +81,73 @@
         <form id="payment-form">
             <h4 class="text-center text-primary mb-3">Informações de Pagamento</h4>
 
+            <h5>Dados Pessoais</h5>
+            <div class="mb-3">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Telefone</label>
+                <input type="text" name="telefone" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Nome Completo</label>
+                <input type="text" name="nome" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>CPF</label>
+                <input type="text" name="cpf" class="form-control" required>
+            </div>
+
             <h5>Endereço de Entrega</h5>
             <div class="mb-3">
-                <label for="cep" class="form-label">CEP</label>
-                <input type="text" id="cep" class="form-control" placeholder="Digite o CEP" required>
+                <label>CEP</label>
+                <input type="text" id="cep" name="cep" class="form-control" required>
                 <p class="loading" id="cep-loading">Buscando endereço...</p>
             </div>
             <div class="mb-3">
                 <label>Rua</label>
-                <input type="text" id="rua" class="form-control" readonly>
+                <input type="text" id="rua" name="rua" class="form-control" readonly>
             </div>
             <div class="mb-3">
                 <label>Número</label>
-                <input type="text" id="numero" class="form-control" required>
+                <input type="text" id="numero" name="numero" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label>Bairro</label>
-                <input type="text" id="bairro" class="form-control" readonly>
+                <input type="text" id="bairro" name="bairro" class="form-control" readonly>
             </div>
             <div class="mb-3">
                 <label>Cidade</label>
-                <input type="text" id="cidade" class="form-control" readonly>
+                <input type="text" id="cidade" name="cidade" class="form-control" readonly>
             </div>
             <div class="mb-3">
                 <label>Estado</label>
-                <input type="text" id="estado" class="form-control" readonly>
+                <input type="text" id="estado" name="estado" class="form-control" readonly>
             </div>
 
             <h5>Dados do Cartão</h5>
             <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Número do Cartão" required>
+                <label>Número do Cartão</label>
+                <input type="text" name="cardNumber" class="form-control" required>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Nome no Cartão" required>
+                <label>Nome no Cartão</label>
+                <input type="text" name="holderName" class="form-control" required>
             </div>
             <div class="row">
                 <div class="col-6 mb-3">
-                    <input type="text" class="form-control" placeholder="MM" required>
+                    <label>Mês</label>
+                    <input type="text" name="expirationMonth" class="form-control" required>
                 </div>
                 <div class="col-6 mb-3">
-                    <input type="text" class="form-control" placeholder="AAAA" required>
+                    <label>Ano</label>
+                    <input type="text" name="expirationYear" class="form-control" required>
                 </div>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" placeholder="CVV" required>
+                <label>CVV</label>
+                <input type="text" name="cvv" class="form-control" required>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Finalizar Compra</button>
@@ -172,9 +181,24 @@
             }
         });
 
-        document.getElementById('payment-form').addEventListener('submit', function (e) {
+        const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            alert('Compra finalizada com sucesso!');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/pagamento', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.json();
+                alert(result.mensagem || 'Pagamento processado com sucesso!');
+            } catch (error) {
+                alert('Erro ao processar pagamento!');
+                console.error(error);
+            }
         });
     </script>
 </body>
