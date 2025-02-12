@@ -282,7 +282,7 @@
                 const productDiv = document.createElement('div');
                 productDiv.className = 'product';
                 productDiv.innerHTML = `
-                    <img src="${produto.image || 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
+                    <img src="${produto.image}" alt="Imagem do produto" class="img-thumbnail" width="120">
                     <div>
                         <h2>${produto.name}</h2>
                         <p>Preço: ${produto.price} ${params.moeda}</p>
