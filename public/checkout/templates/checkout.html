@@ -213,73 +213,49 @@
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('cep-loading').style.display = 'none';
-
-                        if (!data.erro) {
+                        if (data.erro) {
+                            alert('CEP não encontrado!');
+                        } else {
                             document.getElementById('rua').value = data.logradouro;
                             document.getElementById('bairro').value = data.bairro;
                             document.getElementById('cidade').value = data.localidade;
                             document.getElementById('estado').value = data.uf;
-                        } else {
-                            alert('CEP não encontrado!');
                         }
-                    })
-                    .catch(() => {
-                        document.getElementById('cep-loading').style.display = 'none';
-                        alert('Erro ao buscar o CEP!');
                     });
             }
         });
 
-        const form = document.getElementById('payment-form');
-        form.addEventListener('submit', async (e) => {
+        document.getElementById('payment-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            const formData = new FormData(form);
 
-            // Gera um ID aleatório
-            const generateRandomId = () => {
-                return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            const paymentData = {
+                cep: document.getElementById('cep').value,
+                rua: document.getElementById('rua').value,
+                numero: document.getElementById('numero').value,
+                bairro: document.getElementById('bairro').value,
+                cidade: document.getElementById('cidade').value,
+                estado: document.getElementById('estado').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('telefone').value,
+                nome: document.getElementById('nome').value,
+                cpf: document.getElementById('cpf').value,
+                cardNumber: document.getElementById('cardNumber').value,
+                holderName: document.getElementById('holderName').value,
+                expirationMonth: document.getElementById('expirationMonth').value,
+                expirationYear: document.getElementById('expirationYear').value,
+                cvv: document.getElementById('cvv').value,
+                installments: document.getElementById('installments').value,
             };
 
-            // Estrutura dos dados conforme a API espera
-            const data = {
-                email: formData.get('email'),
-                telefone: formData.get('telefone'),
-                nome: formData.get('nome'),
-                cpf: formData.get('cpf'),
-                valor: parseFloat(formData.get('valor')),
-                id: generateRandomId(), // ID aleatório
-                installments: parseInt(formData.get('installments')), // Número de parcelas
-                card: {
-                    number: formData.get('cardNumber'),
-                    holderName: formData.get('holderName'),
-                    expirationMonth: formData.get('expirationMonth'),
-                    expirationYear: formData.get('expirationYear'),
-                    cvv: formData.get('cvv'),
-                },
-                endereco: {
-                    rua: formData.get('rua'),
-                    numero: formData.get('numero'),
-                    bairro: formData.get('bairro'),
-                    cidade: formData.get('cidade'),
-                    estado: formData.get('estado'),
-                    cep: formData.get('cep')
-                },
-                utms: {}, // UTMs podem ser preenchidos dinamicamente, se necessário
-            };
+            console.log('Dados de pagamento:', paymentData);
 
-            try {
-                const response = await fetch('/pagamento', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                });
-                const result = await response.json();
-                alert(result.mensagem || 'Pagamento processado com sucesso!');
-            } catch (error) {
-                alert('Erro ao processar pagamento!');
-                console.error(error);
-            }
+            // Simulação de pagamento bem-sucedido
+            setTimeout(function () {
+                alert('Compra finalizada com sucesso!');
+            }, 1500);
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
