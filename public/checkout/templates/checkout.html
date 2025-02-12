@@ -74,136 +74,64 @@
         <!-- Total Information -->
         <div class="section total-info text-center">
             <h4 class="text-dark">Total:</h4>
-            <p id="total-info" class="text-success fw-bold">{{ total }} {{ moeda }}</p>
+            <p id="total-info" class="text-success fw-bold"></p>
         </div>
 
         <!-- Product Section -->
         <div id="products" class="section">
-            {% for produto in produtos %}
-            <div class="product">
-                <img src="{{ produto.image }}" alt="Imagem do produto" class="img-thumbnail" width="120">
-                <div>
-                    <h2>{{ produto.name }}</h2>
-                    <p>Preço: {{ produto.price }} {{ moeda }}</p>
-                </div>
-            </div>
-            {% endfor %}
+            <!-- Produtos serão inseridos aqui via JavaScript -->
         </div>
 
         <!-- Formulário de Pagamento -->
         <form id="payment-form" class="bg-light p-4 rounded shadow-sm">
-            <h3 class="text-center text-primary mb-4">Informações de Pagamento</h3>
-
-            <!-- Address Section -->
-            <div id="address" class="section">
-                <h4 class="text-primary mb-3">Endereço de Entrega</h4>
-                <div class="mb-3">
-                    <label for="cep">CEP</label>
-                    <input type="text" id="cep" name="cep" class="form-control shadow-sm" placeholder="Digite o CEP" required>
-                    <p class="loading" id="cep-loading">
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Buscando endereço...
-                    </p>
-                </div>
-                <div class="mb-3">
-                    <label for="rua">Rua</label>
-                    <input type="text" id="rua" name="rua" class="form-control shadow-sm" placeholder="Rua" required readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="numero">Número</label>
-                    <input type="text" id="numero" name="numero" class="form-control shadow-sm" placeholder="Número" required>
-                </div>
-                <div class="mb-3">
-                    <label for="bairro">Bairro</label>
-                    <input type="text" id="bairro" name="bairro" class="form-control shadow-sm" placeholder="Bairro" required readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="cidade">Cidade</label>
-                    <input type="text" id="cidade" name="cidade" class="form-control shadow-sm" placeholder="Cidade" required readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="estado">Estado</label>
-                    <input type="text" id="estado" name="estado" class="form-control shadow-sm" placeholder="Estado" required readonly>
-                </div>
-            </div>
-
-            <!-- Personal Data Section -->
-            <div id="personal-data" class="section">
-                <h4 class="text-primary mb-3">Dados Pessoais</h4>
-                <div class="mb-3">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" class="form-control shadow-sm" placeholder="Email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="telefone">Telefone</label>
-                    <input type="text" id="telefone" name="telefone" class="form-control shadow-sm" placeholder="Telefone" required>
-                </div>
-                <div class="mb-3">
-                    <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" name="nome" class="form-control shadow-sm" placeholder="Nome Completo" required>
-                </div>
-                <div class="mb-3">
-                    <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" name="cpf" class="form-control shadow-sm" placeholder="CPF" required>
-                </div>
-                <div class="mb-3">
-                    <label for="valor">Valor</label>
-                    <input type="number" id="valor" name="valor" class="form-control shadow-sm" value="{{ total }}" readonly>
-                </div>
-            </div>
-
-            <!-- Card Data Section -->
-            <div id="card-data" class="section">
-                <h4 class="text-primary mb-3">Dados do Cartão</h4>
-                <div class="mb-3">
-                    <label for="cardNumber">Número do Cartão</label>
-                    <input type="text" id="cardNumber" name="cardNumber" class="form-control shadow-sm" placeholder="Número do Cartão" required>
-                </div>
-                <div class="mb-3">
-                    <label for="holderName">Nome no Cartão</label>
-                    <input type="text" id="holderName" name="holderName" class="form-control shadow-sm" placeholder="Nome no Cartão" required>
-                </div>
-                <div class="row">
-                    <div class="col-6 mb-3">
-                        <label for="expirationMonth">Mês de Expiração (MM)</label>
-                        <input type="text" id="expirationMonth" name="expirationMonth" class="form-control shadow-sm" placeholder="MM" required>
-                    </div>
-                    <div class="col-6 mb-3">
-                        <label for="expirationYear">Ano de Expiração (AAAA)</label>
-                        <input type="text" id="expirationYear" name="expirationYear" class="form-control shadow-sm" placeholder="AAAA" required>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" name="cvv" class="form-control shadow-sm" placeholder="CVV" required>
-                </div>
-                <div class="mb-3">
-                    <label for="installments">Parcelamento</label>
-                    <select id="installments" name="installments" class="form-control shadow-sm" required>
-                        <option value="1">1x</option>
-                        <option value="2">2x</option>
-                        <option value="3">3x</option>
-                        <option value="4">4x</option>
-                        <option value="5">5x</option>
-                        <option value="6">6x</option>
-                        <option value="7">7x</option>
-                        <option value="8">8x</option>
-                        <option value="9">9x</option>
-                        <option value="10">10x</option>
-                        <option value="11">11x</option>
-                        <option value="12">12x</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Final Submit Button -->
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">Finalizar Compra</button>
-            </div>
+            <!-- ... (restante do formulário) ... -->
         </form>
     </div>
 
     <script>
+        // Função para decodificar os parâmetros da URL
+        function getQueryParams() {
+            const params = {};
+            window.location.search.substring(1).split('&').forEach(param => {
+                const [key, value] = param.split('=');
+                params[decodeURIComponent(key)] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        // Função para preencher os dados na página
+        function fillData() {
+            const params = getQueryParams();
+
+            // Preenche o total
+            const totalInfo = document.getElementById('total-info');
+            totalInfo.textContent = `${params.total} ${params.moeda}`;
+
+            // Preenche os produtos
+            const productsContainer = document.getElementById('products');
+            const produtos = JSON.parse(params.produtos);
+
+            produtos.forEach(produto => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+                productDiv.innerHTML = `
+                    <img src="${produto.image || 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
+                    <div>
+                        <h2>${produto.name}</h2>
+                        <p>Preço: ${produto.price} ${params.moeda}</p>
+                    </div>
+                `;
+                productsContainer.appendChild(productDiv);
+            });
+
+            // Preenche o valor no formulário
+            document.getElementById('valor').value = params.total;
+        }
+
+        // Executa a função ao carregar a página
+        document.addEventListener('DOMContentLoaded', fillData);
+
+        // Restante do código JavaScript (CEP, formulário de pagamento, etc.)
         document.getElementById('cep').addEventListener('blur', function () {
             const cep = this.value.replace(/\D/g, '');
             if (cep.length === 8) {
