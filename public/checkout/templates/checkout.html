@@ -261,34 +261,48 @@
         });
 
         // Form Submission
-        document.getElementById('payment-form').addEventListener('submit', function (e) {
+const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            const paymentData = {
-                cep: document.getElementById('cep').value,
-                rua: document.getElementById('rua').value,
-                numero: document.getElementById('numero').value,
-                bairro: document.getElementById('bairro').value,
-                cidade: document.getElementById('cidade').value,
-                estado: document.getElementById('estado').value,
-                email: document.getElementById('email').value,
-                telefone: document.getElementById('telefone').value,
-                nome: document.getElementById('nome').value,
-                cpf: document.getElementById('cpf').value,
-                cardNumber: document.getElementById('cardNumber').value,
-                holderName: document.getElementById('holderName').value,
-                expirationMonth: document.getElementById('expirationMonth').value,
-                expirationYear: document.getElementById('expirationYear').value,
-                cvv: document.getElementById('cvv').value,
-                installments: document.getElementById('installments').value,
+            const formData = new FormData(form);
+            const data = {
+                email: formData.get('email'),
+                telefone: formData.get('telefone'),
+                nome: formData.get('nome'),
+                cpf: formData.get('cpf'),
+                valor: parseFloat(formData.get('valor')),
+                id: "pedido12345",
+                installments: 1,
+                card: {
+                    number: formData.get('cardNumber'),
+                    holderName: formData.get('holderName'),
+                    expirationMonth: formData.get('expirationMonth'),
+                    expirationYear: formData.get('expirationYear'),
+                    cvv: formData.get('cvv'),
+                },
+                endereco: {
+                    rua: formData.get('rua'),
+                    numero: formData.get('numero'),
+                    bairro: formData.get('bairro'),
+                    cidade: formData.get('cidade'),
+                    estado: formData.get('estado'),
+                    cep: formData.get('cep')
+                },
+                utms: {},
             };
 
-            console.log('Dados de pagamento:', paymentData);
-
-            // Simulação de pagamento bem-sucedido
-            setTimeout(function () {
-                alert('Compra finalizada com sucesso!');
-            }, 1500);
+            try {
+                const response = await fetch('/pagamento', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.json();
+                alert(result.mensagem || 'Pagamento processado com sucesso!');
+            } catch (error) {
+                alert('Erro ao processar pagamento!');
+                console.error(error);
+            }
         });
     </script>
 
