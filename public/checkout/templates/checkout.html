@@ -262,48 +262,49 @@
 
         // Form Submission
 const form = document.getElementById('payment-form');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
-            const data = {
-                email: formData.get('email'),
-                telefone: formData.get('telefone'),
-                nome: formData.get('nome'),
-                cpf: formData.get('cpf'),
-                valor: parseFloat(formData.get('valor')),
-                id: "pedido12345",
-                installments: document.getElementById('installments').value,
-                card: {
-                    number: formData.get('cardNumber'),
-                    holderName: formData.get('holderName'),
-                    expirationMonth: formData.get('expirationMonth'),
-                    expirationYear: formData.get('expirationYear'),
-                    cvv: formData.get('cvv'),
-                },
-                endereco: {
-                    rua: formData.get('rua'),
-                    numero: formData.get('numero'),
-                    bairro: formData.get('bairro'),
-                    cidade: formData.get('cidade'),
-                    estado: formData.get('estado'),
-                    cep: formData.get('cep')
-                },
-                utms: {},
-            };
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const data = {
+        email: formData.get('email'),
+        telefone: formData.get('telefone'),
+        nome: formData.get('nome'),
+        cpf: formData.get('cpf'),
+        valor: parseFloat(formData.get('valor')),
+        id: "pedido12345",
+        installments: document.getElementById('installments').value,
+        card: {
+            number: formData.get('cardNumber'),
+            holderName: formData.get('holderName'),
+            expirationMonth: formData.get('expirationMonth'),
+            expirationYear: formData.get('expirationYear'),
+            cvv: formData.get('cvv'),
+        },
+        endereco: {
+            rua: formData.get('rua'),
+            numero: formData.get('numero'),
+            bairro: formData.get('bairro'),
+            cidade: formData.get('cidade'),
+            estado: formData.get('estado'),
+            cep: formData.get('cep')
+        },
+        utms: {}, // Aqui você pode preencher os utms, se necessário
+    };
 
-            try {
-                const response = await fetch('/pagamento', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                });
-                const result = await response.json();
-                alert(result.mensagem || 'Pagamento processado com sucesso!');
-            } catch (error) {
-                alert('Erro ao processar pagamento!');
-                console.error(error);
-            }
+    try {
+        const response = await fetch('/api/process-payment', {  // Alterar a URL para a rota correta
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
         });
+        const result = await response.json();
+        alert(result.message || 'Pagamento processado com sucesso!');
+    } catch (error) {
+        alert('Erro ao processar pagamento!');
+        console.error(error);
+    }
+});
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
