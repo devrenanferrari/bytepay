@@ -272,7 +272,7 @@ const form = document.getElementById('payment-form');
                 cpf: formData.get('cpf'),
                 valor: parseFloat(formData.get('valor')),
                 id: "pedido12345",
-                installments: 1,
+                installments: document.getElementById('installments').value,
                 card: {
                     number: formData.get('cardNumber'),
                     holderName: formData.get('holderName'),
