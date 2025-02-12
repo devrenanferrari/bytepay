@@ -158,7 +158,7 @@ app.post('/api/process-payment', async (req, res) => {
   try {
     // Montando o payload para a requisição POST para a API da BytePayCash
     const paymentPayload = {
-      "api-key": process.env.BYTEPAY_API_KEY, // Sua chave de API armazenada no .env
+      "api-key": bytepaytoken, 
       "email": paymentData.email,
       "telefone": paymentData.telefone,
       "nome": paymentData.nome,
@@ -355,6 +355,44 @@ app.post('/api/integrations', async (req, res) => {
         res.status(500).json({ error: 'Erro ao integrar com o Adquirente' });
     }
 });
+
+// Rota para buscar o bytepaytoken
+app.get('/buscar-bytepaytoken', async (req, res) => {
+  const { email } = req.query; // Captura o email enviado como parâmetro da requisição
+
+  try {
+    // Consulta no banco de dados para pegar o bytepaytoken
+    const result = await pool.query('SELECT bytepaytoken FROM users WHERE email = $1', [email]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Usuário não encontrado.' });
+    }
+
+    const bytepaytoken = result.rows[0].bytepaytoken;
+
+    // Retorna o token encontrado
+    return res.json({ bytepaytoken });
+
+  } catch (error) {
+    console.error('Erro ao buscar o bytepaytoken:', error);
+    return res.status(500).json({ error: 'Erro ao buscar o token.' });
+  }
+});
+
+// Rota de pagamento que usa o bytepaytoken
+app.post('/processar-pagamento', async (req, res) => {
+  const { email, valor } = req.body; // Pega o email e valor do corpo da requisição
+  
+  try {
+    // Chama a rota para pegar o bytepaytoken
+    const response = await fetch(`http://localhost:3000/buscar-bytepaytoken?email=${email}`);
+    const data = await response.json();
+
+    if (data.error) {
+      return res.status(400).json({ error: data.error });
+    }
+
+    const bytepaytoken = data.bytepaytoken;
 
 
 
