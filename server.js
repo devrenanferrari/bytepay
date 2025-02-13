@@ -319,7 +319,6 @@ app.post('/get-products', async (req, res) => {
   }
 });
 
-
 // Importando a função fetchThemes do arquivo apis/conseguirIDtema.js
 const { fetchThemes } = require('./apis/conseguirIDtema');
 
@@ -393,6 +392,28 @@ app.post('/processar-pagamento', async (req, res) => {
     }
 
     const bytepaytoken = data.bytepaytoken;
+
+    // Montando o payload para a requisição POST para a API da BytePayCash
+    const paymentPayload = {
+      "api-key": bytepaytoken, 
+      "email": email,
+      "valor": valor,
+    };
+
+    // Realiza a requisição para a BytePayCash
+    const paymentResponse = await axios.post('https://api.bytepaycash.com/v1/gateway/', paymentPayload);
+
+    // Verifica a resposta da BytePayCash
+    if (paymentResponse.data.status === 'success') {
+      res.status(200).json({ message: 'Pagamento processado com sucesso!', data: paymentResponse.data });
+    } else {
+      res.status(400).json({ message: 'Erro ao processar pagamento.', data: paymentResponse.data });
+    }
+  } catch (error) {
+    console.error('Erro ao processar pagamento:', error);
+    res.status(500).json({ message: 'Erro ao processar pagamento. Tente novamente.' });
+  }
+});
 
 
 
