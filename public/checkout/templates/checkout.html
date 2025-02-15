@@ -234,7 +234,7 @@
 
         <!-- Total Information -->
         <div class="section total-info text-center">
-            <div id="product-list"></div>
+            <div id="product-list">
             <h4 class="text-dark">Total:</h4>
             <p id="total-info" class="text-success fw-bold"></p>
         </div>
@@ -363,48 +363,6 @@
                 <div id="product-list">
                     <!-- Produtos serão inseridos aqui via JavaScript -->
                 </div>
-                <script>
-                    function updateTotal() {
-                        const products = document.querySelectorAll('.product');
-                        let total = 0;
-                        products.forEach(product => {
-                            const price = parseFloat(product.querySelector('.product-price').textContent.replace(/[^\d.-]/g, ''));
-                            const quantity = parseInt(product.querySelector('.product-quantity').value);
-                            total += price * quantity;
-                        });
-                        document.getElementById('total-info').textContent = total.toFixed(2);
-                        document.getElementById('order-total').textContent = total.toFixed(2);
-                    }
-
-                    function fillData() {
-                        const params = getQueryParams();
-
-                        // Preenche o total
-                        const totalInfo = document.getElementById('total-info');
-                        totalInfo.textContent = `${params.total} ${params.moeda}`;
-
-                        // Preenche os produtos
-                        const productsContainer = document.getElementById('product-list');
-                        const produtos = JSON.parse(params.produtos);
-
-                        produtos.forEach(produto => {
-                            const productDiv = document.createElement('div');
-                            productDiv.className = 'product';
-                            productDiv.innerHTML = `
-                                <img src="${produto.image ? produto.image : 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
-                                <div>
-                                    <h2>${produto.name}</h2>
-                                    <p>Preço: <span class="product-price">${produto.price}</span> ${params.moeda}</p>
-                                    <input type="number" class="product-quantity" value="1" min="1" onchange="updateTotal()">
-                                </div>
-                            `;
-                            productsContainer.appendChild(productDiv);
-                        });
-
-                        // Atualiza o total inicial
-                        updateTotal();
-                    }
-                </script>
                 <div class="text-center">
                     <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('card-data')">
                         <i class="fas fa-arrow-right"></i> Próximo
@@ -488,7 +446,8 @@
         <!-- Order Summary -->
         <div class="summary">
             <h4>Resumo do Pedido</h4>
-            <div id="product-list"></div>
+            <p>Produto: <span id="product-name"></span></p>
+            <p>Preço: <span id="product-price"></span></p>
             <p>Total: <span id="order-total"></span></p>
         </div>
     </div>
