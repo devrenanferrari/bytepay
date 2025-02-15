@@ -389,6 +389,17 @@
                         <label for="cardNumber">Número do Cartão</label>
                         <input type="text" id="cardNumber" name="cardNumber" class="form-control shadow-sm" placeholder="0000 0000 0000 0000" required>
                     </div>
+                    <script>
+                        document.getElementById('cardNumber').addEventListener('input', function (e) {
+                            let value = e.target.value.replace(/\D/g, '');
+                            if (value.length > 16) value = value.slice(0, 16);
+                            value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                            e.target.value = value;
+                        });
+                    </script>
+                    <div class="text-end">
+                        <img src="https://paradafeminina.com.br/wp-content/uploads/2019/01/parada-feminina-cartoes-aceitos.png" alt="Cartões Aceitos" style="height: 30px;">
+                    </div>
                     <div class="mb-3">
                         <label for="holderName">Nome</label>
                         <input type="text" id="holderName" name="holderName" class="form-control shadow-sm" placeholder="Nome no Cartão" required>
