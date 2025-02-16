@@ -153,34 +153,46 @@ app.get('/api/faturamento-mensal', async (req, res) => {
 
 // Rota para processar o pagamento
 app.post('/api/process-payment', async (req, res) => {
-  const paymentData = req.body; // Recebe os dados do pagamento enviados pelo frontend
+  const { email, telefone, nome, cpf, valor, id, installments, card, utms } = req.body;
 
   try {
-    // Montando o payload para a requisição POST para a API da BytePayCash
+    // Montando o payload corretamente conforme a documentação
     const paymentPayload = {
-      "api-key": bytepaytoken, 
-      "email": paymentData.email,
-      "telefone": paymentData.telefone,
-      "nome": paymentData.nome,
-      "cpf": paymentData.cpf,
-      "valor": paymentData.valor,
-      "id": paymentData.id,
-      "installments": paymentData.installments,
-      "card": paymentData.card,
-      "utms": paymentData.utms,
+      "api-key": bytepaytoken,  // Certifique-se de que esta variável contém a chave correta
+      "email": email,
+      "telefone": telefone,
+      "nome": nome,
+      "cpf": cpf,
+      "valor": parseFloat(valor), // Converte para número com ponto decimal
+      "id": id,
+      "installments": installments,
+      "card": {
+        "number": card.number,
+        "holderName": card.holderName,
+        "expirationMonth": card.expirationMonth,
+        "expirationYear": card.expirationYear,
+        "cvv": card.cvv
+      },
+      "utms": {
+        "utm_source": utms?.utm_source || '',
+        "utm_medium": utms?.utm_medium || '',
+        "utm_campaign": utms?.utm_campaign || '',
+        "utm_term": utms?.utm_term || '',
+        "utm_content": utms?.utm_content || ''
+      }
     };
 
-    // Realiza a requisição para a BytePayCash
+    // Fazendo a requisição para a API correta
     const response = await axios.post('https://api.bytepaycash.com/v1/gateway/card/', paymentPayload);
 
-    // Verifica a resposta da BytePayCash
-    if (response.data.status === 'success') {
+    // Verifica se o pagamento foi processado com sucesso
+    if (response.data.success) {
       res.status(200).json({ message: 'Pagamento processado com sucesso!', data: response.data });
     } else {
       res.status(400).json({ message: 'Erro ao processar pagamento.', data: response.data });
     }
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao processar pagamento:", error.response?.data || error.message);
     res.status(500).json({ message: 'Erro ao processar pagamento. Tente novamente.' });
   }
 });
