@@ -676,7 +676,7 @@ const formPix = document.getElementById('pix-form');
 
 formPix.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const formData = new FormData(formPix);
+    const formData = new FormData(form);
 
     const data = {
         nome: formData.get('nome'),
