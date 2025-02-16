@@ -205,7 +205,7 @@ app.post('/api/process-pix', async (req, res) => {
     // Montando o payload para o Pix conforme a documentação
     const pixPayload = {
       "api-key": bytepaytoken,  // Certifique-se de que está com o valor correto da chave da API
-      "amount": parseFloat(valor),          // O valor da transação
+      "amount": valor,          // O valor da transação
       "client": {
         "name": nome,           // Nome do cliente
         "document": cpf,        // CPF do cliente
