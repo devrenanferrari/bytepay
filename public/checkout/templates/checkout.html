@@ -603,11 +603,17 @@
             }
         });
 
-        // Função para obter parâmetros da URL
+       // Função para obter parâmetros da URL
 function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
 }
+
+// Pegando os valores passados na URL
+const bytepayToken = getQueryParam('bytepaytoken') || 'DEFAULT_API_KEY';
+const valorTotal = parseFloat(getQueryParam('total')) || 0;
+
+document.getElementById('valor').value = valorTotal.toFixed(2); // Preenchendo o campo valor no formulário
 
 // Form Submission
 const form = document.getElementById('payment-form');
@@ -615,16 +621,13 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
 
-    // Pegando o bytepaytoken da URL
-    const bytepayToken = getQueryParam('bytepaytoken');
-
     const data = {
-        "api-key": bytepayToken,  // Usando o bytepaytoken como API Key
+        "api-key": bytepayToken, 
         email: formData.get('email'),
         telefone: formData.get('telefone'),
         nome: formData.get('nome'),
         cpf: formData.get('cpf'),
-        valor: parseFloat(formData.get('valor')),
+        valor: valorTotal,  // Agora garantimos que o valor seja correto
         id: "pedido12345",
         installments: document.getElementById('installments').value,
         card: {
@@ -642,11 +645,13 @@ form.addEventListener('submit', async (e) => {
             estado: formData.get('estado'),
             cep: formData.get('cep')
         },
-        utms: {}, // Aqui você pode preencher os utms, se necessário
+        utms: {},
     };
 
+    console.log("Enviando pagamento com dados:", data); // Debug
+
     try {
-        const response = await fetch('/api/process-payment', {  // Alterar a URL para a rota correta
+        const response = await fetch('/api/process-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
