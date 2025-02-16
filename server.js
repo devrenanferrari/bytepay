@@ -199,7 +199,7 @@ app.post('/api/process-payment', async (req, res) => {
 
 // Rota para processar pagamento via Pix
 app.post('/api/process-pix', async (req, res) => {
-  const { nome, cpf, telefone, email, valor, utms } = req.body;
+  const {bytepaytoken, nome, cpf, telefone, email, valor, utms } = req.body;
 
   try {
     // Montando o payload para o Pix conforme a documentação
