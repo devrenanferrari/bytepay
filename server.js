@@ -197,34 +197,30 @@ app.post('/api/process-payment', async (req, res) => {
   }
 });
 
-// Rota para processar pagamento via Pix
 app.post('/api/process-pix', async (req, res) => {
-  const {bytepaytoken, nome, cpf, telefone, email, valor, utms } = req.body;
+  const { bytepaytoken, nome, cpf, telefone, email, valor, utms } = req.body;
 
   try {
-    // Montando o payload para o Pix conforme a documentação
     const pixPayload = {
-      "api-key": bytepaytoken,  // Certifique-se de que está com o valor correto da chave da API
-      "amount": valor,          // O valor da transação
+      "api-key": bytepaytoken,  // Alterado para seguir a documentação
+      "amount": valor,  // Converte R$ 10,00 para centavos (1000)
       "client": {
-        "name": nome,           // Nome do cliente
-        "document": cpf,        // CPF do cliente
-        "telefone": telefone,   // Telefone do cliente
-        "email": email          // E-mail do cliente
+        "name": nome,
+        "document": cpf, // Remove pontos e traços do CPF
+        "telefone": telefone,
+        "email": email
       },
-      "utms": utms || {}        // Informações UTM (se houver)
+      "utms": utms || {}  // Garante que utms seja um objeto
     };
 
-    // Realiza a requisição para gerar o código Pix
     const response = await axios.post('https://api.bytepaycash.com/v1/gateway/', pixPayload);
 
-    // Verifica se o Pix foi gerado com sucesso
     if (response.data.status === 'success') {
       return res.status(200).json({
         message: 'Pix gerado com sucesso!',
-        paymentCode: response.data.paymentCode,  // Código do Pix
-        idTransaction: response.data.idTransaction,  // ID da transação
-        paymentCodeBase64: response.data.paymentCodeBase64  // Código Pix em base64
+        paymentCode: response.data.paymentCode,
+        idTransaction: response.data.idTransaction,
+        paymentCodeBase64: response.data.paymentCodeBase64
       });
     } else {
       return res.status(400).json({ message: 'Erro ao gerar Pix', details: response.data });
@@ -234,6 +230,7 @@ app.post('/api/process-pix', async (req, res) => {
     return res.status(500).json({ message: 'Erro ao processar Pix. Tente novamente.' });
   }
 });
+
 
 
 
