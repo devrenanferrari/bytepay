@@ -487,6 +487,95 @@
             </div>
         </form>
 
+        <!-- Tela de Pagamento PIX -->
+        <div id="pix-payment-screen" style="display: none;">
+            <h4 class="text-dark mb-3">Pagamento via PIX</h4>
+            <p>Use o código abaixo para realizar o pagamento:</p>
+            <div class="mb-3">
+                <textarea id="pix-code" class="form-control shadow-sm" rows="3" readonly></textarea>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-outline-dark" onclick="copyPixCode()">
+                    <i class="fas fa-copy"></i> Copiar Código PIX
+                </button>
+            </div>
+        </div>
+
+        <script>
+            // Função para copiar o código PIX
+            function copyPixCode() {
+                const pixCode = document.getElementById('pix-code');
+                pixCode.select();
+                document.execCommand('copy');
+                alert('Código PIX copiado para a área de transferência!');
+            }
+
+            // Modificar o evento de envio do formulário
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const paymentMethod = document.querySelector('.payment-method:visible').id;
+
+                const data = {
+                    nome: formData.get('nome'),
+                    cpf: formData.get('cpf'),
+                    telefone: formData.get('telefone'),
+                    email: formData.get('email'),
+                    valor: parseFloat(formData.get('valor').replace(',', '.')), // Converte para número correto
+                    utms: {
+                        utm_source: formData.get('utm_source') || '',
+                        utm_medium: formData.get('utm_medium') || '',
+                        utm_campaign: formData.get('utm_campaign') || '',
+                        utm_term: formData.get('utm_term') || '',
+                        utm_content: formData.get('utm_content') || ''
+                    }
+                };
+
+                try {
+                    let response, result;
+                    if (paymentMethod === 'card-payment') {
+                        data.card = {
+                            number: formData.get('cardNumber'),
+                            holderName: formData.get('holderName'),
+                            expirationMonth: formData.get('expirationMonth'),
+                            expirationYear: formData.get('expirationYear'),
+                            cvv: formData.get('cvv'),
+                        };
+                        data.installments = document.getElementById('installments').value;
+
+                        response = await fetch('/api/process-payment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data),
+                        });
+                    } else if (paymentMethod === 'pix-payment') {
+                        response = await fetch('/api/process-pix', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data),
+                        });
+                    }
+
+                    result = await response.json();
+
+                    if (response.ok) {
+                        if (paymentMethod === 'pix-payment') {
+                            document.getElementById('pix-code').textContent = result.paymentCode;
+                            document.getElementById('payment-form').style.display = 'none';
+                            document.getElementById('pix-payment-screen').style.display = 'block';
+                        } else {
+                            alert(result.message || 'Pagamento processado com sucesso!');
+                        }
+                    } else {
+                        alert(`Erro ao processar pagamento: ${result.message || 'Tente novamente mais tarde.'}`);
+                    }
+                } catch (error) {
+                    alert('Erro ao processar pagamento!');
+                    console.error(error);
+                }
+            });
+        </script>
+
         <!-- Order Summary -->
         <div class="summary">
             <h4>Resumo do Pedido</h4>
@@ -610,7 +699,7 @@ function getQueryParam(param) {
 }
 
 // Pegando os valores passados na URL
-const bytepayToken = getQueryParam('bytepaytoken') || 'DEFAULT_API_KEY';
+const bytepayToken = getQueryParam('bytepaytoken');
 const valorTotal = parseFloat(getQueryParam('total')) || 0;
 
 document.getElementById('valor').value = valorTotal.toFixed(2); // Preenchendo o campo valor no formulário
