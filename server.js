@@ -197,6 +197,45 @@ app.post('/api/process-payment', async (req, res) => {
   }
 });
 
+// Rota para processar pagamento via Pix
+app.post('/api/process-pix', async (req, res) => {
+  const { nome, cpf, telefone, email, valor, utms } = req.body;
+
+  try {
+    // Montando o payload para o Pix conforme a documentação
+    const pixPayload = {
+      "api-key": bytepaytoken,  // Certifique-se de que está com o valor correto da chave da API
+      "amount": parseFloat(valor),          // O valor da transação
+      "client": {
+        "name": nome,           // Nome do cliente
+        "document": cpf,        // CPF do cliente
+        "telefone": telefone,   // Telefone do cliente
+        "email": email          // E-mail do cliente
+      },
+      "utms": utms || {}        // Informações UTM (se houver)
+    };
+
+    // Realiza a requisição para gerar o código Pix
+    const response = await axios.post('https://api.bytepaycash.com/v1/gateway/', pixPayload);
+
+    // Verifica se o Pix foi gerado com sucesso
+    if (response.data.status === 'success') {
+      return res.status(200).json({
+        message: 'Pix gerado com sucesso!',
+        paymentCode: response.data.paymentCode,  // Código do Pix
+        idTransaction: response.data.idTransaction,  // ID da transação
+        paymentCodeBase64: response.data.paymentCodeBase64  // Código Pix em base64
+      });
+    } else {
+      return res.status(400).json({ message: 'Erro ao gerar Pix', details: response.data });
+    }
+  } catch (error) {
+    console.error("Erro ao gerar Pix:", error.response?.data || error.message);
+    return res.status(500).json({ message: 'Erro ao processar Pix. Tente novamente.' });
+  }
+});
+
+
 
 // Iniciar o servidor
 app.listen(port, () => {
