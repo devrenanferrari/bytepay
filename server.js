@@ -187,15 +187,16 @@ app.post('/api/process-payment', async (req, res) => {
 
     // Verifica se o pagamento foi processado com sucesso
     if (response.data.success) {
-      res.status(200).json({ message: 'Pagamento processado com sucesso!', data: response.data });
+      return res.status(200).json({ message: 'Pagamento processado com sucesso!', data: response.data });
     } else {
-      res.status(400).json({ message: 'Erro ao processar pagamento.', data: response.data });
+      return res.status(400).json({ message: 'Erro ao processar pagamento.', data: response.data });
     }
   } catch (error) {
     console.error("Erro ao processar pagamento:", error.response?.data || error.message);
-    res.status(500).json({ message: 'Erro ao processar pagamento. Tente novamente.' });
+    return res.status(500).json({ message: 'Erro ao processar pagamento. Tente novamente.' });
   }
 });
+
 
 // Iniciar o servidor
 app.listen(port, () => {
