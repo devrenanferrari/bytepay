@@ -603,50 +603,61 @@
             }
         });
 
-        // Form Submission
-        const form = document.getElementById('payment-form');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
-            const data = {
-                email: formData.get('email'),
-                telefone: formData.get('telefone'),
-                nome: formData.get('nome'),
-                cpf: formData.get('cpf'),
-                valor: parseFloat(formData.get('valor')),
-                id: "pedido12345",
-                installments: document.getElementById('installments').value,
-                card: {
-                    number: formData.get('cardNumber'),
-                    holderName: formData.get('holderName'),
-                    expirationMonth: formData.get('expirationMonth'),
-                    expirationYear: formData.get('expirationYear'),
-                    cvv: formData.get('cvv'),
-                },
-                endereco: {
-                    rua: formData.get('rua'),
-                    numero: formData.get('numero'),
-                    bairro: formData.get('bairro'),
-                    cidade: formData.get('cidade'),
-                    estado: formData.get('estado'),
-                    cep: formData.get('cep')
-                },
-                utms: {}, // Aqui você pode preencher os utms, se necessário
-            };
+        // Função para obter parâmetros da URL
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
 
-            try {
-                const response = await fetch('/api/process-payment', {  // Alterar a URL para a rota correta
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                });
-                const result = await response.json();
-                alert(result.message || 'Pagamento processado com sucesso!');
-            } catch (error) {
-                alert('Erro ao processar pagamento!');
-                console.error(error);
-            }
+// Form Submission
+const form = document.getElementById('payment-form');
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    // Pegando o bytepaytoken da URL
+    const bytepayToken = getQueryParam('bytepaytoken');
+
+    const data = {
+        "api-key": bytepayToken,  // Usando o bytepaytoken como API Key
+        email: formData.get('email'),
+        telefone: formData.get('telefone'),
+        nome: formData.get('nome'),
+        cpf: formData.get('cpf'),
+        valor: parseFloat(formData.get('valor')),
+        id: "pedido12345",
+        installments: document.getElementById('installments').value,
+        card: {
+            number: formData.get('cardNumber'),
+            holderName: formData.get('holderName'),
+            expirationMonth: formData.get('expirationMonth'),
+            expirationYear: formData.get('expirationYear'),
+            cvv: formData.get('cvv'),
+        },
+        endereco: {
+            rua: formData.get('rua'),
+            numero: formData.get('numero'),
+            bairro: formData.get('bairro'),
+            cidade: formData.get('cidade'),
+            estado: formData.get('estado'),
+            cep: formData.get('cep')
+        },
+        utms: {}, // Aqui você pode preencher os utms, se necessário
+    };
+
+    try {
+        const response = await fetch('/api/process-payment', {  // Alterar a URL para a rota correta
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
         });
+        const result = await response.json();
+        alert(result.message || 'Pagamento processado com sucesso!');
+    } catch (error) {
+        alert('Erro ao processar pagamento!');
+        console.error(error);
+    }
+});
     </script>
 
 <footer class="footer">
