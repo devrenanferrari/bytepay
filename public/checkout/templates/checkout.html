@@ -657,12 +657,19 @@ form.addEventListener('submit', async (e) => {
         });
 
         const result = await response.json();
-        alert(result.message || 'Pagamento processado com sucesso!');
+
+        if (response.ok) { // Verifica se o status da resposta foi 200
+            alert(result.message || 'Pagamento processado com sucesso!');
+        } else {
+            // Se o status não for 200, trata o erro de forma mais clara
+            alert(`Erro ao processar pagamento: ${result.message || 'Tente novamente mais tarde.'}`);
+        }
     } catch (error) {
         alert('Erro ao processar pagamento!');
         console.error(error);
     }
 });
+
 
     </script>
 
