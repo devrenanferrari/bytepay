@@ -671,6 +671,56 @@ form.addEventListener('submit', async (e) => {
 });
 
 
+        // Função para enviar os dados do Pix
+const formPix = document.getElementById('pix-form');
+
+formPix.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(formPix);
+
+    const data = {
+        nome: formData.get('nome'),
+        cpf: formData.get('cpf'),
+        telefone: formData.get('telefone'),
+        email: formData.get('email'),
+        valor: parseFloat(formData.get('valor').replace(',', '.')), // Converte para número correto
+        utms: {
+            utm_source: formData.get('utm_source') || '',
+            utm_medium: formData.get('utm_medium') || '',
+            utm_campaign: formData.get('utm_campaign') || '',
+            utm_term: formData.get('utm_term') || '',
+            utm_content: formData.get('utm_content') || ''
+        }
+    };
+
+    console.log("Enviando dados para gerar Pix:", data); // Debug
+
+    try {
+        const response = await fetch('/api/process-pix', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {  // Verifica se o status da resposta foi 200
+            alert('Pix gerado com sucesso!');
+            document.getElementById('pix-code').textContent = result.paymentCode;  // Exibe o código Pix
+            document.getElementById('transaction-id').textContent = result.idTransaction;  // Exibe o ID da transação
+            document.getElementById('payment-code-base64').textContent = result.paymentCodeBase64;  // Exibe o código base64 (caso necessário)
+        } else {
+            // Se o status não for 200, exibe a mensagem de erro
+            alert(`Erro ao gerar Pix: ${result.message || 'Tente novamente mais tarde.'}`);
+        }
+    } catch (error) {
+        alert('Erro ao processar Pix!');
+        console.error(error);
+    }
+});
+
+
+
     </script>
 
 <footer class="footer">
