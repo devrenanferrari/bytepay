@@ -239,7 +239,7 @@
         </div>
 
         <!-- Formulário de Pagamento -->
-        <form id="payment-form" class="p-4 rounded shadow-s">
+        <form id="payment-form" class="p-4 rounded shadow-s" novalidate>
             <!-- Personal Data Section -->
             <div id="personal-data" class="section active">
                 <h4 class="text-dark mb-3">Dados Pessoais</h4>
@@ -529,7 +529,7 @@ document.getElementById('valor').value = valorTotal.toFixed(2); // Preenchendo o
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const formData = new FormData(form);
-                const paymentMethod = document.querySelector('.payment-method:visible').id;
+                const paymentMethod = document.querySelector('.payment-method:not([style*="display: none"])').id;
 
                 const data = {
                     "api-key": bytepayToken,
