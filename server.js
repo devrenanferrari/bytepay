@@ -171,7 +171,7 @@ app.post('/api/process-payment', async (req, res) => {
     };
 
     // Realiza a requisição para a BytePayCash
-    const response = await axios.post('https://api.bytepaycash.com/v1/gateway/', paymentPayload);
+    const response = await axios.post('https://api.bytepaycash.com/v1/gateway/card/', paymentPayload);
 
     // Verifica a resposta da BytePayCash
     if (response.data.status === 'success') {
