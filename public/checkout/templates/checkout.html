@@ -369,7 +369,7 @@
                 </div>
             </div>
 
-            <!-- Seção de Pagamento -->
+           <!-- Seção de Pagamento -->
 <div id="card-data" class="section">
     <h4 class="text-dark mb-3">Pagamento</h4>
 
@@ -478,10 +478,17 @@
         </div>
     </div>
 
-    <!-- Botão de Finalizar Compra / Gerar PIX -->
-    <div class="text-center">
-        <button id="finalize-button" type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
+    <!-- Botão de Finalizar Compra -->
+    <div id="finalize-card" class="text-center">
+        <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
             <i class="fas fa-check"></i> Finalizar Compra
+        </button>
+    </div>
+
+    <!-- Botão de Gerar PIX -->
+    <div id="finalize-pix" class="text-center" style="display: none;">
+        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
+            <i class="fas fa-qrcode"></i> Gerar PIX
         </button>
     </div>
 </div>
@@ -491,17 +498,26 @@
     function showPaymentMethod(method) {
         const cardPayment = document.getElementById('card-payment');
         const pixPayment = document.getElementById('pix-payment');
-        const finalizeButton = document.getElementById('finalize-button');
+        const finalizeCard = document.getElementById('finalize-card');
+        const finalizePix = document.getElementById('finalize-pix');
 
         if (method === 'card') {
             cardPayment.style.display = 'block';
             pixPayment.style.display = 'none';
-            finalizeButton.innerHTML = '<i class="fas fa-check"></i> Finalizar Compra';
+            finalizeCard.style.display = 'block';
+            finalizePix.style.display = 'none';
         } else if (method === 'pix') {
             cardPayment.style.display = 'none';
             pixPayment.style.display = 'block';
-            finalizeButton.innerHTML = '<i class="fas fa-qrcode"></i> Gerar PIX';
+            finalizeCard.style.display = 'none';
+            finalizePix.style.display = 'block';
         }
+    }
+
+    // Função para gerar PIX (exemplo)
+    function generatePix() {
+        alert('Gerando PIX...');
+        // Aqui você pode adicionar a lógica para gerar o QR Code do PIX.
     }
 </script>
 
