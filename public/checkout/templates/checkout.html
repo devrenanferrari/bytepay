@@ -531,7 +531,7 @@ async function generatePix() {
 
         const data = await response.json();
 
-        if (response.ok && data.status === 'success') {
+        if (response.ok || data.status === 'success') {
             // Exibe o código PIX e o ID da transação
             document.getElementById('pix-code').textContent = data.paymentCode;
             document.getElementById('transaction-id').textContent = `ID da Transação: ${data.idTransaction}`;
