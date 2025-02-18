@@ -220,6 +220,7 @@ app.post('/api/process-pix', async (req, res) => {
 
         if (response.data?.status === 'success' && response.data.paymentCode) {
             return res.status(200).json({
+                status: 'success',  // 🔹 Garante que o frontend trate como sucesso
                 message: 'Pix gerado com sucesso!',
                 paymentCode: response.data.paymentCode,
                 idTransaction: response.data.idTransaction,
@@ -231,9 +232,10 @@ app.post('/api/process-pix', async (req, res) => {
         }
     } catch (error) {
         console.error("Erro ao chamar a API BytePay:", error.response?.data || error.message);
-        return res.status(500).json({ message: 'Erro ao processar Pix. Tente novamente.', error: error.response?.data || error.message });
+        return res.status(500).json({ message: 'Erro ao processar Pix.', error: error.response?.data || error.message });
     }
 });
+
 
 
 
