@@ -346,249 +346,249 @@
                         <option value="SP">São Paulo</option>
                         <option value="SE">Sergipe</option>
                         <option value="TO">Tocantins</option>
-                    </select>
-                </div>
-                <div class="text-center">
-                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('products')">
-                        <i class="fas fa-arrow-right"></i> Próximo
-                    </button>
-                </div>
-            </div>
+</select>
+</div>
+<div class="text-center">
+    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('products')">
+        <i class="fas fa-arrow-right"></i> Próximo
+    </button>
+</div>
+</div>
 
-            <!-- Product Section -->
-            <div id="products" class="section">
-                <h4 class="text-dark mb-3">Carrinho</h4>
-                <div id="product-list">
-                    <!-- Produtos serão inseridos aqui via JavaScript -->
-                </div>
-                <div class="text-center">
-                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('card-data')">
-                        <i class="fas fa-arrow-right"></i> Próximo
-                    </button>
-                </div>
-            </div>
+<!-- Product Section -->
+<div id="products" class="section">
+    <h4 class="text-dark mb-3">Carrinho</h4>
+    <div id="product-list">
+        <!-- Produtos serão inseridos aqui via JavaScript -->
+    </div>
+    <div class="text-center">
+        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('card-data')">
+            <i class="fas fa-arrow-right"></i> Próximo
+        </button>
+    </div>
+</div>
 
-            <!-- Seção de Pagamento -->
-            <div id="card-data" class="section">
-                <h4 class="text-dark mb-3">Pagamento</h4>
+<!-- Seção de Pagamento -->
+<div id="card-data" class="section">
+    <h4 class="text-dark mb-3">Pagamento</h4>
 
-                <!-- Escolha do Método de Pagamento -->
-                <div class="payment-methods mb-4">
-                    <button type="button" class="btn btn-outline-dark" onclick="showPaymentMethod('pix')">
-                        <i class="fas fa-qrcode"></i> Pagar com PIX
-                    </button>
-                </div>
-
-                <!-- Tela de Pagamento com PIX -->
-                <div id="pix-payment" class="payment-method" style="display: none;"></div>
-                <div class="text-center">
-                    <p class="mb-3">Após clicar em 'Gerar PIX', você verá o QR Code para pagamento. Certifique-se de concluir a transação para que seu pedido seja confirmado.</p>
-                </div>
-
-                <!-- Botão de Gerar PIX -->
-                <div class="text-center">
-                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
-                        <i class="fas fa-qrcode"></i> Gerar PIX
-                    </button>
-                </div>
-
-                <!-- Área para exibir o código do PIX -->
-                <div id="pix-code-container" class="text-center mt-4" style="display: none;">
-                    <h5 class="text-dark mb-3">Código PIX:</h5>
-                    <p id="pix-code" class="text-dark font-weight-bold"></p>
-                    <button class="btn btn-outline-dark" onclick="copyPixCode()">Copiar Código</button>
-                    <p id="transaction-id" class="text-muted small"></p>
-                </div>
-            </div>
-            <!-- Campo oculto para valor -->
-            <input type="hidden" id="valor" name="valor">
-        </form>
-
-        <!-- Order Summary -->
-        <div class="summary">
-            <h4>Resumo do Pedido</h4>
-            <p>Produto: <span id="product-name"></span></p>
-            <p>Preço: <span id="product-price"></span></p>
-            <p>Total: <span id="order-total"></span></p>
-        </div>
+    <!-- Escolha do Método de Pagamento -->
+    <div class="payment-methods mb-4">
+        <button type="button" class="btn btn-outline-dark" onclick="showPaymentMethod('pix')">
+            <i class="fas fa-qrcode"></i> Pagar com PIX
+        </button>
     </div>
 
-    <script>
-        // Função para obter parâmetros da URL
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
+    <!-- Tela de Pagamento com PIX -->
+    <div id="pix-payment" class="payment-method" style="display: none;"></div>
+    <div class="text-center">
+        <p class="mb-3">Após clicar em 'Gerar PIX', você verá o QR Code para pagamento. Certifique-se de concluir a transação para que seu pedido seja confirmado.</p>
+    </div>
 
-        // Função para decodificar os parâmetros da URL
-        function getQueryParams() {
-            const params = {};
-            window.location.search.substring(1).split('&').forEach(param => {
-                const [key, value] = param.split('=');
-                params[decodeURIComponent(key)] = decodeURIComponent(value);
-            });
-            return params;
-        }
+    <!-- Botão de Gerar PIX -->
+    <div class="text-center">
+        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
+            <i class="fas fa-qrcode"></i> Gerar PIX
+        </button>
+    </div>
 
-        // Função para preencher os dados na página
-        function fillData() {
-            const params = getQueryParams();
+    <!-- Área para exibir o código do PIX -->
+    <div id="pix-code-container" class="text-center mt-4" style="display: none;">
+        <h5 class="text-dark mb-3">Código PIX:</h5>
+        <p id="pix-code" class="text-dark font-weight-bold"></p>
+        <button class="btn btn-outline-dark" onclick="copyPixCode()">Copiar Código</button>
+        <p id="transaction-id" class="text-muted small"></p>
+    </div>
+</div>
+<!-- Campo oculto para valor -->
+<input type="hidden" id="valor" name="valor">
+</form>
 
-            // Preenche o total
-            const totalInfo = document.getElementById('total-info');
-            totalInfo.textContent = `${params.total} ${params.moeda}`;
+<!-- Order Summary -->
+<div class="summary">
+    <h4>Resumo do Pedido</h4>
+    <p>Produto: <span id="product-name"></span></p>
+    <p>Preço: <span id="product-price"></span></p>
+    <p>Total: <span id="order-total"></span></p>
+</div>
+</div>
 
-            // Preenche os produtos
-            const productsContainer = document.getElementById('product-list');
-            const produtos = JSON.parse(params.produtos);
-
-            produtos.forEach(produto => {
-                const productDiv = document.createElement('div');
-                productDiv.className = 'product';
-                productDiv.innerHTML = `
-                    <img src="${produto.image ? produto.image : 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
-                    <div>
-                    <h2>${produto.name}</h2>
-                    <p>Preço: ${produto.price} ${params.moeda}</p>
-                    </div>
-                `;
-                productsContainer.appendChild(productDiv);
-
-                // Preenche o resumo do pedido
-                document.getElementById('product-name').textContent = produto.name;
-                document.getElementById('product-price').textContent = `${produto.price} ${params.moeda}`;
-                document.getElementById('order-total').textContent = `${params.total} ${params.moeda}`;
-            });
-
-            // Preenche o valor no formulário
-            document.getElementById('valor').value = params.total;
-        }
-
-        // Função para mostrar a próxima seção
-        function nextSection(sectionId) {
-            const currentSection = document.querySelector('.section.active');
-            currentSection.classList.remove('active');
-            document.getElementById(sectionId).classList.add('active');
-            updateProgressBar();
-        }
-
-        // Função para atualizar a barra de progresso
-        function updateProgressBar() {
-            const sections = document.querySelectorAll('.section');
-            const activeSectionIndex = Array.from(sections).findIndex(section => section.classList.contains('active'));
-            const progressSteps = document.querySelectorAll('.progress-step');
-            progressSteps.forEach((step, index) => {
-                if (index < activeSectionIndex) {
-                    step.classList.add('active');
-                } else {
-                    step.classList.remove('active');
-                }
-            });
-        }
-
-        // Função para alternar entre métodos de pagamento
-        function showPaymentMethod(method) {
-            // Oculta todos os métodos de pagamento
-            document.querySelectorAll('.payment-method').forEach(element => {
-                element.style.display = 'none';
-            });
-
-            // Exibe o método de pagamento selecionado
-            if (method === 'card') {
-                document.getElementById('card-payment').style.display = 'block';
-            } else if (method === 'pix') {
-                document.getElementById('pix-payment').style.display = 'block';
-            }
-        }
-
-        // Função para gerar o PIX
-async function generatePix() {
-    const nome = document.getElementById('nome').value;
-    const cpf = document.getElementById('cpf').value;
-    const telefone = document.getElementById('telefone').value;
-    const email = document.getElementById('email').value;
-    const valorTotal = parseFloat(getQueryParam('total')) || 0;
-    const valor = valorTotal.toFixed(2);
-
-    const payload = {
-        bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
-        nome,
-        cpf,
-        telefone,
-        email,
-        valor,
-        utms: ""
-    };
-
-    try {
-        const response = await fetch('/api/process-pix', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.status === 'success') {
-            // Exibe o código PIX e o ID da transação
-            document.getElementById('pix-code').textContent = data.paymentCode;
-            document.getElementById('transaction-id').textContent = `ID da Transação: ${data.idTransaction}`;
-            document.getElementById('pix-code-container').style.display = 'block';
-
-            // Se houver um QR Code em base64, exiba-o
-            if (data.paymentCodeBase64) {
-                const qrCodeImage = document.createElement('img');
-                qrCodeImage.src = `data:image/png;base64,${data.paymentCodeBase64}`;
-                qrCodeImage.alt = 'QR Code PIX';
-                qrCodeImage.style.maxWidth = '100%';
-                document.getElementById('pix-code-container').appendChild(qrCodeImage);
-            }
-        } else {
-            alert('Erro ao gerar PIX: ' + (data.message || 'Resposta inválida da API'));
-        }
-    } catch (error) {
-        console.error('Erro ao processar PIX:', error);
-        alert('Erro ao processar PIX. Tente novamente.');
+<script>
+    // Função para obter parâmetros da URL
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
     }
-}
 
-        // Função para copiar o código PIX
-        function copyPixCode() {
-            const pixCode = document.getElementById('pix-code').textContent;
-            navigator.clipboard.writeText(pixCode).then(() => {
-                alert('Código PIX copiado para a área de transferência!');
-            }).catch((err) => {
-                console.error('Erro ao copiar o código:', err);
-            });
-        }
+    // Função para decodificar os parâmetros da URL
+    function getQueryParams() {
+        const params = {};
+        window.location.search.substring(1).split('&').forEach(param => {
+            const [key, value] = param.split('=');
+            params[decodeURIComponent(key)] = decodeURIComponent(value);
+        });
+        return params;
+    }
 
-        // Executa a função ao carregar a página
-        document.addEventListener('DOMContentLoaded', fillData);
+    // Função para preencher os dados na página
+    function fillData() {
+        const params = getQueryParams();
 
-        // CEP Autocomplete
-        document.getElementById('cep').addEventListener('blur', function () {
-            const cep = this.value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                document.getElementById('cep-loading').style.display = 'block';
+        // Preenche o total
+        const totalInfo = document.getElementById('total-info');
+        totalInfo.textContent = `${params.total} ${params.moeda}`;
 
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('cep-loading').style.display = 'none';
-                        if (data.erro) {
-                            alert('CEP não encontrado!');
-                        } else {
-                            document.getElementById('rua').value = data.logradouro;
-                            document.getElementById('bairro').value = data.bairro;
-                            document.getElementById('cidade').value = data.localidade;
-                            document.getElementById('estado').value = data.uf;
-                        }
-                    });
+        // Preenche os produtos
+        const productsContainer = document.getElementById('product-list');
+        const produtos = JSON.parse(params.produtos);
+
+        produtos.forEach(produto => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+            productDiv.innerHTML = `
+                <img src="${produto.image ? produto.image : 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
+                <div>
+                <h2>${produto.name}</h2>
+                <p>Preço: ${produto.price} ${params.moeda}</p>
+                </div>
+            `;
+            productsContainer.appendChild(productDiv);
+
+            // Preenche o resumo do pedido
+            document.getElementById('product-name').textContent = produto.name;
+            document.getElementById('product-price').textContent = `${produto.price} ${params.moeda}`;
+            document.getElementById('order-total').textContent = `${params.total} ${params.moeda}`;
+        });
+
+        // Preenche o valor no formulário
+        document.getElementById('valor').value = params.total;
+    }
+
+    // Função para mostrar a próxima seção
+    function nextSection(sectionId) {
+        const currentSection = document.querySelector('.section.active');
+        currentSection.classList.remove('active');
+        document.getElementById(sectionId).classList.add('active');
+        updateProgressBar();
+    }
+
+    // Função para atualizar a barra de progresso
+    function updateProgressBar() {
+        const sections = document.querySelectorAll('.section');
+        const activeSectionIndex = Array.from(sections).findIndex(section => section.classList.contains('active'));
+        const progressSteps = document.querySelectorAll('.progress-step');
+        progressSteps.forEach((step, index) => {
+            if (index < activeSectionIndex) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
             }
         });
-    </script>
+    }
+
+    // Função para alternar entre métodos de pagamento
+    function showPaymentMethod(method) {
+        // Oculta todos os métodos de pagamento
+        document.querySelectorAll('.payment-method').forEach(element => {
+            element.style.display = 'none';
+        });
+
+        // Exibe o método de pagamento selecionado
+        if (method === 'card') {
+            document.getElementById('card-payment').style.display = 'block';
+        } else if (method === 'pix') {
+            document.getElementById('pix-payment').style.display = 'block';
+        }
+    }
+
+    // Função para gerar o PIX
+    async function generatePix() {
+        const nome = document.getElementById('nome').value;
+        const cpf = document.getElementById('cpf').value;
+        const telefone = document.getElementById('telefone').value;
+        const email = document.getElementById('email').value;
+        const valorTotal = parseFloat(getQueryParam('total')) || 0;
+        const valor = valorTotal.toFixed(2);
+
+        const payload = {
+            bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
+            nome,
+            cpf,
+            telefone,
+            email,
+            valor,
+            utms: ""
+        };
+
+        try {
+            const response = await fetch('/api/process-pix', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.status === 'success') {
+                // Exibe o código PIX e o ID da transação
+                document.getElementById('pix-code').textContent = data.paymentCode;
+                document.getElementById('transaction-id').textContent = `ID da Transação: ${data.idTransaction}`;
+                document.getElementById('pix-code-container').style.display = 'block';
+
+                // Se houver um QR Code em base64, exiba-o
+                if (data.paymentCodeBase64) {
+                    const qrCodeImage = document.createElement('img');
+                    qrCodeImage.src = `data:image/png;base64,${data.paymentCodeBase64}`;
+                    qrCodeImage.alt = 'QR Code PIX';
+                    qrCodeImage.style.maxWidth = '100%';
+                    document.getElementById('pix-code-container').appendChild(qrCodeImage);
+                }
+            } else {
+                alert('Erro ao gerar PIX: ' + (data.message || 'Resposta inválida da API'));
+            }
+        } catch (error) {
+            console.error('Erro ao processar PIX:', error);
+            alert('Erro ao processar PIX. Tente novamente.');
+        }
+    }
+
+    // Função para copiar o código PIX
+    function copyPixCode() {
+        const pixCode = document.getElementById('pix-code').textContent;
+        navigator.clipboard.writeText(pixCode).then(() => {
+            alert('Código PIX copiado para a área de transferência!');
+        }).catch((err) => {
+            console.error('Erro ao copiar o código:', err);
+        });
+    }
+
+    // Executa a função ao carregar a página
+    document.addEventListener('DOMContentLoaded', fillData);
+
+    // CEP Autocomplete
+    document.getElementById('cep').addEventListener('blur', function () {
+        const cep = this.value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            document.getElementById('cep-loading').style.display = 'block';
+
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('cep-loading').style.display = 'none';
+                    if (data.erro) {
+                        alert('CEP não encontrado!');
+                    } else {
+                        document.getElementById('rua').value = data.logradouro;
+                        document.getElementById('bairro').value = data.bairro;
+                        document.getElementById('cidade').value = data.localidade;
+                        document.getElementById('estado').value = data.uf;
+                    }
+                });
+        }
+    });
+</script>
 
 <footer class="footer">
     <div class="footer-content">
