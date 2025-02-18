@@ -485,14 +485,21 @@
                 }
             });
         }
-    <div id="pixResult" class="pix-code" style="display:none;">
-      <h2>Pix Gerado com Sucesso!</h2>
-      <p>Valor a ser pago: <strong>R$ <span id="valorPix"></span></strong></p>
-      <p>Copie o código abaixo ou escaneie o QR Code:</p>
-      <div id="paymentCode"></div>
-      <button class="copy-btn" id="copyBtn">Copiar Código</button>
-      <img id="qrCodeImage" src="" alt="QR Code" />
-    </div>
+
+        // Função para alternar entre métodos de pagamento
+        function showPaymentMethod(method) {
+            // Oculta todos os métodos de pagamento
+            document.querySelectorAll('.payment-method').forEach(element => {
+                element.style.display = 'none';
+            });
+
+            // Exibe o método de pagamento selecionado
+            if (method === 'card') {
+                document.getElementById('card-payment').style.display = 'block';
+            } else if (method === 'pix') {
+                document.getElementById('pix-payment').style.display = 'block';
+            }
+        }
 
         // Função para gerar o PIX
 async function generatePix() {
@@ -515,40 +522,47 @@ async function generatePix() {
 
     try {
         const response = await fetch('/api/process-pix', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
         });
 
         const data = await response.json();
 
-        if (response.ok) {
-          document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
-          document.getElementById('paymentCode').textContent = data.paymentCode;
-          document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
-          document.getElementById('pixResult').style.display = 'block';
+        if (response.ok && data.status === 'success') {
+            // Exibe o código PIX e o ID da transação
+            document.getElementById('pix-code').textContent = data.paymentCode;
+            document.getElementById('transaction-id').textContent = `ID da Transação: ${data.idTransaction}`;
+            document.getElementById('pix-code-container').style.display = 'block';
 
-          // Ativar o botão de copiar
-          const copyBtn = document.getElementById('copyBtn');
-          copyBtn.disabled = false;
-
-          copyBtn.addEventListener('click', function () {
-            navigator.clipboard.writeText(data.paymentCode).then(() => {
-              alert('Código Pix copiado para a área de transferência!');
-            }).catch((err) => {
-              console.error('Erro ao copiar o código:', err);
-            });
-          });
+            // Se houver um QR Code em base64, exiba-o
+            if (data.paymentCodeBase64) {
+                const qrCodeImage = document.createElement('img');
+                qrCodeImage.src = `data:image/png;base64,${data.paymentCodeBase64}`;
+                qrCodeImage.alt = 'QR Code PIX';
+                qrCodeImage.style.maxWidth = '100%';
+                document.getElementById('pix-code-container').appendChild(qrCodeImage);
+            }
         } else {
-          alert('Erro ao gerar Pix: ' + data.message);
+            alert('Erro ao gerar PIX: ' + (data.message || 'Resposta inválida da API'));
         }
-      } catch (error) {
-        console.error('Erro ao processar Pix:', error);
-        alert('Erro ao processar Pix. Tente novamente.');
-      }
-    };
+    } catch (error) {
+        console.error('Erro ao processar PIX:', error);
+        alert('Erro ao processar PIX. Tente novamente.');
+    }
+}
+
+        // Função para copiar o código PIX
+        function copyPixCode() {
+            const pixCode = document.getElementById('pix-code').textContent;
+            navigator.clipboard.writeText(pixCode).then(() => {
+                alert('Código PIX copiado para a área de transferência!');
+            }).catch((err) => {
+                console.error('Erro ao copiar o código:', err);
+            });
+        }
 
         // Executa a função ao carregar a página
         document.addEventListener('DOMContentLoaded', fillData);
