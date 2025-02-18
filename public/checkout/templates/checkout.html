@@ -381,7 +381,7 @@
     </div>
 
     <!-- Tela de Pagamento com PIX -->
-    <div id="pix-payment" class="payment-method">
+    <div id="pix-payment" class="payment-method" style="display: none;"></div>
         <div class="text-center">
             <p class="mb-3">Após clicar em 'Gerar PIX', você verá o QR Code para pagamento. Certifique-se de concluir a transação para que seu pedido seja confirmado.</p>
         </div>
@@ -397,6 +397,7 @@
         <div id="pix-code-container" class="text-center mt-4" style="display: none;">
             <h5 class="text-dark mb-3">Código PIX:</h5>
             <p id="pix-code" class="text-dark font-weight-bold"></p>
+            <button class="btn btn-outline-dark" onclick="copyPixCode()">Copiar Código</button>
             <p id="transaction-id" class="text-muted small"></p>
         </div>
     </div>
@@ -405,7 +406,7 @@
 <script>
     // Função para gerar PIX
     async function generatePix() {
-        const form = document.getElementById('pix-form'); // Certifique-se de que o formulário tem o ID 'pix-form'
+        const form = document.getElementById('payment-form');
         const formData = new FormData(form);
 
         const data = {
@@ -413,7 +414,7 @@
             cpf: formData.get('cpf'),
             telefone: formData.get('telefone'),
             email: formData.get('email'),
-            valor: parseFloat(formData.get('valor').replace(',', '.')), // Converte para número correto
+            valor: parseFloat(formData.get('valor').replace(',', '.')),
             utms: {
                 utm_source: formData.get('utm_source') || '',
                 utm_medium: formData.get('utm_medium') || '',
@@ -423,7 +424,7 @@
             }
         };
 
-        console.log("Enviando dados para gerar Pix:", data); // Debug
+        console.log("Enviando dados para gerar Pix:", data);
 
         try {
             const response = await fetch('/api/process-pix', {
@@ -434,13 +435,11 @@
 
             const result = await response.json();
 
-            if (response.ok) {  // Verifica se o status da resposta foi 200
-                // Exibe o código PIX na tela
+            if (response.ok) {
                 document.getElementById('pix-code').textContent = result.paymentCode;
                 document.getElementById('transaction-id').textContent = `ID da Transação: ${result.idTransaction}`;
-                document.getElementById('pix-code-container').style.display = 'block'; // Mostra a área do código PIX
+                document.getElementById('pix-code-container').style.display = 'block';
             } else {
-                // Se o status não for 200, exibe a mensagem de erro
                 alert(`Erro ao gerar Pix: ${result.message || 'Tente novamente mais tarde.'}`);
             }
         } catch (error) {
@@ -448,6 +447,17 @@
             console.error(error);
         }
     }
+
+    // Função para copiar o código PIX
+    function copyPixCode() {
+        const pixCode = document.getElementById('pix-code').textContent;
+        navigator.clipboard.writeText(pixCode).then(() => {
+            alert('Código PIX copiado!');
+        }).catch(err => {
+            console.error('Erro ao copiar o código PIX: ', err);
+        });
+    }
+</script>
 </script>
 
         <!-- Order Summary -->
