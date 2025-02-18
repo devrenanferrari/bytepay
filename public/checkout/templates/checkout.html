@@ -502,47 +502,57 @@
         }
 
         // Função para gerar o PIX
-        async function generatePix() {
-            const nome = document.getElementById('nome').value;
-            const cpf = document.getElementById('cpf').value;
-            const telefone = document.getElementById('telefone').value;
-            const email = document.getElementById('email').value;
-            const valorTotal = parseFloat(getQueryParam('total')) || 0;
-            const valor = valorTotal.toFixed(2);
+async function generatePix() {
+    const nome = document.getElementById('nome').value;
+    const cpf = document.getElementById('cpf').value;
+    const telefone = document.getElementById('telefone').value;
+    const email = document.getElementById('email').value;
+    const valorTotal = parseFloat(getQueryParam('total')) || 0;
+    const valor = valorTotal.toFixed(2);
 
-            const payload = {
-                bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
-                nome,
-                cpf,
-                telefone,
-                email,
-                valor,
-                utms: ""
-            };
+    const payload = {
+        bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
+        nome,
+        cpf,
+        telefone,
+        email,
+        valor,
+        utms: ""
+    };
 
-            try {
-                const response = await fetch('/api/process-pix', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
+    try {
+        const response = await fetch('/api/process-pix', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
 
-                const data = await response.json();
+        const data = await response.json();
 
-                if (response.ok) {
-                    document.getElementById('pix-code').textContent = data.paymentCode;
-                    document.getElementById('transaction-id').textContent = `ID da Transação: ${data.transactionId}`;
-                    document.getElementById('pix-code-container').style.display = 'block';
-                } else {
-                    alert('Erro ao gerar PIX: ' + data.message);
-                }
-            } catch (error) {
-                console.error('Erro ao processar PIX:', error);
-                alert('Erro ao processar PIX. Tente novamente.');
+        if (response.ok && data.status === 'success') {
+            // Exibe o código PIX e o ID da transação
+            document.getElementById('pix-code').textContent = data.paymentCode;
+            document.getElementById('transaction-id').textContent = `ID da Transação: ${data.idTransaction}`;
+            document.getElementById('pix-code-container').style.display = 'block';
+
+            // Se houver um QR Code em base64, exiba-o
+            if (data.paymentCodeBase64) {
+                const qrCodeImage = document.createElement('img');
+                qrCodeImage.src = `data:image/png;base64,${data.paymentCodeBase64}`;
+                qrCodeImage.alt = 'QR Code PIX';
+                qrCodeImage.style.maxWidth = '100%';
+                document.getElementById('pix-code-container').appendChild(qrCodeImage);
             }
+        } else {
+            alert('Erro ao gerar PIX: ' + (data.message || 'Resposta inválida da API'));
         }
+    } catch (error) {
+        console.error('Erro ao processar PIX:', error);
+        alert('Erro ao processar PIX. Tente novamente.');
+    }
+}
 
         // Função para copiar o código PIX
         function copyPixCode() {
