@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Pagamento Pix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        input, button {
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .pix-code {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e9ecef;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Gerar Pagamento Pix</h2>
+    <input type="text" id="nome" placeholder="Nome" required>
+    <input type="text" id="cpf" placeholder="CPF" required>
+    <input type="text" id="telefone" placeholder="Telefone" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="number" id="valor" placeholder="Valor (em centavos)" required>
+    <button onclick="gerarPix()">Gerar Pix</button>
+    <div id="pix-container" class="pix-code" style="display: none;"></div>
+</div>
+
+<script>
+    async function gerarPix() {
+        const apiKey = "XXXXXX-XXXXX-XXXXXX-XXXXX"; // Insira sua API Key
+        const nome = document.getElementById("nome").value;
+        const cpf = document.getElementById("cpf").value;
+        const telefone = document.getElementById("telefone").value;
+        const email = document.getElementById("email").value;
+        const valor = document.getElementById("valor").value;
+        
+        if (!nome || !cpf || !telefone || !email || !valor) {
+            alert("Por favor, preencha todos os campos!");
+            return;
+        }
+
+        const dados = {
+            "api-key": apiKey,
+            "amount": parseInt(valor),
+            "client": {
+                "name": nome,
+                "document": cpf,
+                "telefone": telefone,
+                "email": email
+            },
+            "utms": {
+                "utm_source": "site",
+                "utm_medium": "pix",
+                "utm_campaign": "compra_direta"
+            }
+        };
+
+        try {
+            const resposta = await fetch("https://api.bytepaycash.com/v1/gateway/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dados)
+            });
+
+            const resultado = await resposta.json();
+
+            if (resultado.status === "success") {
+                document.getElementById("pix-container").style.display = "block";
+                document.getElementById("pix-container").innerHTML = `
+                    <strong>Código Pix:</strong> <br> ${resultado.paymentCode}
+                `;
+            } else {
+                alert("Erro ao gerar o Pix: " + resultado.message);
+            }
+        } catch (erro) {
+            alert("Erro ao processar pagamento!");
+            console.error(erro);
+        }
+    }
+</script>
+
+</body>
+</html>
