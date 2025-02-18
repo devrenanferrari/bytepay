@@ -518,41 +518,31 @@ async function generatePix() {
         email,
         valor,
         utms: ""
-    };
+    }};
 
-    try {
-        const response = await fetch('/api/process-pix', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+    const response = await fetch('/api/process-pix', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (response.ok || data.status === 'success') {
-            // Exibe o código PIX e o ID da transação
-            document.getElementById('pix-code').textContent = data.paymentCode;
-            document.getElementById('transaction-id').textContent = `ID da Transação: ${data.idTransaction}`;
-            document.getElementById('pix-code-container').style.display = 'block';
+    // Exibe o código PIX e o ID da transação
+    document.getElementById('pix-code').textContent = data.paymentCode;
+    document.getElementById('transaction-id').textContent = `ID da Transação: ${data.idTransaction}`;
+    document.getElementById('pix-code-container').style.display = 'block';
 
-            // Se houver um QR Code em base64, exiba-o
-            if (data.paymentCodeBase64) {
-                const qrCodeImage = document.createElement('img');
-                qrCodeImage.src = `data:image/png;base64,${data.paymentCodeBase64}`;
-                qrCodeImage.alt = 'QR Code PIX';
-                qrCodeImage.style.maxWidth = '100%';
-                document.getElementById('pix-code-container').appendChild(qrCodeImage);
-            }
-        } else {
-            alert('Erro ao gerar PIX: ' + (data.message || 'Resposta inválida da API'));
-        }
-    } catch (error) {
-        console.error('Erro ao processar PIX:', error);
-        alert('Erro ao processar PIX. Tente novamente.');
+    // Se houver um QR Code em base64, exiba-o
+    if (data.paymentCodeBase64) {
+        const qrCodeImage = document.createElement('img');
+        qrCodeImage.src = `data:image/png;base64,${data.paymentCodeBase64}`;
+        qrCodeImage.alt = 'QR Code PIX';
+        qrCodeImage.style.maxWidth = '100%';
+        document.getElementById('pix-code-container').appendChild(qrCodeImage);
     }
-}
 
         // Função para copiar o código PIX
         function copyPixCode() {
