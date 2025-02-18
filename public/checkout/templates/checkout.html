@@ -523,32 +523,41 @@
         }
     }
 
-    // Função para gerar PIX (exemplo)
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
     async function generatePix() {
-        const nome = document.getElementById('nome').value;
-        const cpf = document.getElementById('cpf').value;
-        const telefone = document.getElementById('telefone').value;
-        const email = document.getElementById('email').value;
-        const valor = document.getElementById('valor').value;
-        
+        const nome = document.getElementById('nome')?.value || '';
+        const cpf = document.getElementById('cpf')?.value || '';
+        const telefone = document.getElementById('telefone')?.value || '';
+        const email = document.getElementById('email')?.value || '';
+        const valor = getQueryParam('total'); // Pegando o valor direto da URL
+
+        if (!valor) {
+            alert("Erro: Valor do pagamento não encontrado na URL.");
+            return;
+        }
+
         const payload = {
-            bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API
+            bytepaytoken: getQueryParam('bytepaytoken') || 'c1989a43-d693-458b-8766-e0ae91526e30', // Token da API
             nome,
             cpf,
             telefone,
             email,
             valor
         };
-        
+
         try {
             const response = await fetch('/api/process-pix', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            
+
             const data = await response.json();
-            
+
             if (response.ok) {
                 document.getElementById('pix-code').textContent = data.paymentCode;
                 document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
