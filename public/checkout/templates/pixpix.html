@@ -1,839 +1,180 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * {
-            font-family: 'Roboto', sans-serif;
-        }
-        body {
-            background-color: #ffffff;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #000000;
-            margin-bottom: 20px;
-        }
-        .section {
-            display: none;
-            margin-bottom: 20px;
-        }
-        .section.active {
-            display: block;
-        }
-        .section h4 {
-            font-size: 18px;
-            font-weight: 500;
-            color: #000000;
-            margin-bottom: 15px;
-        }
-        .product {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .product img {
-            border-radius: 8px;
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-        }
-        .product h2 {
-            font-size: 16px;
-            font-weight: 500;
-            color: #484848;
-            margin: 0;
-        }
-        .product p {
-            font-size: 14px;
-            color: #767676;
-            margin: 0;
-        }
-        input, select {
-            border-radius: 8px;
-            border: 1px solid #d1d1d1;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            background-color: #f7f7f7;
-            font-size: 14px;
-            color: #676666;
-        }
-        input:focus, select:focus {
-            border-color: #000;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-        button {
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 8px;
-            background-color: #000000;
-            color: #fff;
-            padding: 10px;
-            width: 100%;
-            border: none;
-            transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        button:hover {
-            background-color: #252525;
-        }
-        .loading {
-            display: none;
-            text-align: center;
-            font-size: 14px;
-            color: #000000;
-        }
-        .payment-methods {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .payment-methods .btn {
-            flex: 1;
-            font-size: 14px;
-            padding: 10px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        .payment-methods .btn:hover {
-            background-color: #000;
-            color: #fff;
-        }
-        .summary {
-            background: #f7f7f7;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .summary h4 {
-            font-size: 18px;
-            font-weight: 500;
-            color: #484848;
-            margin-bottom: 15px;
-        }
-        .summary p {
-            font-size: 16px;
-            color: #767676;
-            margin: 0;
-        }
-        .progress-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .progress-step {
-            text-align: center;
-            flex: 1;
-            position: relative;
-        }
-        .progress-step::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            height: 2px;
-            background-color: #e0e0e0;
-            z-index: -1;
-        }
-        .progress-step.active::before {
-            background-color: #339326;
-        }
-        .progress-step:first-child::before {
-            display: none;
-        }
-        .progress-step-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: auto;
-            margin-bottom: 5px;
-            color: #fff;
-        }
-        .progress-step.active .progress-step-icon {
-            background-color: #35961d;
-        }
-        .progress-step p {
-            margin: 0;
-            font-size: 12px;
-            color: #484848;
-        }
-        .progress-step.active p {
-            color: #000;
-        }
-        .secure-payment {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            color: green;
-            font-weight: bold;
-        }
-        .secure-payment i {
-            font-size: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerar Pix</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      color: #4A90E2;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4A90E2;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #357ABD;
+    }
+    .pix-code {
+      margin-top: 30px;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .pix-code h2 {
+      color: #27ae60;
+      font-size: 22px;
+    }
+    .pix-code p {
+      font-size: 18px;
+      color: #333;
+    }
+    #paymentCode {
+      font-family: monospace;
+      background-color: #e8f4f8;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 18px;
+      word-wrap: break-word;
+      margin-bottom: 15px;
+    }
+    #qrCodeImage {
+      max-width: 200px;
+      margin-top: 15px;
+    }
+    .copy-btn {
+      background-color: #27ae60;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+      transition: background-color 0.3s;
+    }
+    .copy-btn:hover {
+      background-color: #2ecc71;
+    }
+    .copy-btn:active {
+      background-color: #1e8449;
+    }
+    .copy-btn:disabled {
+      background-color: #d3d3d3;
+    }
+  </style>
 </head>
 <body>
-    <!-- Secure Payment -->
-    <div class="secure-payment">
-        <i class="fas fa-shield-alt"></i>
-        <span>PAGAMENTO 100% SEGURO</span>
+  <div class="container">
+    <h1>Gerar Pix</h1>
+    <form id="pixForm">
+      <input type="text" id="nome" placeholder="Nome Completo" required />
+      <input type="text" id="cpf" placeholder="CPF" required />
+      <input type="text" id="telefone" placeholder="Telefone" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="number" id="valor" placeholder="Valor" step="0.01" required />
+      <input type="text" id="utms" placeholder="UTMs (opcional)" />
+      <button type="submit">Gerar Pix</button>
+    </form>
+
+    <div id="pixResult" class="pix-code" style="display:none;">
+      <h2>Pix Gerado com Sucesso!</h2>
+      <p>Valor a ser pago: <strong>R$ <span id="valorPix"></span></strong></p>
+      <p>Copie o código abaixo ou escaneie o QR Code:</p>
+      <div id="paymentCode"></div>
+      <button class="copy-btn" id="copyBtn">Copiar Código</button>
+      <img id="qrCodeImage" src="" alt="QR Code" />
     </div>
-    <div class="container">
-        <div class="header text-center mb-4">
-            <h3>Checkout</h3>
-        </div>
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-step active">
-                <div class="progress-step-icon"><i class="fas fa-user"></i></div>
-                <p>Dados</p>
-            </div>
-            <div class="progress-step">
-                <div class="progress-step-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <p>Endereço</p>
-            </div>
-            <div class="progress-step">
-                <div class="progress-step-icon"><i class="fas fa-shopping-cart"></i></div>
-                <p>Carrinho</p>
-            </div>
-            <div class="progress-step">
-                <div class="progress-step-icon"><i class="fas fa-credit-card"></i></div>
-                <p>Pagamento</p>
-            </div>
-        </div>
+  </div>
 
-        <!-- Total Information -->
-        <div class="section total-info text-center">
-            <h4 class="text-dark">Total:</h4>
-            <p id="total-info" class="text-success fw-bold"></p>
-        </div>
+  <script>
+    document.getElementById('pixForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
 
-        <!-- Formulário de Pagamento -->
-        <form id="payment-form" class="p-4 rounded shadow-s">
-            <!-- Personal Data Section -->
-            <div id="personal-data" class="section active">
-                <h4 class="text-dark mb-3">Dados Pessoais</h4>
-                <div class="mb-3">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" class="form-control shadow-sm" placeholder="" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Por favor, insira um endereço de email válido.">
-                </div>
-                <div class="mb-3">
-                    <label for="telefone">Telefone</label>
-                    <input type="text" id="telefone" name="telefone" class="form-control shadow-sm" placeholder="" required>
-                </div>
-                <script>
-                    document.getElementById('telefone').addEventListener('input', function (e) {
-                        let value = e.target.value.replace(/\D/g, '');
-                        if (value.length > 11) value = value.slice(0, 11);
-                        value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                        value = value.replace(/(\d{1})(\d{4})(\d{4})$/, '$1 $2-$3');
-                        e.target.value = value;
-                    });
-                </script>
-                <div class="mb-3">
-                    <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" name="nome" class="form-control shadow-sm" placeholder="" required>
-                </div>
-                <div class="mb-3">
-                    <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" name="cpf" class="form-control shadow-sm" placeholder="" required>
-                </div>
-                <script>
-                    document.getElementById('cpf').addEventListener('input', function (e) {
-                        let value = e.target.value.replace(/\D/g, '');
-                        if (value.length > 11) value = value.slice(0, 11);
-                        value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                        value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                        e.target.value = value;
-                    });
-                </script>
-                <div class="text-center">
-                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('address')">
-                        <i class="fas fa-arrow-right"></i> Próximo
-                    </button>
-                </div>
-            </div>
+      const nome = document.getElementById('nome').value;
+      const cpf = document.getElementById('cpf').value;
+      const telefone = document.getElementById('telefone').value;
+      const email = document.getElementById('email').value;
+      const valor = document.getElementById('valor').value;
+      const utms = document.getElementById('utms').value;
 
-            <!-- Address Section -->
-            <div id="address" class="section">
-                <h4 class="text-dark mb-3">Endereço de Entrega</h4>
-                <div class="mb-3">
-                    <label for="cep">CEP</label>
-                    <input type="text" id="cep" name="cep" class="form-control shadow-sm" placeholder="00.000-000" required>
-                    <p class="loading" id="cep-loading">
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Buscando endereço...
-                    </p>
-                </div>
-                <div class="mb-3">
-                    <label for="rua">Rua</label>
-                    <input type="text" id="rua" name="rua" class="form-control shadow-sm" placeholder="" required>
-                </div>
-                <div class="mb-3">
-                    <label for="numero">Número</label>
-                    <input type="text" id="numero" name="numero" class="form-control shadow-sm" placeholder="" required>
-                </div>
-                <div class="mb-3">
-                    <label for="complemento">Complemento</label>
-                    <input type="text" id="complemento" name="complemento" class="form-control shadow-sm" placeholder="" required>
-                </div>
-                <div class="mb-3">
-                    <label for="bairro">Bairro</label>
-                    <input type="text" id="bairro" name="bairro" class="form-control shadow-sm" placeholder="" required>
-                </div>
-                <div class="mb-3">
-                    <label for="cidade">Cidade</label>
-                    <input type="text" id="cidade" name="cidade" class="form-control shadow-sm" placeholder="" required>
-                </div>
-                <div class="mb-3">
-                    <label for="estado">Estado</label>
-                    <select id="estado" name="estado" class="form-control shadow-sm" required>
-                        <option value="">Selecione o Estado</option>
-                        <option value="AC">Acre</option>
-                        <option value="AL">Alagoas</option>
-                        <option value="AP">Amapá</option>
-                        <option value="AM">Amazonas</option>
-                        <option value="BA">Bahia</option>
-                        <option value="CE">Ceará</option>
-                        <option value="DF">Distrito Federal</option>
-                        <option value="ES">Espírito Santo</option>
-                        <option value="GO">Goiás</option>
-                        <option value="MA">Maranhão</option>
-                        <option value="MT">Mato Grosso</option>
-                        <option value="MS">Mato Grosso do Sul</option>
-                        <option value="MG">Minas Gerais</option>
-                        <option value="PA">Pará</option>
-                        <option value="PB">Paraíba</option>
-                        <option value="PR">Paraná</option>
-                        <option value="PE">Pernambuco</option>
-                        <option value="PI">Piauí</option>
-                        <option value="RJ">Rio de Janeiro</option>
-                        <option value="RN">Rio Grande do Norte</option>
-                        <option value="RS">Rio Grande do Sul</option>
-                        <option value="RO">Rondônia</option>
-                        <option value="RR">Roraima</option>
-                        <option value="SC">Santa Catarina</option>
-                        <option value="SP">São Paulo</option>
-                        <option value="SE">Sergipe</option>
-                        <option value="TO">Tocantins</option>
-                    </select>
-                </div>
-                <div class="text-center">
-                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('products')">
-                        <i class="fas fa-arrow-right"></i> Próximo
-                    </button>
-                </div>
-            </div>
+      const payload = {
+        bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
+        nome,
+        cpf,
+        telefone,
+        email,
+        valor,
+        utms
+      };
 
-            <!-- Product Section -->
-            <div id="products" class="section">
-                <h4 class="text-dark mb-3">Carrinho</h4>
-                <div id="product-list">
-                    <!-- Produtos serão inseridos aqui via JavaScript -->
-                </div>
-                <div class="text-center">
-                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('card-data')">
-                        <i class="fas fa-arrow-right"></i> Próximo
-                    </button>
-                </div>
-            </div>
-
-            <!-- Seção de Pagamento -->
-            <div id="card-data" class="section">
-                <h4 class="text-dark mb-3">Pagamento</h4>
-
-                <div class="container">
-                    <h1>Gerar Pix</h1>
-                    <form id="pixForm">
-                      <input type="text" id="nome" placeholder="Nome Completo" required />
-                      <input type="text" id="cpf" placeholder="CPF" required />
-                      <input type="text" id="telefone" placeholder="Telefone" required />
-                      <input type="email" id="email" placeholder="Email" required />
-                      <input type="number" id="valor" placeholder="Valor" step="0.01" required />
-                      <input type="text" id="utms" placeholder="UTMs (opcional)" />
-                      <button type="submit">Gerar Pix</button>
-                    </form>
-                
-                    <div id="pixResult" class="pix-code" style="display:none;">
-                      <h2>Pix Gerado com Sucesso!</h2>
-                      <p>Valor a ser pago: <strong>R$ <span id="valorPix"></span></strong></p>
-                      <p>Copie o código abaixo ou escaneie o QR Code:</p>
-                      <div id="paymentCode"></div>
-                      <button class="copy-btn" id="copyBtn">Copiar Código</button>
-                      <img id="qrCodeImage" src="" alt="QR Code" />
-                    </div>
-                  </div>
-                
-                  <script>
-                    document.getElementById('pixForm').addEventListener('submit', async function (e) {
-                      e.preventDefault();
-                
-                      const nome = document.getElementById('nome').value;
-                      const cpf = document.getElementById('cpf').value;
-                      const telefone = document.getElementById('telefone').value;
-                      const email = document.getElementById('email').value;
-                      const valor = document.getElementById('valor').value;
-                      const utms = document.getElementById('utms').value;
-                
-                      const payload = {
-                        bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
-                        nome,
-                        cpf,
-                        telefone,
-                        email,
-                        valor,
-                        utms
-                      };
-                
-                      try {
-                        const response = await fetch('/api/process-pix', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json'
-                          },
-                          body: JSON.stringify(payload)
-                        });
-                
-                        const data = await response.json();
-                
-                        if (response.ok) {
-                          document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
-                          document.getElementById('paymentCode').textContent = data.paymentCode;
-                          document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
-                          document.getElementById('pixResult').style.display = 'block';
-                
-                          // Ativar o botão de copiar
-                          const copyBtn = document.getElementById('copyBtn');
-                          copyBtn.disabled = false;
-                
-                          copyBtn.addEventListener('click', function () {
-                            navigator.clipboard.writeText(data.paymentCode).then(() => {
-                              alert('Código Pix copiado para a área de transferência!');
-                            }).catch((err) => {
-                              console.error('Erro ao copiar o código:', err);
-                            });
-                          });
-                        } else {
-                          alert('Erro ao gerar Pix: ' + data.message);
-                        }
-                      } catch (error) {
-                        console.error('Erro ao processar Pix:', error);
-                        alert('Erro ao processar Pix. Tente novamente.');
-                      }
-                    });
-                  </script>
-
-                <!-- Tela de Pagamento com PIX -->
-                <div id="pix-payment" class="payment-method" style="display: none;"></div>
-                <div class="text-center">
-                    <p class="mb-3">Após clicar em 'Gerar PIX', você verá o QR Code para pagamento. Certifique-se de concluir a transação para que seu pedido seja confirmado.</p>
-                </div>
-
-                <!-- Botão de Gerar PIX -->
-                <div class="text-center">
-                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
-                        <i class="fas fa-qrcode"></i> Gerar PIX
-                    </button>
-                </div>
-
-               
-        <!-- Order Summary -->
-        <div class="summary">
-            <h4>Resumo do Pedido</h4>
-            <p>Produto: <span id="product-name"></span></p>
-            <p>Preço: <span id="product-price"></span></p>
-            <p>Total: <span id="order-total"></span></p>
-        </div>
-    </div>
-
-    <script>
-        // Função para obter parâmetros da URL
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-
-        // Função para decodificar os parâmetros da URL
-        function getQueryParams() {
-            const params = {};
-            window.location.search.substring(1).split('&').forEach(param => {
-                const [key, value] = param.split('=');
-                params[decodeURIComponent(key)] = decodeURIComponent(value);
-            });
-            return params;
-        }
-
-        // Função para preencher os dados na página
-        function fillData() {
-            const params = getQueryParams();
-
-            // Preenche o total
-            const totalInfo = document.getElementById('total-info');
-            totalInfo.textContent = `${params.total} ${params.moeda}`;
-
-            // Preenche os produtos
-            const productsContainer = document.getElementById('product-list');
-            const produtos = JSON.parse(params.produtos);
-
-            produtos.forEach(produto => {
-                const productDiv = document.createElement('div');
-                productDiv.className = 'product';
-                productDiv.innerHTML = `
-                    <img src="${produto.image ? produto.image : 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
-                    <div>
-                    <h2>${produto.name}</h2>
-                    <p>Preço: ${produto.price} ${params.moeda}</p>
-                    </div>
-                `;
-                productsContainer.appendChild(productDiv);
-
-                // Preenche o resumo do pedido
-                document.getElementById('product-name').textContent = produto.name;
-                document.getElementById('product-price').textContent = `${produto.price} ${params.moeda}`;
-                document.getElementById('order-total').textContent = `${params.total} ${params.moeda}`;
-            });
-
-            // Preenche o valor no formulário
-            document.getElementById('valor').value = params.total;
-        }
-
-        // Função para mostrar a próxima seção
-        function nextSection(sectionId) {
-            const currentSection = document.querySelector('.section.active');
-            currentSection.classList.remove('active');
-            document.getElementById(sectionId).classList.add('active');
-            updateProgressBar();
-        }
-
-        // Função para atualizar a barra de progresso
-        function updateProgressBar() {
-            const sections = document.querySelectorAll('.section');
-            const activeSectionIndex = Array.from(sections).findIndex(section => section.classList.contains('active'));
-            const progressSteps = document.querySelectorAll('.progress-step');
-            progressSteps.forEach((step, index) => {
-                if (index < activeSectionIndex) {
-                    step.classList.add('active');
-                } else {
-                    step.classList.remove('active');
-                }
-            });
-        }
-
-
-        
-
-        // Executa a função ao carregar a página
-        document.addEventListener('DOMContentLoaded', fillData);
-
-        // CEP Autocomplete
-        document.getElementById('cep').addEventListener('blur', function () {
-            const cep = this.value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                document.getElementById('cep-loading').style.display = 'block';
-
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('cep-loading').style.display = 'none';
-                        if (data.erro) {
-                            alert('CEP não encontrado!');
-                        } else {
-                            document.getElementById('rua').value = data.logradouro;
-                            document.getElementById('bairro').value = data.bairro;
-                            document.getElementById('cidade').value = data.localidade;
-                            document.getElementById('estado').value = data.uf;
-                        }
-                    });
-            }
+      try {
+        const response = await fetch('/api/process-pix', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
         });
-    </script>
 
-<footer class="footer">
-    <div class="footer-content">
-        <p>Formas de pagamento</p>
-        <div class="payment-logos">
-            <a href="#"><img src="https://images.tcdn.com.br/img/editor/up/183934/pagamento.png" alt="Formas de Pagamento"></a>
-        </div>
-        <button class="secure-button" onclick="openSecureModal()">
-            <i class="fas fa-shield-alt"></i> Ambiente Seguro
-        </button>
-    </div>
-</footer>
+        const data = await response.json();
 
-<!-- Modal de Ambiente Seguro -->
-<div id="secureModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeSecureModal()">&times;</span>
-        <h2>Não se preocupe, aqui é seguro!</h2>
-        <ul class="security-features">
-            <li>
-                <i class="fas fa-lock"></i>
-                <div>
-                    <strong>Ambiente criptografado</strong>
-                    <p>Sua compra é processada em um ambiente de alta segurança, criptografado de ponta a ponta.</p>
-                </div>
-            </li>
-            <li>
-                <i class="fas fa-shield-alt"></i>
-                <div>
-                    <strong>Monitoramento 24/7</strong>
-                    <p>Nosso sistema de segurança é monitorado 24 horas por dia, 7 dias por semana.</p>
-                </div>
-            </li>
-            <li>
-                <i class="fas fa-user-shield"></i>
-                <div>
-                    <strong>Antifraude dedicado</strong>
-                    <p>É impossível ocorrer fraude em seu nome, afinal, nenhum dado sensível fica guardado em nosso sistema.</p>
-                </div>
-            </li>
-            <li>
-                <i class="fas fa-certificate"></i>
-                <div>
-                    <strong>Certificados SSL</strong>
-                    <p>Nenhuma transação é aceita fora de uma rede segura. Você será alertado caso esteja conectado a uma rede suspeita.</p>
-                </div>
-            </li>
-        </ul>
-        <button class="modal-button" onclick="closeSecureModal()">
-            <i class="fas fa-check"></i> Estou seguro, quero comprar!
-        </button>
-    </div>
-</div>
+        if (response.ok) {
+          document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
+          document.getElementById('paymentCode').textContent = data.paymentCode;
+          document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
+          document.getElementById('pixResult').style.display = 'block';
 
-<style>
-    .footer {
-        background-color: #f0f0f0; /* Cor de fundo cinza */
-        padding: 20px 0;
-        text-align: center;
-        border-top: 1px solid #ddd;
-        width: 100%;
-        margin-top: auto; /* Faz o footer ficar no final da página */
-    }
+          // Ativar o botão de copiar
+          const copyBtn = document.getElementById('copyBtn');
+          copyBtn.disabled = false;
 
-    .footer-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-
-    .footer p {
-        margin: 5px 0;
-        color: #333;
-        font-size: 14px;
-    }
-
-    .payment-logos {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-top: 10px;
-    }
-
-    .payment-logos img {
-        height: 90px; /* Ajuste a altura das logos */
-    }
-
-    /* Estilo do Botão "Ambiente Seguro" */
-    .secure-button {
-        background-color: white; /* Fundo branco */
-        color: #218838; /* Cor do texto verde */
-        border: 2px solid #218838; /* Borda verde */
-        padding: 10px 20px;
-        border-radius: 25px; /* Bordas arredondadas */
-        cursor: pointer;
-        margin-top: 10px;
-        font-size: 14px;
-        transition: background-color 0.3s, color 0.3s; /* Transição suave */
-        height: 50px;
-        width: 190px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 10px auto; /* Centraliza horizontalmente */
-    }
-
-    .secure-button:hover {
-        background-color: #218838; /* Fundo verde ao passar o mouse */
-        color: white; /* Texto branco ao passar o mouse */
-    }
-
-    .secure-button i {
-        margin-right: 5px;
-    }
-
-    /* Estilos do Modal */
-    /* Estilos do Modal */
-    .modal {
-        display: flex; /* Exibido como flexível */
-        justify-content: center;
-        align-items: center;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro */
-        opacity: 0; /* Inicialmente invisível */
-        visibility: hidden; /* Escondido */
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-
-    .modal.active {
-        opacity: 1; /* Visível */
-        visibility: visible; /* Mostrado */
-    }
-
-    .modal-content {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 500px; /* Reduzido para 500px */
-        width: 90%;
-        position: relative;
-        transform: translateY(-20px); /* Efeito de deslizar para baixo */
-        transition: transform 0.3s ease;
-    }
-
-    .modal.active .modal-content {
-        transform: translateY(0); /* Volta à posição original */
-    }
-
-    .close {
-        position: absolute;
-        top: 15px;
-        right: 20px;
-        font-size: 24px;
-        cursor: pointer;
-        color: #888;
-    }
-
-    .close:hover {
-        color: #ff0000;
-    }
-
-    .modal-content h2 {
-        color: #218838;
-        margin-bottom: 15px;
-        font-size: 22px; /* Reduzido */
-    }
-
-    .modal-content p {
-        color: #555;
-        font-size: 14px; /* Reduzido */
-        line-height: 1.5;
-    }
-
-    .security-features {
-        list-style: none;
-        padding: 0;
-        margin: 15px 0; /* Reduzido */
-    }
-
-    .security-features li {
-        display: flex;
-        align-items: flex-start;
-        margin-bottom: 15px; /* Reduzido */
-    }
-
-    .security-features i {
-        font-size: 20px; /* Reduzido */
-        color: #218838;
-        margin-right: 10px; /* Reduzido */
-        margin-top: 5px;
-    }
-
-    .security-features strong {
-        color: #333;
-        font-size: 16px; /* Reduzido */
-    }
-
-    .security-features p {
-        color: #666;
-        font-size: 13px; /* Reduzido */
-        margin-top: 5px;
-    }
-
-    .modal-button {
-        background-color: #218838; /* Verde */
-        color: white;
-        border: none;
-        padding: 10px 20px; /* Reduzido */
-        border-radius: 25px;
-        cursor: pointer;
-        font-size: 14px; /* Reduzido */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px; /* Reduzido */
-        margin: 15px auto 0; /* Reduzido */
-        transition: background-color 0.3s;
-    }
-
-    .modal-button:hover {
-        background-color: #1e7a34; /* Verde mais escuro */
-    }
-
-    .modal-button i {
-        font-size: 16px; /* Reduzido */
-    }
-</style>
-
-<script>
-    // Função para abrir o modal
-    function openSecureModal() {
-        const modal = document.getElementById('secureModal');
-        modal.classList.add('active');
-    }
-
-    // Função para fechar o modal
-    function closeSecureModal() {
-        const modal = document.getElementById('secureModal');
-        modal.classList.remove('active');
-    }
-
-    // Fechar o modal ao clicar fora dele
-    window.onclick = function(event) {
-        const modal = document.getElementById('secureModal');
-        if (event.target === modal) {
-            closeSecureModal();
+          copyBtn.addEventListener('click', function () {
+            navigator.clipboard.writeText(data.paymentCode).then(() => {
+              alert('Código Pix copiado para a área de transferência!');
+            }).catch((err) => {
+              console.error('Erro ao copiar o código:', err);
+            });
+          });
+        } else {
+          alert('Erro ao gerar Pix: ' + data.message);
         }
-    };
-</script>
-
-<!-- Inclua o FontAwesome para o ícone do botão -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+      } catch (error) {
+        console.error('Erro ao processar Pix:', error);
+        alert('Erro ao processar Pix. Tente novamente.');
+      }
+    });
+  </script>
 </body>
 </html>
