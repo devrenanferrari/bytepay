@@ -473,10 +473,19 @@
 
     <!-- Pagamento com PIX -->
     <div id="pix-payment" class="payment-method" style="display: none;">
-        <div class="text-center">
-            <p class="mb-3">Após clicar em 'Gerar PIX', você verá o QR Code para pagamento. Certifique-se de concluir a transação para que seu pedido seja confirmado.</p>
+    <div class="text-center">
+        <p class="mb-3">Clique em 'Gerar PIX' para obter o QR Code.</p>
+        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
+            <i class="fas fa-qrcode"></i> Gerar PIX
+        </button>
+        <div id="pixResult" class="pix-code" style="display:none;">
+            <h2>Pix Gerado com Sucesso!</h2>
+            <p>Código:</p>
+            <div id="pix-code" style="word-wrap: break-word; background-color: #e8f4f8; padding: 12px; border-radius: 5px;"></div>
+            <img id="qrCodeImage" src="" alt="QR Code" style="max-width: 200px; margin-top: 15px;">
         </div>
     </div>
+</div>
 
     <!-- Botão de Finalizar Compra -->
     <div id="finalize-card" class="text-center">
@@ -515,9 +524,42 @@
     }
 
     // Função para gerar PIX (exemplo)
-    function generatePix() {
-        alert('Gerando PIX...');
-        // Aqui você pode adicionar a lógica para gerar o QR Code do PIX.
+    async function generatePix() {
+        const nome = document.getElementById('nome').value;
+        const cpf = document.getElementById('cpf').value;
+        const telefone = document.getElementById('telefone').value;
+        const email = document.getElementById('email').value;
+        const valor = document.getElementById('valor').value;
+        
+        const payload = {
+            bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API
+            nome,
+            cpf,
+            telefone,
+            email,
+            valor
+        };
+        
+        try {
+            const response = await fetch('/api/process-pix', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                document.getElementById('pix-code').textContent = data.paymentCode;
+                document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
+                document.getElementById('pixResult').style.display = 'block';
+            } else {
+                alert('Erro ao gerar Pix: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Erro ao processar Pix:', error);
+            alert('Erro ao processar Pix. Tente novamente.');
+        }
     }
 </script>
 
