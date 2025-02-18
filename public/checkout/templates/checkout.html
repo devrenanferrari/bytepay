@@ -189,345 +189,280 @@
             color: #000;
         }
         .secure-payment {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    color: green;
-    font-weight: bold;
-}
-
-.secure-payment i {
-    font-size: 20px;
-}
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: green;
+            font-weight: bold;
+        }
+        .secure-payment i {
+            font-size: 20px;
+        }
     </style>
 </head>
+<body>
     <!-- Secure Payment -->
     <div class="secure-payment">
         <i class="fas fa-shield-alt"></i>
         <span>PAGAMENTO 100% SEGURO</span>
     </div>
-<body>
     <div class="container">
-    <div class="header text-center mb-4">
-        <h3>Checkout</h3>
-    </div>
-    <!-- Progress Bar -->
-    <div class="progress-container">
-        <div class="progress-step active">
-        <div class="progress-step-icon"><i class="fas fa-user"></i></div>
-        <p>Dados</p>
+        <div class="header text-center mb-4">
+            <h3>Checkout</h3>
         </div>
-        <div class="progress-step">
-        <div class="progress-step-icon"><i class="fas fa-map-marker-alt"></i></div>
-        <p>Endereço</p>
-        </div>
-        <div class="progress-step">
-        <div class="progress-step-icon"><i class="fas fa-shopping-cart"></i></div>
-        <p>Carrinho</p>
-        </div>
-        <div class="progress-step">
-        <div class="progress-step-icon"><i class="fas fa-credit-card"></i></div>
-        <p>Pagamento</p>
-        </div>
-    </div>
-
-    <!-- Total Information -->
-    <div class="section total-info text-center">
-        <h4 class="text-dark">Total:</h4>
-        <p id="total-info" class="text-success fw-bold"></p>
-    </div>
-
-    <!-- Formulário de Pagamento -->
-    <form id="payment-form" class="p-4 rounded shadow-s">
-        <!-- Personal Data Section -->
-        <div id="personal-data" class="section active">
-        <h4 class="text-dark mb-3">Dados Pessoais</h4>
-        <div class="mb-3">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" class="form-control shadow-sm" placeholder="" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Por favor, insira um endereço de email válido.">
-        </div>
-        <div class="mb-3">
-            <label for="telefone">Telefone</label>
-            <input type="text" id="telefone" name="telefone" class="form-control shadow-sm" placeholder="" required>
-        </div>
-        <script>
-            document.getElementById('telefone').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 11) value = value.slice(0, 11);
-            value = value.replace(/(\d{2})(\d)/, '($1) $2');
-            value = value.replace(/(\d{1})(\d{4})(\d{4})$/, '$1 $2-$3');
-            e.target.value = value;
-            });
-        </script>
-        <div class="mb-3">
-            <label for="nome">Nome Completo</label>
-            <input type="text" id="nome" name="nome" class="form-control shadow-sm" placeholder="" required>
-        </div>
-        <div class="mb-3">
-            <label for="cpf">CPF</label>
-            <input type="text" id="cpf" name="cpf" class="form-control shadow-sm" placeholder="" required>
-        </div>
-        <script>
-            document.getElementById('cpf').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 11) value = value.slice(0, 11);
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            e.target.value = value;
-            });
-            const valorTotal = parseFloat(getQueryParam('total')) || 0;
-            document.getElementById('valor').value = valorTotal.toFixed(2); // Preenchendo o campo valor no formulário
-        </script>
-        <div class="text-center">
-            <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('address')">
-            <i class="fas fa-arrow-right"></i> Próximo
-            </button>
-        </div>
-        </div>
-
-        <!-- Address Section -->
-        <div id="address" class="section">
-        <h4 class="text-dark mb-3">Endereço de Entrega</h4>
-        <div class="mb-3">
-            <label for="cep">CEP</label>
-            <input type="text" id="cep" name="cep" class="form-control shadow-sm" placeholder="00.000-000" required>
-            <p class="loading" id="cep-loading">
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Buscando endereço...
-            </p>
-        </div>
-        <div class="mb-3">
-            <label for="rua">Rua</label>
-            <input type="text" id="rua" name="rua" class="form-control shadow-sm" placeholder="" required>
-        </div>
-        <div class="mb-3">
-            <label for="numero">Número</label>
-            <input type="text" id="numero" name="numero" class="form-control shadow-sm" placeholder="" required>
-        </div>
-        <div class="mb-3">
-            <label for="complemento">Complemento</label>
-            <input type="text" id="complemento" name="complemento" class="form-control shadow-sm" placeholder="" required>
-        </div>
-        <div class="mb-3">
-            <label for="bairro">Bairro</label>
-            <input type="text" id="bairro" name="bairro" class="form-control shadow-sm" placeholder="" required>
-        </div>
-        <div class="mb-3">
-            <label for="cidade">Cidade</label>
-            <input type="text" id="cidade" name="cidade" class="form-control shadow-sm" placeholder="" required>
-        </div>
-        <div class="mb-3">
-            <label for="estado">Estado</label>
-            <select id="estado" name="estado" class="form-control shadow-sm" required>
-            <option value="">Selecione o Estado</option>
-            <option value="AC">Acre</option>
-            <option value="AL">Alagoas</option>
-            <option value="AP">Amapá</option>
-            <option value="AM">Amazonas</option>
-            <option value="BA">Bahia</option>
-            <option value="CE">Ceará</option>
-            <option value="DF">Distrito Federal</option>
-            <option value="ES">Espírito Santo</option>
-            <option value="GO">Goiás</option>
-            <option value="MA">Maranhão</option>
-            <option value="MT">Mato Grosso</option>
-            <option value="MS">Mato Grosso do Sul</option>
-            <option value="MG">Minas Gerais</option>
-            <option value="PA">Pará</option>
-            <option value="PB">Paraíba</option>
-            <option value="PR">Paraná</option>
-            <option value="PE">Pernambuco</option>
-            <option value="PI">Piauí</option>
-            <option value="RJ">Rio de Janeiro</option>
-            <option value="RN">Rio Grande do Norte</option>
-            <option value="RS">Rio Grande do Sul</option>
-            <option value="RO">Rondônia</option>
-            <option value="RR">Roraima</option>
-            <option value="SC">Santa Catarina</option>
-            <option value="SP">São Paulo</option>
-            <option value="SE">Sergipe</option>
-            <option value="TO">Tocantins</option>
-            </select>
-        </div>
-        <div class="text-center">
-            <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('products')">
-            <i class="fas fa-arrow-right"></i> Próximo
-            </button>
-        </div>
-        </div>
-
-        <!-- Product Section -->
-        <div id="products" class="section">
-        <h4 class="text-dark mb-3">Carrinho</h4>
-        <div id="product-list">
-            <!-- Produtos serão inseridos aqui via JavaScript -->
-        </div>
-        <div class="text-center">
-            <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('card-data')">
-            <i class="fas fa-arrow-right"></i> Próximo
-            </button>
-        </div>
-        </div>
-
-<script>
-
-       // Função para obter parâmetros da URL
-       function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
-
-// Pegando os valores passados na URL
-const bytepayToken = getQueryParam('bytepaytoken') || 'DEFAULT_API_KEY';
-
-
-// Função para decodificar os parâmetros da URL
-function getQueryParams() {
-        const params = {};
-        window.location.search.substring(1).split('&').forEach(param => {
-        const [key, value] = param.split('=');
-        params[decodeURIComponent(key)] = decodeURIComponent(value);
-        });
-        return params;
-    }
-
-    // Função para preencher os dados na página
-    function fillData() {
-        const params = getQueryParams();
-
-        // Preenche o total
-        const totalInfo = document.getElementById('total-info');
-        totalInfo.textContent = `${params.total} ${params.moeda}`;
-
-        // Preenche os produtos
-        const productsContainer = document.getElementById('product-list');
-        const produtos = JSON.parse(params.produtos);
-
-        produtos.forEach(produto => {
-        const productDiv = document.createElement('div');
-        productDiv.className = 'product';
-        productDiv.innerHTML = `
-            <img src="${produto.image ? produto.image : 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
-            <div>
-            <h2>${produto.name}</h2>
-            <p>Preço: ${produto.price} ${params.moeda}</p>
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-step active">
+                <div class="progress-step-icon"><i class="fas fa-user"></i></div>
+                <p>Dados</p>
             </div>
-        `;
-        productsContainer.appendChild(productDiv);
+            <div class="progress-step">
+                <div class="progress-step-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <p>Endereço</p>
+            </div>
+            <div class="progress-step">
+                <div class="progress-step-icon"><i class="fas fa-shopping-cart"></i></div>
+                <p>Carrinho</p>
+            </div>
+            <div class="progress-step">
+                <div class="progress-step-icon"><i class="fas fa-credit-card"></i></div>
+                <p>Pagamento</p>
+            </div>
+        </div>
 
-        // Preenche o resumo do pedido
-        document.getElementById('product-name').textContent = produto.name;
-        document.getElementById('product-price').textContent = `${produto.price} ${params.moeda}`;
-        document.getElementById('order-total').textContent = `${params.total} ${params.moeda}`;
-        });
+        <!-- Total Information -->
+        <div class="section total-info text-center">
+            <h4 class="text-dark">Total:</h4>
+            <p id="total-info" class="text-success fw-bold"></p>
+        </div>
 
-        // Preenche o valor no formulário
-        document.getElementById('valor').value = params.total;
-    }
+        <!-- Formulário de Pagamento -->
+        <form id="payment-form" class="p-4 rounded shadow-s">
+            <!-- Personal Data Section -->
+            <div id="personal-data" class="section active">
+                <h4 class="text-dark mb-3">Dados Pessoais</h4>
+                <div class="mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control shadow-sm" placeholder="" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Por favor, insira um endereço de email válido.">
+                </div>
+                <div class="mb-3">
+                    <label for="telefone">Telefone</label>
+                    <input type="text" id="telefone" name="telefone" class="form-control shadow-sm" placeholder="" required>
+                </div>
+                <script>
+                    document.getElementById('telefone').addEventListener('input', function (e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length > 11) value = value.slice(0, 11);
+                        value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                        value = value.replace(/(\d{1})(\d{4})(\d{4})$/, '$1 $2-$3');
+                        e.target.value = value;
+                    });
+                </script>
+                <div class="mb-3">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" class="form-control shadow-sm" placeholder="" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" name="cpf" class="form-control shadow-sm" placeholder="" required>
+                </div>
+                <script>
+                    document.getElementById('cpf').addEventListener('input', function (e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length > 11) value = value.slice(0, 11);
+                        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                        e.target.value = value;
+                    });
+                </script>
+                <div class="text-center">
+                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('address')">
+                        <i class="fas fa-arrow-right"></i> Próximo
+                    </button>
+                </div>
+            </div>
 
-</script>
+            <!-- Address Section -->
+            <div id="address" class="section">
+                <h4 class="text-dark mb-3">Endereço de Entrega</h4>
+                <div class="mb-3">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" class="form-control shadow-sm" placeholder="00.000-000" required>
+                    <p class="loading" id="cep-loading">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Buscando endereço...
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <label for="rua">Rua</label>
+                    <input type="text" id="rua" name="rua" class="form-control shadow-sm" placeholder="" required>
+                </div>
+                <div class="mb-3">
+                    <label for="numero">Número</label>
+                    <input type="text" id="numero" name="numero" class="form-control shadow-sm" placeholder="" required>
+                </div>
+                <div class="mb-3">
+                    <label for="complemento">Complemento</label>
+                    <input type="text" id="complemento" name="complemento" class="form-control shadow-sm" placeholder="" required>
+                </div>
+                <div class="mb-3">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" name="bairro" class="form-control shadow-sm" placeholder="" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" name="cidade" class="form-control shadow-sm" placeholder="" required>
+                </div>
+                <div class="mb-3">
+                    <label for="estado">Estado</label>
+                    <select id="estado" name="estado" class="form-control shadow-sm" required>
+                        <option value="">Selecione o Estado</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('products')">
+                        <i class="fas fa-arrow-right"></i> Próximo
+                    </button>
+                </div>
+            </div>
 
-<!-- Seção de Pagamento -->
-<div id="card-data" class="section">
-    <h4 class="text-dark mb-3">Pagamento</h4>
+            <!-- Product Section -->
+            <div id="products" class="section">
+                <h4 class="text-dark mb-3">Carrinho</h4>
+                <div id="product-list">
+                    <!-- Produtos serão inseridos aqui via JavaScript -->
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('card-data')">
+                        <i class="fas fa-arrow-right"></i> Próximo
+                    </button>
+                </div>
+            </div>
 
+            <!-- Seção de Pagamento -->
+            <div id="card-data" class="section">
+                <h4 class="text-dark mb-3">Pagamento</h4>
 
-    <!-- Tela de Pagamento com PIX -->
-    <div id="pix-payment" class="payment-method" style="display: none;"></div>
-    <div class="text-center">
-        <p class="mb-3">Após clicar em 'Gerar PIX', você verá o QR Code para pagamento. Certifique-se de concluir a transação para que seu pedido seja confirmado.</p>
+                <!-- Escolha do Método de Pagamento -->
+                <div class="payment-methods mb-4">
+                    <button type="button" class="btn btn-outline-dark" onclick="showPaymentMethod('pix')">
+                        <i class="fas fa-qrcode"></i> Pagar com PIX
+                    </button>
+                </div>
+
+                <!-- Tela de Pagamento com PIX -->
+                <div id="pix-payment" class="payment-method" style="display: none;"></div>
+                <div class="text-center">
+                    <p class="mb-3">Após clicar em 'Gerar PIX', você verá o QR Code para pagamento. Certifique-se de concluir a transação para que seu pedido seja confirmado.</p>
+                </div>
+
+                <!-- Botão de Gerar PIX -->
+                <div class="text-center">
+                    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
+                        <i class="fas fa-qrcode"></i> Gerar PIX
+                    </button>
+                </div>
+
+                <!-- Área para exibir o código do PIX -->
+                <div id="pix-code-container" class="text-center mt-4" style="display: none;">
+                    <h5 class="text-dark mb-3">Código PIX:</h5>
+                    <p id="pix-code" class="text-dark font-weight-bold"></p>
+                    <button class="btn btn-outline-dark" onclick="copyPixCode()">Copiar Código</button>
+                    <p id="transaction-id" class="text-muted small"></p>
+                </div>
+            </div>
+            <!-- Campo oculto para valor -->
+            <input type="hidden" id="valor" name="valor">
+        </form>
+
+        <!-- Order Summary -->
+        <div class="summary">
+            <h4>Resumo do Pedido</h4>
+            <p>Produto: <span id="product-name"></span></p>
+            <p>Preço: <span id="product-price"></span></p>
+            <p>Total: <span id="order-total"></span></p>
+        </div>
     </div>
 
-
-    <div class="container">
-      <h1>Gerar Pix</h1>
-      <form id="payment-form">
-        <button type="submit">Gerar Pix</button>
-      </form>
-      
-      <div id="pixResult" class="pix-code" style="display:none;">
-        <h2>Pix Gerado com Sucesso!</h2>
-        <p>Valor a ser pago: <strong>R$ <span id="valorPix"></span></strong></p>
-        <p>Copie o código abaixo ou escaneie o QR Code:</p>
-        <div id="paymentCode"></div>
-        <button class="copy-btn" id="copyBtn">Copiar Código</button>
-        <img id="qrCodeImage" src="" alt="QR Code" />
-      </div>
-    </div>
-      
     <script>
-      document.getElementById('payment-form').addEventListener('submit', async function (e) {
-        e.preventDefault();
-      
-        const nome = document.getElementById('nome').value;
-        const cpf = document.getElementById('cpf').value;
-        const telefone = document.getElementById('telefone').value;
-        const email = document.getElementById('email').value;
-        const valorTotal = parseFloat(getQueryParam('total')) || 0;
-        const valor = valorTotal.toFixed(2);
-      
-        const payload = {
-          bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
-          nome,
-          cpf,
-          telefone,
-          email,
-          valor,
-          utms: ""
-        };
-      
-        try {
-          const response = await fetch('/api/process-pix', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-          });
-      
-          const data = await response.json();
-      
-          if (response.ok) {
-        document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
-        document.getElementById('paymentCode').textContent = data.paymentCode;
-        document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
-        document.getElementById('pixResult').style.display = 'block';
-      
-        // Ativar o botão de copiar
-        const copyBtn = document.getElementById('copyBtn');
-        copyBtn.disabled = false;
-      
-        copyBtn.addEventListener('click', function () {
-          navigator.clipboard.writeText(data.paymentCode).then(() => {
-            alert('Código Pix copiado para a área de transferência!');
-          }).catch((err) => {
-            console.error('Erro ao copiar o código:', err);
-          });
-        });
-          } else {
-        alert('Erro ao gerar Pix: ' + data.message);
-          }
-        } catch (error) {
-          console.error('Erro ao processar Pix:', error);
-          alert('Erro ao processar Pix. Tente novamente.');
+        // Função para obter parâmetros da URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
         }
-      });
-    </script>
-</script>
 
-    <!-- Order Summary -->
-    <div class="summary">
-        <h4>Resumo do Pedido</h4>
-        <p>Produto: <span id="product-name"></span></p>
-        <p>Preço: <span id="product-price"></span></p>
-        <p>Total: <span id="order-total"></span></p>
-    </div>
-    </div>
+        // Função para decodificar os parâmetros da URL
+        function getQueryParams() {
+            const params = {};
+            window.location.search.substring(1).split('&').forEach(param => {
+                const [key, value] = param.split('=');
+                params[decodeURIComponent(key)] = decodeURIComponent(value);
+            });
+            return params;
+        }
 
-    <script>
-        
+        // Função para preencher os dados na página
+        function fillData() {
+            const params = getQueryParams();
+
+            // Preenche o total
+            const totalInfo = document.getElementById('total-info');
+            totalInfo.textContent = `${params.total} ${params.moeda}`;
+
+            // Preenche os produtos
+            const productsContainer = document.getElementById('product-list');
+            const produtos = JSON.parse(params.produtos);
+
+            produtos.forEach(produto => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+                productDiv.innerHTML = `
+                    <img src="${produto.image ? produto.image : 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
+                    <div>
+                    <h2>${produto.name}</h2>
+                    <p>Preço: ${produto.price} ${params.moeda}</p>
+                    </div>
+                `;
+                productsContainer.appendChild(productDiv);
+
+                // Preenche o resumo do pedido
+                document.getElementById('product-name').textContent = produto.name;
+                document.getElementById('product-price').textContent = `${produto.price} ${params.moeda}`;
+                document.getElementById('order-total').textContent = `${params.total} ${params.moeda}`;
+            });
+
+            // Preenche o valor no formulário
+            document.getElementById('valor').value = params.total;
+        }
 
         // Função para mostrar a próxima seção
         function nextSection(sectionId) {
@@ -566,6 +501,59 @@ function getQueryParams() {
             }
         }
 
+        // Função para gerar o PIX
+        async function generatePix() {
+            const nome = document.getElementById('nome').value;
+            const cpf = document.getElementById('cpf').value;
+            const telefone = document.getElementById('telefone').value;
+            const email = document.getElementById('email').value;
+            const valorTotal = parseFloat(getQueryParam('total')) || 0;
+            const valor = valorTotal.toFixed(2);
+
+            const payload = {
+                bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
+                nome,
+                cpf,
+                telefone,
+                email,
+                valor,
+                utms: ""
+            };
+
+            try {
+                const response = await fetch('/api/process-pix', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('pix-code').textContent = data.paymentCode;
+                    document.getElementById('transaction-id').textContent = `ID da Transação: ${data.transactionId}`;
+                    document.getElementById('pix-code-container').style.display = 'block';
+                } else {
+                    alert('Erro ao gerar PIX: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Erro ao processar PIX:', error);
+                alert('Erro ao processar PIX. Tente novamente.');
+            }
+        }
+
+        // Função para copiar o código PIX
+        function copyPixCode() {
+            const pixCode = document.getElementById('pix-code').textContent;
+            navigator.clipboard.writeText(pixCode).then(() => {
+                alert('Código PIX copiado para a área de transferência!');
+            }).catch((err) => {
+                console.error('Erro ao copiar o código:', err);
+            });
+        }
+
         // Executa a função ao carregar a página
         document.addEventListener('DOMContentLoaded', fillData);
 
@@ -590,7 +578,6 @@ function getQueryParams() {
                     });
             }
         });
-
     </script>
 
 <footer class="footer">
