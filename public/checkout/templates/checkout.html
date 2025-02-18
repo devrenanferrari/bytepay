@@ -596,9 +596,17 @@
             return params;
         }
 
-        // Função para preencher os dados na página
         function fillData() {
-            const params = getQueryParams();
+    const params = new URLSearchParams(window.location.search);
+    const valorTotal = params.get('total');
+
+    if (document.getElementById('valor')) {  // 🔹 Só tenta definir se o elemento existir
+        document.getElementById('valor').value = valorTotal;
+    } else {
+        console.warn("Campo 'valor' não encontrado no DOM!");
+    }
+}
+
 
             // Preenche o total
             const totalInfo = document.getElementById('total-info');
