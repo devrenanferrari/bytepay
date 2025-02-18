@@ -540,36 +540,52 @@
             return;
         }
 
-        const payload = {
-            bytepaytoken: getQueryParam('bytepaytoken') || 'c1989a43-d693-458b-8766-e0ae91526e30', // Token da API
-            nome,
-            cpf,
-            telefone,
-            email,
-            valor
-        };
+         const payload = {
+        bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
+        nome,
+        cpf,
+        telefone,
+        email,
+        valor,
+        utms
+      };
 
-        try {
-            const response = await fetch('/api/process-pix', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+      try {
+        const response = await fetch('/api/process-pix', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
+          document.getElementById('paymentCode').textContent = data.paymentCode;
+          document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
+          document.getElementById('pixResult').style.display = 'block';
+
+          // Ativar o botão de copiar
+          const copyBtn = document.getElementById('copyBtn');
+          copyBtn.disabled = false;
+
+          copyBtn.addEventListener('click', function () {
+            navigator.clipboard.writeText(data.paymentCode).then(() => {
+              alert('Código Pix copiado para a área de transferência!');
+            }).catch((err) => {
+              console.error('Erro ao copiar o código:', err);
             });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                document.getElementById('pix-code').textContent = data.paymentCode;
-                document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
-                document.getElementById('pixResult').style.display = 'block';
-            } else {
-                alert('Erro ao gerar Pix: ' + data.message);
-            }
-        } catch (error) {
-            console.error('Erro ao processar Pix:', error);
-            alert('Erro ao processar Pix. Tente novamente.');
+          });
+        } else {
+          alert('Erro ao gerar Pix: ' + data.message);
         }
-    }
+      } catch (error) {
+        console.error('Erro ao processar Pix:', error);
+        alert('Erro ao processar Pix. Tente novamente.');
+      }
+    });
 </script>
 
         <!-- Order Summary -->
