@@ -494,14 +494,6 @@
         </button>
     </div>
 
-    <!-- Botão de Gerar PIX -->
-    <div id="finalize-pix" class="text-center" style="display: none;">
-        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
-            <i class="fas fa-qrcode"></i> Gerar PIX
-        </button>
-    </div>
-</div>
-
 <script>
     // Função para alternar entre os métodos de pagamento
     function showPaymentMethod(method) {
@@ -587,6 +579,15 @@
       }
     });
 </script>
+
+       <!-- Botão de Gerar PIX -->
+    <div id="finalize-pix" class="text-center" style="display: none;">
+        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
+            <i class="fas fa-qrcode"></i> Gerar PIX
+        </button>
+    </div>
+</div>
+
 
         <!-- Order Summary -->
         <div class="summary">
