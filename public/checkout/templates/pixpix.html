@@ -16,36 +16,82 @@
     }
     .container {
       background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
       width: 100%;
+      text-align: center;
     }
     h1 {
-      text-align: center;
       color: #4A90E2;
+      font-size: 24px;
+      margin-bottom: 20px;
     }
     input, button {
       width: 100%;
-      padding: 10px;
-      margin: 8px 0;
+      padding: 12px;
+      margin: 10px 0;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 16px;
     }
     button {
       background-color: #4A90E2;
       color: white;
       font-weight: bold;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #357ABD;
     }
     .pix-code {
-      margin-top: 20px;
-      text-align: center;
+      margin-top: 30px;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    img {
-      max-width: 100%;
-      margin-top: 10px;
+    .pix-code h2 {
+      color: #27ae60;
+      font-size: 22px;
+    }
+    .pix-code p {
+      font-size: 18px;
+      color: #333;
+    }
+    #paymentCode {
+      font-family: monospace;
+      background-color: #e8f4f8;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 18px;
+      word-wrap: break-word;
+      margin-bottom: 15px;
+    }
+    #qrCodeImage {
+      max-width: 200px;
+      margin-top: 15px;
+    }
+    .copy-btn {
+      background-color: #27ae60;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+      transition: background-color 0.3s;
+    }
+    .copy-btn:hover {
+      background-color: #2ecc71;
+    }
+    .copy-btn:active {
+      background-color: #1e8449;
+    }
+    .copy-btn:disabled {
+      background-color: #d3d3d3;
     }
   </style>
 </head>
@@ -64,8 +110,10 @@
 
     <div id="pixResult" class="pix-code" style="display:none;">
       <h2>Pix Gerado com Sucesso!</h2>
+      <p>Valor a ser pago: <strong>R$ <span id="valorPix"></span></strong></p>
       <p>Copie o código abaixo ou escaneie o QR Code:</p>
-      <p id="paymentCode"></p>
+      <div id="paymentCode"></div>
+      <button class="copy-btn" id="copyBtn">Copiar Código</button>
       <img id="qrCodeImage" src="" alt="QR Code" />
     </div>
   </div>
@@ -82,7 +130,7 @@
       const utms = document.getElementById('utms').value;
 
       const payload = {
-        bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
+        bytepaytoken: 'SUA_BYTEPAY_API_KEY', // Substitua com sua chave da API BytePay
         nome,
         cpf,
         telefone,
@@ -103,9 +151,22 @@
         const data = await response.json();
 
         if (response.ok) {
+          document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
           document.getElementById('paymentCode').textContent = data.paymentCode;
           document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
           document.getElementById('pixResult').style.display = 'block';
+
+          // Ativar o botão de copiar
+          const copyBtn = document.getElementById('copyBtn');
+          copyBtn.disabled = false;
+
+          copyBtn.addEventListener('click', function () {
+            navigator.clipboard.writeText(data.paymentCode).then(() => {
+              alert('Código Pix copiado para a área de transferência!');
+            }).catch((err) => {
+              console.error('Erro ao copiar o código:', err);
+            });
+          });
         } else {
           alert('Erro ao gerar Pix: ' + data.message);
         }
