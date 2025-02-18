@@ -369,16 +369,70 @@
                 </div>
             </div>
 
+<script>
+
+       // Função para obter parâmetros da URL
+       function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// Pegando os valores passados na URL
+const bytepayToken = getQueryParam('bytepaytoken') || 'DEFAULT_API_KEY';
+const valorTotal = parseFloat(getQueryParam('total')) || 0;
+
+document.getElementById('valor').value = valorTotal.toFixed(2); // Preenchendo o campo valor no formulário
+
+// Função para decodificar os parâmetros da URL
+function getQueryParams() {
+            const params = {};
+            window.location.search.substring(1).split('&').forEach(param => {
+                const [key, value] = param.split('=');
+                params[decodeURIComponent(key)] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        // Função para preencher os dados na página
+        function fillData() {
+            const params = getQueryParams();
+
+            // Preenche o total
+            const totalInfo = document.getElementById('total-info');
+            totalInfo.textContent = `${params.total} ${params.moeda}`;
+
+            // Preenche os produtos
+            const productsContainer = document.getElementById('product-list');
+            const produtos = JSON.parse(params.produtos);
+
+            produtos.forEach(produto => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+                productDiv.innerHTML = `
+                    <img src="${produto.image ? produto.image : 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
+                    <div>
+                        <h2>${produto.name}</h2>
+                        <p>Preço: ${produto.price} ${params.moeda}</p>
+                    </div>
+                `;
+                productsContainer.appendChild(productDiv);
+
+                // Preenche o resumo do pedido
+                document.getElementById('product-name').textContent = produto.name;
+                document.getElementById('product-price').textContent = `${produto.price} ${params.moeda}`;
+                document.getElementById('order-total').textContent = `${params.total} ${params.moeda}`;
+            });
+
+            // Preenche o valor no formulário
+            document.getElementById('valor').value = params.total;
+        }
+
+</script>
+
 <!-- Seção de Pagamento -->
 <div id="card-data" class="section">
     <h4 class="text-dark mb-3">Pagamento</h4>
 
-    <!-- Escolha do Método de Pagamento -->
-    <div class="payment-methods mb-4">
-        <button type="button" class="btn btn-outline-dark" onclick="showPaymentMethod('pix')">
-            <i class="fas fa-qrcode"></i> Pagar com PIX
-        </button>
-    </div>
 
     <!-- Tela de Pagamento com PIX -->
     <div id="pix-payment" class="payment-method" style="display: none;"></div>
@@ -386,16 +440,10 @@
             <p class="mb-3">Após clicar em 'Gerar PIX', você verá o QR Code para pagamento. Certifique-se de concluir a transação para que seu pedido seja confirmado.</p>
         </div>
 
-        <!-- Botão de Gerar PIX -->
-        <div class="text-center">
-            <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
-                <i class="fas fa-qrcode"></i> Gerar PIX
-            </button>
-        </div>
 
         <div class="container">
           <h1>Gerar Pix</h1>
-          <form id="pixForm">
+          <form id="payment-form">
             <button type="submit">Gerar Pix</button>
           </form>
       
@@ -417,8 +465,6 @@
             const cpf = document.getElementById('cpf').value;
             const telefone = document.getElementById('telefone').value;
             const email = document.getElementById('email').value;
-            const valor = document.getElementById('valor').value;
-            const utms = document.getElementById('utms').value;
       
             const payload = {
               bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
@@ -427,7 +473,7 @@
               telefone,
               email,
               valor,
-              utms
+              utms: ""
             };
       
             try {
@@ -479,49 +525,7 @@
     </div>
 
     <script>
-        // Função para decodificar os parâmetros da URL
-        function getQueryParams() {
-            const params = {};
-            window.location.search.substring(1).split('&').forEach(param => {
-                const [key, value] = param.split('=');
-                params[decodeURIComponent(key)] = decodeURIComponent(value);
-            });
-            return params;
-        }
-
-        // Função para preencher os dados na página
-        function fillData() {
-            const params = getQueryParams();
-
-            // Preenche o total
-            const totalInfo = document.getElementById('total-info');
-            totalInfo.textContent = `${params.total} ${params.moeda}`;
-
-            // Preenche os produtos
-            const productsContainer = document.getElementById('product-list');
-            const produtos = JSON.parse(params.produtos);
-
-            produtos.forEach(produto => {
-                const productDiv = document.createElement('div');
-                productDiv.className = 'product';
-                productDiv.innerHTML = `
-                    <img src="${produto.image ? produto.image : 'https://via.placeholder.com/120'}" alt="Imagem do produto" class="img-thumbnail" width="120">
-                    <div>
-                        <h2>${produto.name}</h2>
-                        <p>Preço: ${produto.price} ${params.moeda}</p>
-                    </div>
-                `;
-                productsContainer.appendChild(productDiv);
-
-                // Preenche o resumo do pedido
-                document.getElementById('product-name').textContent = produto.name;
-                document.getElementById('product-price').textContent = `${produto.price} ${params.moeda}`;
-                document.getElementById('order-total').textContent = `${params.total} ${params.moeda}`;
-            });
-
-            // Preenche o valor no formulário
-            document.getElementById('valor').value = params.total;
-        }
+        
 
         // Função para mostrar a próxima seção
         function nextSection(sectionId) {
@@ -584,124 +588,6 @@
                     });
             }
         });
-
-       // Função para obter parâmetros da URL
-function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
-
-// Pegando os valores passados na URL
-const bytepayToken = getQueryParam('bytepaytoken') || 'DEFAULT_API_KEY';
-const valorTotal = parseFloat(getQueryParam('total')) || 0;
-
-document.getElementById('valor').value = valorTotal.toFixed(2); // Preenchendo o campo valor no formulário
-
-// Form Submission
-const form = document.getElementById('payment-form');
-
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-
-    const data = {
-        "api-key": bytepayToken,  // Garante que está definido
-        email: formData.get('email'),
-        telefone: formData.get('telefone'),
-        nome: formData.get('nome'),
-        cpf: formData.get('cpf'),
-        valor: parseFloat(formData.get('valor').replace(',', '.')), // Converte para número correto
-        id: "pedido12345",
-        installments: document.getElementById('installments').value,
-        card: {
-            number: formData.get('cardNumber'),
-            holderName: formData.get('holderName'),
-            expirationMonth: formData.get('expirationMonth'),
-            expirationYear: formData.get('expirationYear'),
-            cvv: formData.get('cvv'),
-        },
-        utms: {
-            utm_source: formData.get('utm_source') || '',
-            utm_medium: formData.get('utm_medium') || '',
-            utm_campaign: formData.get('utm_campaign') || '',
-            utm_term: formData.get('utm_term') || '',
-            utm_content: formData.get('utm_content') || ''
-        },
-    };
-
-    console.log("Enviando pagamento com dados:", data); // Debug
-
-    try {
-        const response = await fetch('/api/process-payment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-
-        if (response.ok) { // Verifica se o status da resposta foi 200
-            alert(result.message || 'Pagamento processado com sucesso!');
-        } else {
-            // Se o status não for 200, trata o erro de forma mais clara
-            alert(`Erro ao processar pagamento: ${result.message || 'Tente novamente mais tarde.'}`);
-        }
-    } catch (error) {
-        alert('Erro ao processar pagamento!');
-        console.error(error);
-    }
-});
-
-
-        // Função para enviar os dados do Pix
-const formPix = document.getElementById('pix-form');
-
-formPix.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-
-    const data = {
-        nome: formData.get('nome'),
-        cpf: formData.get('cpf'),
-        telefone: formData.get('telefone'),
-        email: formData.get('email'),
-        valor: parseFloat(formData.get('valor').replace(',', '.')), // Converte para número correto
-        utms: {
-            utm_source: formData.get('utm_source') || '',
-            utm_medium: formData.get('utm_medium') || '',
-            utm_campaign: formData.get('utm_campaign') || '',
-            utm_term: formData.get('utm_term') || '',
-            utm_content: formData.get('utm_content') || ''
-        }
-    };
-
-    console.log("Enviando dados para gerar Pix:", data); // Debug
-
-    try {
-        const response = await fetch('/api/process-pix', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {  // Verifica se o status da resposta foi 200
-            alert('Pix gerado com sucesso!');
-            document.getElementById('pix-code').textContent = result.paymentCode;  // Exibe o código Pix
-            document.getElementById('transaction-id').textContent = result.idTransaction;  // Exibe o ID da transação
-            document.getElementById('payment-code-base64').textContent = result.paymentCodeBase64;  // Exibe o código base64 (caso necessário)
-        } else {
-            // Se o status não for 200, exibe a mensagem de erro
-            alert(`Erro ao gerar Pix: ${result.message || 'Tente novamente mais tarde.'}`);
-        }
-    } catch (error) {
-        alert('Erro ao processar Pix!');
-        console.error(error);
-    }
-});
-
-
 
     </script>
 
