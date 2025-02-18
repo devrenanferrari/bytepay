@@ -277,6 +277,8 @@
                         value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
                         e.target.value = value;
                     });
+                    const valorTotal = parseFloat(getQueryParam('total')) || 0;
+                    document.getElementById('valor').value = valorTotal.toFixed(2); // Preenchendo o campo valor no formulário
                 </script>
                 <div class="text-center">
                     <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="nextSection('address')">
@@ -379,9 +381,7 @@
 
 // Pegando os valores passados na URL
 const bytepayToken = getQueryParam('bytepaytoken') || 'DEFAULT_API_KEY';
-const valorTotal = parseFloat(getQueryParam('total')) || 0;
 
-document.getElementById('valor').value = valorTotal.toFixed(2); // Preenchendo o campo valor no formulário
 
 // Função para decodificar os parâmetros da URL
 function getQueryParams() {
@@ -465,6 +465,8 @@ function getQueryParams() {
             const cpf = document.getElementById('cpf').value;
             const telefone = document.getElementById('telefone').value;
             const email = document.getElementById('email').value;
+            const valorTotal = parseFloat(getQueryParam('total')) || 0;
+            const valor = valorTotal.toFixed(2);
       
             const payload = {
               bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
