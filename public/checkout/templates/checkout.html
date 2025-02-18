@@ -393,71 +393,80 @@
             </button>
         </div>
 
-        <!-- Área para exibir o código do PIX -->
-        <div id="pix-code-container" class="text-center mt-4" style="display: none;">
-            <h5 class="text-dark mb-3">Código PIX:</h5>
-            <p id="pix-code" class="text-dark font-weight-bold"></p>
-            <button class="btn btn-outline-dark" onclick="copyPixCode()">Copiar Código</button>
-            <p id="transaction-id" class="text-muted small"></p>
+        <div class="container">
+          <h1>Gerar Pix</h1>
+          <form id="pixForm">
+            <button type="submit">Gerar Pix</button>
+          </form>
+      
+          <div id="pixResult" class="pix-code" style="display:none;">
+            <h2>Pix Gerado com Sucesso!</h2>
+            <p>Valor a ser pago: <strong>R$ <span id="valorPix"></span></strong></p>
+            <p>Copie o código abaixo ou escaneie o QR Code:</p>
+            <div id="paymentCode"></div>
+            <button class="copy-btn" id="copyBtn">Copiar Código</button>
+            <img id="qrCodeImage" src="" alt="QR Code" />
+          </div>
         </div>
-    </div>
-</div>
-
-<script>
-    // Função para gerar PIX
-    async function generatePix() {
-        const form = document.getElementById('payment-form');
-        const formData = new FormData(form);
-
-        const data = {
-            nome: formData.get('nome'),
-            cpf: formData.get('cpf'),
-            telefone: formData.get('telefone'),
-            email: formData.get('email'),
-            valor: parseFloat(formData.get('valor').replace(',', '.')),
-            utms: {
-                utm_source: formData.get('utm_source') || '',
-                utm_medium: formData.get('utm_medium') || '',
-                utm_campaign: formData.get('utm_campaign') || '',
-                utm_term: formData.get('utm_term') || '',
-                utm_content: formData.get('utm_content') || ''
-            }
-        };
-
-        console.log("Enviando dados para gerar Pix:", data);
-
-        try {
-            const response = await fetch('/api/process-pix', {
+      
+        <script>
+          document.getElementById('payment-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+      
+            const nome = document.getElementById('nome').value;
+            const cpf = document.getElementById('cpf').value;
+            const telefone = document.getElementById('telefone').value;
+            const email = document.getElementById('email').value;
+            const valor = document.getElementById('valor').value;
+            const utms = document.getElementById('utms').value;
+      
+            const payload = {
+              bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
+              nome,
+              cpf,
+              telefone,
+              email,
+              valor,
+              utms
+            };
+      
+            try {
+              const response = await fetch('/api/process-pix', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                document.getElementById('pix-code').textContent = result.paymentCode;
-                document.getElementById('transaction-id').textContent = `ID da Transação: ${result.idTransaction}`;
-                document.getElementById('pix-code-container').style.display = 'block';
-            } else {
-                alert(`Erro ao gerar Pix: ${result.message || 'Tente novamente mais tarde.'}`);
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+              });
+      
+              const data = await response.json();
+      
+              if (response.ok) {
+                document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
+                document.getElementById('paymentCode').textContent = data.paymentCode;
+                document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
+                document.getElementById('pixResult').style.display = 'block';
+      
+                // Ativar o botão de copiar
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.disabled = false;
+      
+                copyBtn.addEventListener('click', function () {
+                  navigator.clipboard.writeText(data.paymentCode).then(() => {
+                    alert('Código Pix copiado para a área de transferência!');
+                  }).catch((err) => {
+                    console.error('Erro ao copiar o código:', err);
+                  });
+                });
+              } else {
+                alert('Erro ao gerar Pix: ' + data.message);
+              }
+            } catch (error) {
+              console.error('Erro ao processar Pix:', error);
+              alert('Erro ao processar Pix. Tente novamente.');
             }
-        } catch (error) {
-            alert('Erro ao processar Pix!');
-            console.error(error);
-        }
-    }
-
-    // Função para copiar o código PIX
-    function copyPixCode() {
-        const pixCode = document.getElementById('pix-code').textContent;
-        navigator.clipboard.writeText(pixCode).then(() => {
-            alert('Código PIX copiado!');
-        }).catch(err => {
-            console.error('Erro ao copiar o código PIX: ', err);
-        });
-    }
-</script>
+          });
+        </script>
 </script>
 
         <!-- Order Summary -->
