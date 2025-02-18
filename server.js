@@ -197,30 +197,33 @@ app.post('/api/process-payment', async (req, res) => {
   }
 });
 
+// Rota para gerar um pagamento via PIX
 app.post('/api/process-pix', async (req, res) => {
   const { bytepaytoken, nome, cpf, telefone, email, valor, utms } = req.body;
-
+  
   try {
+    // Configurar o payload da requisição
     const pixPayload = {
-      "api-key": bytepaytoken,  // Alterado para seguir a documentação
-      "amount": valor,  // Converte R$ 10,00 para centavos (1000)
+      "api-key": bytepaytoken, // Pegando a chave do ambiente
+      "amount": parseFloat(valor), // Converter para número
       "client": {
         "name": nome,
-        "document": cpf, // Remove pontos e traços do CPF
+        "document": cpf.replace(/\D/g, ''), // Remove pontos e traços
         "telefone": telefone,
         "email": email
       },
-      "utms": utms || {}  // Garante que utms seja um objeto
+      "utms": utms || {} // Caso os dados de rastreamento não sejam passados
     };
 
+    // Enviar a requisição para a API BytePay
     const response = await axios.post('https://api.bytepaycash.com/v1/gateway/', pixPayload);
-
+    
     if (response.data.status === 'success') {
       return res.status(200).json({
         message: 'Pix gerado com sucesso!',
-        paymentCode: response.data.paymentCode,
-        idTransaction: response.data.idTransaction,
-        paymentCodeBase64: response.data.paymentCodeBase64
+        paymentCode: response.data.paymentCode, // Código do pagamento
+        idTransaction: response.data.idTransaction, // ID da transação
+        paymentCodeBase64: response.data.paymentCodeBase64 // QR Code em base64
       });
     } else {
       return res.status(400).json({ message: 'Erro ao gerar Pix', details: response.data });
@@ -230,8 +233,6 @@ app.post('/api/process-pix', async (req, res) => {
     return res.status(500).json({ message: 'Erro ao processar Pix. Tente novamente.' });
   }
 });
-
-
 
 
 // Iniciar o servidor
