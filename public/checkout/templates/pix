@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento PIX</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+        .timer {
+            font-size: 24px;
+            color: #009688;
+            font-weight: bold;
+        }
+        .qr-code {
+            margin: 20px 0;
+        }
+        .button {
+            background: #009688;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>PIX gerado com sucesso</h2>
+        <p>Aguardando o pagamento! Após realizar o pagamento, aguarde nesta tela para confirmar seu pedido.</p>
+        <p class="timer" id="timer">28:00</p>
+        <div class="qr-code" id="qrcode"></div>
+        <p>Efetue o pagamento agora mesmo escaneando o QR Code</p>
+        <button class="button" onclick="copyPix()">UTILIZAR PIX COPIA E COLA</button>
+        <p>Pedido #47071 - RESERVADO</p>
+    </div>
+
+    <script>
+        let time = 28 * 60; // 28 minutos em segundos
+        const timerElement = document.getElementById('timer');
+        const pixCopiaCola = "00020126330014BR.GOV.BCB.PIX0114+5599999999995204000053039865802BR5920Nome do Recebedor6009Sao Paulo62070503***6304ABCD"; // Substitua pelo código real
+
+        function updateTimer() {
+            const minutes = Math.floor(time / 60);
+            const seconds = time % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            time--;
+            if (time >= 0) {
+                setTimeout(updateTimer, 1000);
+            }
+        }
+        updateTimer();
+
+        function copyPix() {
+            navigator.clipboard.writeText(pixCopiaCola).then(() => {
+                alert('Código PIX copiado!');
+            });
+        }
+
+        new QRCode(document.getElementById("qrcode"), {
+            text: pixCopiaCola,
+            width: 200,
+            height: 200
+        });
+    </script>
+</body>
+</html>
