@@ -373,26 +373,11 @@
 <div id="card-data" class="section">
     <h4 class="text-dark mb-3">Pagamento</h4>
 
-    <!-- Pagamento com PIX -->
-    <div id="pix-payment" class="payment-method" style="display: none;">
-    <div class="text-center">
-        <p class="mb-3">Clique em 'Gerar PIX' para obter o QR Code.</p>
-        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
-            <i class="fas fa-qrcode"></i> Gerar PIX
-        </button>
-        <div id="pixResult" class="pix-code" style="display:none;">
-            <h2>Pix Gerado com Sucesso!</h2>
-            <p>Código:</p>
-            <div id="pix-code" style="word-wrap: break-word; background-color: #e8f4f8; padding: 12px; border-radius: 5px;"></div>
-            <img id="qrCodeImage" src="" alt="QR Code" style="max-width: 200px; margin-top: 15px;">
-        </div>
-    </div>
-</div>
 
     <!-- Botão de Finalizar Compra -->
     <div id="finalize-card" class="text-center">
         <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
-            <i class="fas fa-check"></i> Finalizar Compra
+            <i class="fas fa-check"></i> Gerar Pix
         </button>
     </div>
 
@@ -428,6 +413,7 @@
         const telefone = document.getElementById('telefone')?.value || '';
         const email = document.getElementById('email')?.value || '';
         const valor = getQueryParam('total'); // Pegando o valor direto da URL
+        const bytepayToken = getQueryParam('bytepaytoken'); // Pegando o valor direto da URL
 
         if (!valor) {
             alert("Erro: Valor do pagamento não encontrado na URL.");
@@ -440,7 +426,7 @@
         cpf,
         telefone,
         email,
-        valor: '2000',
+        valor,
         utms
       };
 
@@ -481,14 +467,6 @@
       }
     };
 </script>
-
-       <!-- Botão de Gerar PIX -->
-    <div id="finalize-pix" class="text-center" style="display: none;">
-        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
-            <i class="fas fa-qrcode"></i> Gerar PIX
-        </button>
-    </div>
-</div>
 
 
         <!-- Order Summary -->
