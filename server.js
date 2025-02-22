@@ -201,13 +201,28 @@ app.post('/api/process-payment', async (req, res) => {
 app.post('/api/process-pix', async (req, res) => {
     const { bytepaytoken, nome, cpf, telefone, email, valor, utms } = req.body;
 
+    // Validação dos dados de entrada
+    if (!bytepaytoken || !nome || !cpf || !telefone || !email || !valor) {
+        return res.status(400).json({ message: 'Dados incompletos ou inválidos.' });
+    }
+
+    const valorNumerico = parseFloat(valor);
+    if (isNaN(valorNumerico)) {
+        return res.status(400).json({ message: 'O valor deve ser um número válido.' });
+    }
+
+    const cpfLimpo = cpf.replace(/\D/g, '');
+    if (cpfLimpo.length !== 11) {
+        return res.status(400).json({ message: 'CPF inválido.' });
+    }
+
     try {
         const pixPayload = {
             "api-key": bytepaytoken,
-            "amount": parseFloat(valor), // Converter para número
+            "amount": valorNumerico,
             "client": {
                 "name": nome,
-                "document": cpf.replace(/\D/g, ''),
+                "document": cpfLimpo,
                 "telefone": telefone,
                 "email": email
             },
@@ -218,9 +233,14 @@ app.post('/api/process-pix', async (req, res) => {
 
         console.log("Resposta da BytePay:", response.data); // Debug
 
-        if (response.data?.status === 'success' && response.data.paymentCode) {
+        if (response.data?.status === 'success') {
+            if (!response.data.paymentCode || !response.data.idTransaction || !response.data.paymentCodeBase64) {
+                console.error("Dados incompletos na resposta da BytePay:", response.data);
+                return res.status(500).json({ message: 'Resposta incompleta da API BytePay.' });
+            }
+
             return res.status(200).json({
-                status: 'success',  // 🔹 Garante que o frontend trate como sucesso
+                status: 'success',
                 message: 'Pix gerado com sucesso!',
                 paymentCode: response.data.paymentCode,
                 idTransaction: response.data.idTransaction,
@@ -231,7 +251,11 @@ app.post('/api/process-pix', async (req, res) => {
             return res.status(400).json({ message: 'Erro ao gerar Pix', details: response.data });
         }
     } catch (error) {
-        console.error("Erro ao chamar a API BytePay:", error.response?.data || error.message);
+        console.error("Erro ao chamar a API BytePay:", {
+            message: error.message,
+            response: error.response?.data,
+            stack: error.stack
+        });
         return res.status(500).json({ message: 'Erro ao processar Pix.', error: error.response?.data || error.message });
     }
 });
