@@ -374,79 +374,73 @@
     <h4 class="text-dark mb-3">Pagamento</h4>
 
 
-    <!-- Botão de Finalizar Compra -->
-    <div id="finalize-card" class="text-center">
-        <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
-            <i class="fas fa-qrcode"></i> Gerar Pix
-        </button>
-    </div>
+    <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
+        <i class="fas fa-qrcode"></i> Gerar Pix
+    </button>
 
 <script>
+    async function generatePix() {
+    // Coletar os dados do formulário
+    const nome = document.getElementById('nome').value;
+    const cpf = document.getElementById('cpf').value.replace(/\D/g, ''); // Remover formatação do CPF
+    const telefone = document.getElementById('telefone').value.replace(/\D/g, ''); // Remover formatação do telefone
+    const email = document.getElementById('email').value;
+    const valor = getQueryParam('total'); // Pegar o valor da URL
 
+    // Verificar se o valor está presente
+    if (!valor) {
+        alert("Erro: Valor do pagamento não encontrado na URL.");
+        return;
+    }
+
+    // Montar o payload para a API
+    const payload = {
+        bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua pela sua chave da API BytePay
+        nome,
+        cpf,
+        telefone,
+        email,
+        valor: parseFloat(valor).toFixed(2), // Garantir que o valor seja um número com 2 casas decimais
+        utms: {} // Adicionar UTMs se necessário
+    };
+
+    try {
+        // Enviar os dados para a API
+        const response = await fetch('/api/process-pix', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        // Verificar se a requisição foi bem-sucedida
+        if (response.ok) {
+            // Redirecionar para a página pix.html com os dados de pagamento
+            const queryParams = new URLSearchParams({
+                paymentCode: data.paymentCode,
+                paymentCodeBase64: data.paymentCodeBase64,
+                valor: valor
+            }).toString();
+
+            window.location.href = `pix.html?${queryParams}`;
+        } else {
+            alert('Erro ao gerar Pix: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Erro ao processar Pix:', error);
+        alert('Erro ao processar Pix. Tente novamente.');
+    }
+}
 
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     }
 
-    async function generatePix() {
-        const nome = document.getElementById('nome')?.value || '';
-        const cpf = document.getElementById('cpf')?.value || '';
-        const telefone = document.getElementById('telefone')?.value || '';
-        const email = document.getElementById('email')?.value || '';
-        const valor = getQueryParam('total'); // Pegando o valor direto da URL
 
-        if (!valor) {
-            alert("Erro: Valor do pagamento não encontrado na URL.");
-            return;
-        }
-
-         const payload = {
-        bytepaytoken: 'c1989a43-d693-458b-8766-e0ae91526e30', // Substitua com sua chave da API BytePay
-        nome,
-        cpf,
-        telefone,
-        email,
-        valor: '2000',
-        utms
-      };
-
-      try {
-        const response = await fetch('/api/process-pix', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
-          document.getElementById('paymentCode').textContent = data.paymentCode;
-          document.getElementById('qrCodeImage').src = `data:image/png;base64,${data.paymentCodeBase64}`;
-          document.getElementById('pixResult').style.display = 'block';
-
-          // Ativar o botão de copiar
-          const copyBtn = document.getElementById('copyBtn');
-          copyBtn.disabled = false;
-
-          copyBtn.addEventListener('click', function () {
-            navigator.clipboard.writeText(data.paymentCode).then(() => {
-              alert('Código Pix copiado para a área de transferência!');
-            }).catch((err) => {
-              console.error('Erro ao copiar o código:', err);
-            });
-          });
-        } else {
-          alert('Erro ao gerar Pix: ' + data.message);
-        }
-      } catch (error) {
-        console.error('Erro ao processar Pix:', error);
-        alert('Erro ao processar Pix. Tente novamente.');
-      }
-    };
 </script>
 
        <!-- Botão de Gerar PIX -->
