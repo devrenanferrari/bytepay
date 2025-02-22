@@ -16,14 +16,40 @@
             <div id="qrcode"></div>
         </div>
         <p>Efetue o pagamento agora mesmo escaneando o QR Code</p>
-        <button class="btn btn-success w-100" onclick="copyPix()">UTILIZAR PIX COPIA E COLA</button>
+        <button id="copyBtn" class="btn btn-success w-100" onclick="copyPix()">UTILIZAR PIX COPIA E COLA</button>
         <p class="text-muted mt-3">Pedido #47071 - RESERVADO</p>
     </div>
 
     <script>
+        // Capturar os parâmetros da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentCode = urlParams.get('paymentCode');
+        const paymentCodeBase64 = urlParams.get('paymentCodeBase64');
+        const valor = urlParams.get('valor');
+
+        // Exibir o valor do PIX
+        document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
+
+        // Gerar o QR Code
+        new QRCode(document.getElementById("qrcode"), {
+            text: paymentCode,
+            width: 200,
+            height: 200
+        });
+
+        // Configurar o botão de copiar
+        const copyBtn = document.getElementById('copyBtn');
+        copyBtn.addEventListener('click', function () {
+            navigator.clipboard.writeText(paymentCode).then(() => {
+                alert('Código Pix copiado para a área de transferência!');
+            }).catch((err) => {
+                console.error('Erro ao copiar o código:', err);
+            });
+        });
+
+        // Configurar o timer
         let time = 28 * 60;
         const timerElement = document.getElementById('timer');
-        const pixCopiaCola = "00020126330014BR.GOV.BCB.PIX0114+5599999999995204000053039865802BR5920Nome do Recebedor6009Sao Paulo62070503***6304ABCD";
 
         function updateTimer() {
             const minutes = Math.floor(time / 60);
@@ -35,18 +61,6 @@
             }
         }
         updateTimer();
-
-        function copyPix() {
-            navigator.clipboard.writeText(pixCopiaCola).then(() => {
-                alert('Código PIX copiado!');
-            });
-        }
-
-        new QRCode(document.getElementById("qrcode"), {
-            text: pixCopiaCola,
-            width: 200,
-            height: 200
-        });
     </script>
 </body>
 </html>
