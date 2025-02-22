@@ -443,9 +443,17 @@
                 }
             });
         }
+
+        // Adicionando validação ao botão manualmente
+        document.querySelector(".btn-success").addEventListener("click", function () {
+            if (validateStep()) {
+                nextSection('address');
+            } else {
+                alert("Preencha todos os campos obrigatórios antes de avançar!");
+            }
+        });
     });
 </script>
-
 
 
 <script>
