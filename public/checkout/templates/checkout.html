@@ -408,8 +408,7 @@
                 if (!input.value.trim()) {
                     allFilled = false;
                     input.classList.add("border-danger");
-                } else {
-                    input.classList.remove("border-danger");
+                    input.addEventListener("input", () => input.classList.remove("border-danger"));
                 }
             });
 
@@ -446,6 +445,7 @@
         }
     });
 </script>
+
 
 
 <script>
