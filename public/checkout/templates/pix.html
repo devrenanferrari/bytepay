@@ -26,6 +26,9 @@
         const paymentCodeBase64 = urlParams.get('paymentCodeBase64');
         const valor = urlParams.get('valor');
 
+        console.log("paymentCodeBase64:", paymentCodeBase64); // Debug
+        console.log("valor:", valor); // Debug
+
         // Exibir o valor do PIX
         if (valor) {
             document.getElementById('valorPix').textContent = `R$ ${parseFloat(valor).toFixed(2)}`;
@@ -35,6 +38,8 @@
         if (paymentCodeBase64) {
             // Decodificar o paymentCodeBase64 para obter o código PIX Copia e Cola
             const paymentCode = atob(paymentCodeBase64);
+
+            console.log("Código PIX decodificado:", paymentCode); // Debug
 
             // Verificar se o código PIX é válido
             if (paymentCode && paymentCode.startsWith('000201')) {
@@ -55,9 +60,11 @@
                     });
                 });
             } else {
+                console.error("Código PIX inválido ou ausente:", paymentCode);
                 alert('Erro: Código PIX inválido ou ausente.');
             }
         } else {
+            console.error("paymentCodeBase64 não encontrado na URL.");
             alert('Erro: paymentCodeBase64 não encontrado na URL.');
         }
 
