@@ -152,52 +152,6 @@ app.get('/api/faturamento-mensal', async (req, res) => {
 });
 
 // Rota para processar o pagamento
-app.post('/api/process-payment', async (req, res) => {
-  const { email, telefone, nome, cpf, valor, id, installments, card, utms } = req.body;
-
-  try {
-    // Montando o payload corretamente conforme a documentação
-    const paymentPayload = {
-      "api-key": bytepaytoken,  // Certifique-se de que esta variável contém a chave correta
-      "email": email,
-      "telefone": telefone,
-      "nome": nome,
-      "cpf": cpf,
-      "valor": parseFloat(valor), // Converte para número com ponto decimal
-      "id": id,
-      "installments": installments,
-      "card": {
-        "number": card.number,
-        "holderName": card.holderName,
-        "expirationMonth": card.expirationMonth,
-        "expirationYear": card.expirationYear,
-        "cvv": card.cvv
-      },
-      "utms": {
-        "utm_source": utms?.utm_source || '',
-        "utm_medium": utms?.utm_medium || '',
-        "utm_campaign": utms?.utm_campaign || '',
-        "utm_term": utms?.utm_term || '',
-        "utm_content": utms?.utm_content || ''
-      }
-    };
-
-    // Fazendo a requisição para a API correta
-    const response = await axios.post('https://api.bytepaycash.com/v1/gateway/card/', paymentPayload);
-
-    // Verifica se o pagamento foi processado com sucesso
-    if (response.data.success) {
-      return res.status(200).json({ message: 'Pagamento processado com sucesso!', data: response.data });
-    } else {
-      return res.status(400).json({ message: 'Erro ao processar pagamento.', data: response.data });
-    }
-  } catch (error) {
-    console.error("Erro ao processar pagamento:", error.response?.data || error.message);
-    return res.status(500).json({ message: 'Erro ao processar pagamento. Tente novamente.' });
-  }
-});
-
-// Rota para gerar um pagamento via PIX
 app.post('/api/process-pix', async (req, res) => {
     const { bytepaytoken, nome, cpf, telefone, email, valor, utms } = req.body;
 
@@ -267,8 +221,6 @@ app.post('/api/process-pix', async (req, res) => {
         return res.status(500).json({ message: 'Erro ao processar Pix.', error: error.response?.data || error.message });
     }
 });
-
-
 
 
 // Iniciar o servidor
