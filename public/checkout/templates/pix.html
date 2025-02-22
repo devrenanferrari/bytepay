@@ -15,73 +15,76 @@
         <div class="d-flex justify-content-center my-3">
             <div id="qrcode"></div>
         </div>
+        <p id="valorPix" class="fs-5 fw-bold text-dark"></p>
         <p>Efetue o pagamento agora mesmo escaneando o QR Code</p>
-        <button id="copyBtn" class="btn btn-success w-100" onclick="copyPix()">UTILIZAR PIX COPIA E COLA</button>
+        <button id="copyBtn" class="btn btn-success w-100">UTILIZAR PIX COPIA E COLA</button>
         <p class="text-muted mt-3">Pedido #47071 - RESERVADO</p>
     </div>
 
     <script>
-        // Capturar os parâmetros da URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const paymentCodeBase64 = urlParams.get('paymentCodeBase64');
-        const valor = urlParams.get('valor');
+        document.addEventListener("DOMContentLoaded", function () {
+            // Capturar os parâmetros da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentCodeBase64 = urlParams.get('paymentCodeBase64');
+            const valor = urlParams.get('valor');
 
-        console.log("paymentCodeBase64:", paymentCodeBase64); // Debug
-        console.log("valor:", valor); // Debug
+            console.log("paymentCodeBase64:", paymentCodeBase64); // Debug
+            console.log("valor:", valor); // Debug
 
-        // Exibir o valor do PIX
-        if (valor) {
-            document.getElementById('valorPix').textContent = `R$ ${parseFloat(valor).toFixed(2)}`;
-        }
-
-        // Verificar se o paymentCodeBase64 está presente
-        if (paymentCodeBase64) {
-            // Decodificar o paymentCodeBase64 para obter o código PIX Copia e Cola
-            const paymentCode = atob(paymentCodeBase64);
-
-            console.log("Código PIX decodificado:", paymentCode); // Debug
-
-            // Verificar se o código PIX é válido
-            if (paymentCode && paymentCode.startsWith('000201')) {
-                // Gerar o QR Code
-                new QRCode(document.getElementById("qrcode"), {
-                    text: paymentCode,
-                    width: 200,
-                    height: 200
-                });
-
-                // Configurar o botão de copiar
-                const copyBtn = document.getElementById('copyBtn');
-                copyBtn.addEventListener('click', function () {
-                    navigator.clipboard.writeText(paymentCode).then(() => {
-                        alert('Código Pix copiado para a área de transferência!');
-                    }).catch((err) => {
-                        console.error('Erro ao copiar o código:', err);
-                    });
-                });
-            } else {
-                console.error("Código PIX inválido ou ausente:", paymentCode);
-                alert('Erro: Código PIX inválido ou ausente.');
+            // Exibir o valor do PIX
+            if (valor) {
+                document.getElementById('valorPix').textContent = `Valor: R$ ${parseFloat(valor).toFixed(2)}`;
             }
-        } else {
-            console.error("paymentCodeBase64 não encontrado na URL.");
-            alert('Erro: paymentCodeBase64 não encontrado na URL.');
-        }
 
-        // Configurar o timer
-        let time = 28 * 60;
-        const timerElement = document.getElementById('timer');
+            if (paymentCodeBase64) {
+                try {
+                    // Decodificar o código PIX
+                    const paymentCode = atob(paymentCodeBase64);
+                    console.log("Código PIX decodificado:", paymentCode);
 
-        function updateTimer() {
-            const minutes = Math.floor(time / 60);
-            const seconds = time % 60;
-            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            time--;
-            if (time >= 0) {
+                    if (paymentCode.startsWith('000201')) {
+                        // Gerar o QR Code
+                        new QRCode(document.getElementById("qrcode"), {
+                            text: paymentCode,
+                            width: 200,
+                            height: 200
+                        });
+
+                        // Configurar o botão de copiar
+                        document.getElementById('copyBtn').addEventListener('click', function () {
+                            navigator.clipboard.writeText(paymentCode).then(() => {
+                                alert('Código Pix copiado para a área de transferência!');
+                            }).catch(err => {
+                                console.error('Erro ao copiar o código:', err);
+                            });
+                        });
+                    } else {
+                        console.error("Código PIX inválido:", paymentCode);
+                        alert('Erro: Código PIX inválido.');
+                    }
+                } catch (e) {
+                    console.error("Erro ao decodificar Base64:", e);
+                    alert('Erro: Código PIX inválido ou corrompido.');
+                }
+            } else {
+                console.error("paymentCodeBase64 não encontrado na URL.");
+                alert('Erro: paymentCodeBase64 não encontrado na URL.');
+            }
+
+            // Configurar o timer
+            let time = 28 * 60;
+            const timerElement = document.getElementById('timer');
+
+            function updateTimer() {
+                if (time < 0) return;
+                const minutes = Math.floor(time / 60);
+                const seconds = time % 60;
+                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                time--;
                 setTimeout(updateTimer, 1000);
             }
-        }
-        updateTimer();
+            updateTimer();
+        });
     </script>
 </body>
 </html>
