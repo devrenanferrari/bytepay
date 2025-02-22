@@ -24,28 +24,34 @@
         // Capturar os parâmetros da URL
         const urlParams = new URLSearchParams(window.location.search);
         const paymentCode = urlParams.get('paymentCode');
-        const paymentCodeBase64 = urlParams.get('paymentCodeBase64');
         const valor = urlParams.get('valor');
 
         // Exibir o valor do PIX
-        document.getElementById('valorPix').textContent = parseFloat(valor).toFixed(2);
+        if (valor) {
+            document.getElementById('valorPix').textContent = `R$ ${parseFloat(valor).toFixed(2)}`;
+        }
 
-        // Gerar o QR Code
-        new QRCode(document.getElementById("qrcode"), {
-            text: paymentCode,
-            width: 200,
-            height: 200
-        });
-
-        // Configurar o botão de copiar
-        const copyBtn = document.getElementById('copyBtn');
-        copyBtn.addEventListener('click', function () {
-            navigator.clipboard.writeText(paymentCode).then(() => {
-                alert('Código Pix copiado para a área de transferência!');
-            }).catch((err) => {
-                console.error('Erro ao copiar o código:', err);
+        // Verificar se o paymentCode está presente e é válido
+        if (paymentCode && paymentCode.startsWith('000201')) {
+            // Gerar o QR Code
+            new QRCode(document.getElementById("qrcode"), {
+                text: paymentCode,
+                width: 200,
+                height: 200
             });
-        });
+
+            // Configurar o botão de copiar
+            const copyBtn = document.getElementById('copyBtn');
+            copyBtn.addEventListener('click', function () {
+                navigator.clipboard.writeText(paymentCode).then(() => {
+                    alert('Código Pix copiado para a área de transferência!');
+                }).catch((err) => {
+                    console.error('Erro ao copiar o código:', err);
+                });
+            });
+        } else {
+            alert('Erro: Código PIX inválido ou ausente.');
+        }
 
         // Configurar o timer
         let time = 28 * 60;
