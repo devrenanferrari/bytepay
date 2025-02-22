@@ -379,6 +379,76 @@
     </button>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sections = document.querySelectorAll(".section");
+        let currentStep = 0;
+
+        // Impede o Enter de submeter o formulário
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+            }
+        });
+
+        function goToStep(step) {
+            if (step < sections.length) {
+                sections[currentStep].classList.remove("active");
+                sections[step].classList.add("active");
+                currentStep = step;
+                window.scrollTo({ top: 0, behavior: "smooth" }); // Rola para o topo
+                updateProgressBar();
+            }
+        }
+
+        function validateStep() {
+            const inputs = sections[currentStep].querySelectorAll("input[required], select[required], textarea[required]");
+            let allFilled = true;
+
+            inputs.forEach((input) => {
+                if (!input.value.trim()) {
+                    allFilled = false;
+                    input.classList.add("border-danger");
+                } else {
+                    input.classList.remove("border-danger");
+                }
+            });
+
+            return allFilled;
+        }
+
+        document.querySelectorAll(".next-button").forEach((button) => {
+            button.addEventListener("click", function () {
+                if (validateStep()) {
+                    goToStep(currentStep + 1);
+                } else {
+                    alert("Preencha todos os campos obrigatórios antes de avançar!");
+                }
+            });
+        });
+
+        document.querySelectorAll(".prev-button").forEach((button) => {
+            button.addEventListener("click", function () {
+                if (currentStep > 0) {
+                    goToStep(currentStep - 1);
+                }
+            });
+        });
+
+        function updateProgressBar() {
+            const progressSteps = document.querySelectorAll(".progress-step");
+            progressSteps.forEach((step, index) => {
+                if (index <= currentStep) {
+                    step.classList.add("active");
+                } else {
+                    step.classList.remove("active");
+                }
+            });
+        }
+    });
+</script>
+
+
+<script>
     async function generatePix() {
     // Coletar os dados do formulário
     const nome = document.getElementById('nome').value;
