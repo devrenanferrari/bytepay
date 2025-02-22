@@ -231,10 +231,18 @@ app.post('/api/process-pix', async (req, res) => {
 
         const response = await axios.post('https://api.bytepaycash.com/v1/gateway/', pixPayload);
 
-        console.log("Resposta da BytePay:", response.data); // Debug
+        console.log("Resposta completa da BytePay:", JSON.stringify(response.data, null, 2)); // Debug detalhado
 
         if (response.data?.status === 'success') {
-            if (!response.data.paymentCode || !response.data.idTransaction || !response.data.paymentCodeBase64) {
+            const { paymentCode, idTransaction, paymentCodeBase64 } = response.data;
+
+            // Verificar se o paymentCode está completo
+            if (!paymentCode || !paymentCode.startsWith('000201')) {
+                console.error("Código PIX incompleto ou inválido:", paymentCode);
+                return res.status(500).json({ message: 'Código PIX inválido ou incompleto.' });
+            }
+
+            if (!idTransaction || !paymentCodeBase64) {
                 console.error("Dados incompletos na resposta da BytePay:", response.data);
                 return res.status(500).json({ message: 'Resposta incompleta da API BytePay.' });
             }
@@ -242,9 +250,9 @@ app.post('/api/process-pix', async (req, res) => {
             return res.status(200).json({
                 status: 'success',
                 message: 'Pix gerado com sucesso!',
-                paymentCode: response.data.paymentCode,
-                idTransaction: response.data.idTransaction,
-                paymentCodeBase64: response.data.paymentCodeBase64
+                paymentCode,
+                idTransaction,
+                paymentCodeBase64
             });
         } else {
             console.error("Erro na API BytePay:", response.data);
