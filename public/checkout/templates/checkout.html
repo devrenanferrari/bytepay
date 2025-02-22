@@ -373,21 +373,6 @@
 <div id="card-data" class="section">
     <h4 class="text-dark mb-3">Pagamento</h4>
 
-    <!-- Pagamento com PIX -->
-    <div id="pix-payment" class="payment-method" style="display: none;">
-    <div class="text-center">
-        <p class="mb-3">Clique em 'Gerar PIX' para obter o QR Code.</p>
-        <button type="button" class="btn btn-success btn-lg w-100 shadow-sm" onclick="generatePix()">
-            <i class="fas fa-qrcode"></i> Gerar PIX
-        </button>
-        <div id="pixResult" class="pix-code" style="display:none;">
-            <h2>Pix Gerado com Sucesso!</h2>
-            <p>Código:</p>
-            <div id="pix-code" style="word-wrap: break-word; background-color: #e8f4f8; padding: 12px; border-radius: 5px;"></div>
-            <img id="qrCodeImage" src="" alt="QR Code" style="max-width: 200px; margin-top: 15px;">
-        </div>
-    </div>
-</div>
 
     <!-- Botão de Finalizar Compra -->
     <div id="finalize-card" class="text-center">
@@ -397,25 +382,7 @@
     </div>
 
 <script>
-    // Função para alternar entre os métodos de pagamento
-    function showPaymentMethod(method) {
-        const cardPayment = document.getElementById('card-payment');
-        const pixPayment = document.getElementById('pix-payment');
-        const finalizeCard = document.getElementById('finalize-card');
-        const finalizePix = document.getElementById('finalize-pix');
 
-        if (method === 'card') {
-            cardPayment.style.display = 'block';
-            pixPayment.style.display = 'none';
-            finalizeCard.style.display = 'block';
-            finalizePix.style.display = 'none';
-        } else if (method === 'pix') {
-            cardPayment.style.display = 'none';
-            pixPayment.style.display = 'block';
-            finalizeCard.style.display = 'none';
-            finalizePix.style.display = 'block';
-        }
-    }
 
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
