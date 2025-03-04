@@ -26,14 +26,24 @@
 
         nav {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 10px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
             background: #222;
             flex-wrap: wrap;
         }
 
-        nav a {
+        nav .logo img {
+            height: 50px;
+        }
+
+        nav .menu {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav .menu a {
             color: #fff;
             text-decoration: none;
             font-size: 18px;
@@ -41,7 +51,7 @@
             transition: background 0.3s ease;
         }
 
-        nav a:hover {
+        nav .menu a:hover {
             background: #444;
             border-radius: 5px;
         }
@@ -87,6 +97,29 @@
 
         .btn:hover {
             background: #0056b3;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .stat {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .stat h3 {
+            font-size: 2.5rem;
+            margin: 0;
+            color: #007bff;
+        }
+
+        .stat p {
+            font-size: 1.2rem;
+            color: #ccc;
         }
 
         .cards {
@@ -147,6 +180,16 @@
                 align-items: center;
             }
 
+            nav .menu {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+
             .cards {
                 flex-direction: column;
                 align-items: center;
@@ -160,23 +203,43 @@
     </style>
 </head>
 <body>
-    <header>BytePay Checkout</header>
-    <nav>
-        <a href="#inicio">Início</a>
-        <a href="#recursos">Recursos</a>
-        <a href="#precos">Preços</a>
-        <a href="#contato">Contato</a>
-        <a href="#sobre">Sobre</a>
-        <a href="#faq">FAQ</a>
-        <a href="#suporte">Suporte</a>
-        <a href="https://www.bytepaycheckout.com/login/index.html">Login</a>
-        <a href="https://www.bytepaycheckout.com/cadastro/index.html">Cadastro</a>
-    </nav>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="https://bytepaycash.com/images/logo.png" alt="BytePay Logo">
+            </div>
+            <div class="menu">
+                <a href="#sobre">Sobre</a>
+                <a href="#suporte">Suporte</a>
+                <a href="#faq">Perguntas Frequentes</a>
+                <a href="#planos">Planos</a>
+                <a href="https://www.bytepaycheckout.com/login/index.html">Entrar</a>
+                <a href="https://www.bytepaycheckout.com/cadastro/index.html">Criar Conta</a>
+            </div>
+        </nav>
+    </header>
 
     <section id="inicio" class="container">
-        <h1>Checkout Grátis e Exclusivo para Usuários do Nosso Gateway</h1>
-        <p>Experimente a solução mais rápida e segura para pagamentos online.</p>
+        <h1>O Checkout Completo para Você Vender Online</h1>
+        <p>Mais de 99% de clientes satisfeitos e 87.9% aumentaram sua receita com o BytePay Checkout.</p>
         <a href="#cadastro" class="btn">Comece Agora</a>
+    </section>
+
+    <section id="stats" class="container">
+        <div class="stats">
+            <div class="stat">
+                <h3>+99%</h3>
+                <p>Clientes Satisfeitos</p>
+            </div>
+            <div class="stat">
+                <h3>87.9%</h3>
+                <p>Aumentaram sua Receita</p>
+            </div>
+            <div class="stat">
+                <h3>+95M</h3>
+                <p>Transações Realizadas</p>
+            </div>
+        </div>
     </section>
 
     <section id="recursos" class="container">
@@ -200,7 +263,7 @@
         </div>
     </section>
 
-    <section id="precos" class="container">
+    <section id="planos" class="container">
         <h2>Planos e Preços</h2>
         <p>Nosso checkout é 100% grátis para quem usa nosso gateway. Confira nossos planos:</p>
         <div class="cards">
