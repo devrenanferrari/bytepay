@@ -20,7 +20,7 @@
         <nav class="sidebar">
             <div class="logo">
                 <img src="logo.png" alt="BytePay Logo">
-                <h2></h2>
+                <h2>BytePay</h2>
             </div>
             <ul class="menu">
                 <li><a href="#" class="active"><i class="icon">🏠</i> Início</a></li>
@@ -109,132 +109,276 @@
         </div>
     </div>
 
-<!-- Janela Modal de Integração com Adquirente -->
-<div id="adquirenteModal" class="modal">
-    <div class="modal-content">
-        <h2>Integração Adquirente</h2>
-        <form id="adquirenteForm">
-            <label for="apiKey">Chave API BytePay:</label>
-            <input type="text" id="apiKey" name="apiKey" required>
+    <!-- Janela Modal de Integração com Adquirente -->
+    <div id="adquirenteModal" class="modal">
+        <div class="modal-content">
+            <h2>Integração Adquirente</h2>
+            <form id="adquirenteForm">
+                <label for="apiKey">Chave API BytePay:</label>
+                <input type="text" id="apiKey" name="apiKey" required>
 
-            <label for="email">E-mail:</label>
-            <input type="text" id="email" name="email" required>
-            
-            <button type="submit" class="btn">Salvar</button>
-            <button type="button" class="btn cancel" onclick="closeAdquirenteModal()">Cancelar</button>
-        </form>
+                <label for="email">E-mail:</label>
+                <input type="text" id="email" name="email" required>
+                
+                <button type="submit" class="btn">Salvar</button>
+                <button type="button" class="btn cancel" onclick="closeAdquirenteModal()">Cancelar</button>
+            </form>
+        </div>
     </div>
-</div>
 
     <!-- Scripts -->
-<!-- Scripts -->
-<script>
-    // Função para deslogar
-    document.getElementById('logoutButton').addEventListener('click', function() {
-        localStorage.removeItem('authToken');
-        sessionStorage.removeItem('authToken');
-        window.location.href = '../login/index.html';
-    });
+    <script>
+        // Função para deslogar
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            localStorage.removeItem('authToken');
+            sessionStorage.removeItem('authToken');
+            window.location.href = '../login/index.html';
+        });
 
-    // Função para enviar os dados de integração Shopify
-    document.getElementById('integrationForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+        // Função para enviar os dados de integração Shopify
+        document.getElementById('integrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-        const shopifyDomain = document.getElementById('shopifyDomain').value;
-        const shopifyToken = document.getElementById('shopifyToken').value;
-        const userEmail = document.getElementById('userEmail').value;
+            const shopifyDomain = document.getElementById('shopifyDomain').value;
+            const shopifyToken = document.getElementById('shopifyToken').value;
+            const userEmail = document.getElementById('userEmail').value;
 
-        // Verifica se os campos estão preenchidos
-        if (!shopifyDomain || !shopifyToken || !userEmail) {
-            alert('Por favor, preencha todos os campos.');
-            return;
-        }
+            // Verifica se os campos estão preenchidos
+            if (!shopifyDomain || !shopifyToken || !userEmail) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
 
-        try {
-            // Monta a URL com os parâmetros
-            const url = new URL('https://bytepay-production.up.railway.app/getThemes');
-            url.searchParams.append('accessToken', shopifyToken);
-            url.searchParams.append('domain', shopifyDomain);
-            url.searchParams.append('userEmail', userEmail);  // <- Correto!
+            try {
+                // Monta a URL com os parâmetros
+                const url = new URL('https://bytepay-production.up.railway.app/getThemes');
+                url.searchParams.append('accessToken', shopifyToken);
+                url.searchParams.append('domain', shopifyDomain);
+                url.searchParams.append('userEmail', userEmail);  // <- Correto!
 
-            // Faz a requisição GET para a API
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`  // Usando o authToken do localStorage
+                // Faz a requisição GET para a API
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`  // Usando o authToken do localStorage
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao integrar com Shopify');
                 }
-            });
 
-            if (!response.ok) {
-                throw new Error('Erro ao integrar com Shopify');
-            }
-
-            const result = await response.json();
-            alert('Integração com Shopify realizada com sucesso!');
-            closeModal(); // Fecha a janela modal
-        } catch (error) {
-            console.error('Erro ao integrar Shopify:', error);
-            alert('Falha na integração, tente novamente.');
-        }
-    });
-
-   // Função para enviar os dados de integração Adquirente
-document.getElementById('adquirenteForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const bytepayToken = document.getElementById('apiKey').value;
-        const email = document.getElementById('email').value;
-        
-        try {
-            const response = await fetch('/api/integrations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    bytepayToken: bytepayToken,  // Não precisamos mais passar o userEmail, ele será extraído automaticamente no backend
-                    email: email
-                })
-            });
-
-            if (response.ok) {
                 const result = await response.json();
-                alert(result.message);
-                closeAdquirenteModal(); // Fecha a janela modal
-            } else {
-                const error = await response.json();
-                alert(error.error);
+                alert('Integração com Shopify realizada com sucesso!');
+                closeModal(); // Fecha a janela modal
+            } catch (error) {
+                console.error('Erro ao integrar Shopify:', error);
+                alert('Falha na integração, tente novamente.');
             }
-        } catch (error) {
-            console.error('Erro ao integrar Adquirente:', error);
-            alert('Falha na integração, tente novamente.');
+        });
+
+        // Função para enviar os dados de integração Adquirente
+        document.getElementById('adquirenteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const bytepayToken = document.getElementById('apiKey').value;
+            const email = document.getElementById('email').value;
+            
+            try {
+                const response = await fetch('/api/integrations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        bytepayToken: bytepayToken,  // Não precisamos mais passar o userEmail, ele será extraído automaticamente no backend
+                        email: email
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);
+                    closeAdquirenteModal(); // Fecha a janela modal
+                } else {
+                    const error = await response.json();
+                    alert(error.error);
+                }
+            } catch (error) {
+                console.error('Erro ao integrar Adquirente:', error);
+                alert('Falha na integração, tente novamente.');
+            }
+        });
+
+        // Função para abrir a janela modal de integração do Shopify
+        document.getElementById('integrarShopify').addEventListener('click', function() {
+            document.getElementById('integrationModal').style.display = 'block';
+        });
+
+        // Função para abrir a janela modal de integração do Adquirente
+        document.getElementById('configureAdquirente').addEventListener('click', function() {
+            document.getElementById('adquirenteModal').style.display = 'block';
+        });
+
+        // Função para fechar a janela modal do Shopify
+        function closeModal() {
+            document.getElementById('integrationModal').style.display = 'none';
         }
-    });
 
-
-    // Função para abrir a janela modal de integração do Shopify
-    document.getElementById('integrarShopify').addEventListener('click', function() {
-        document.getElementById('integrationModal').style.display = 'block';
-    });
-
-    // Função para abrir a janela modal de integração do Adquirente
-    document.getElementById('configureAdquirente').addEventListener('click', function() {
-        document.getElementById('adquirenteModal').style.display = 'block';
-    });
-
-    // Função para fechar a janela modal do Shopify
-    function closeModal() {
-        document.getElementById('integrationModal').style.display = 'none';
-    }
-
-    // Função para fechar a janela modal do Adquirente
-    function closeAdquirenteModal() {
-        document.getElementById('adquirenteModal').style.display = 'none';
-    }
-</script>
-
+        // Função para fechar a janela modal do Adquirente
+        function closeAdquirenteModal() {
+            document.getElementById('adquirenteModal').style.display = 'none';
+        }
+    </script>
 
     <style>
+        /* Estilos globais */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar .logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        .sidebar .menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar .menu li {
+            margin: 15px 0;
+        }
+
+        .sidebar .menu a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar .menu a i {
+            margin-right: 10px;
+        }
+
+        .sidebar .settings {
+            margin-top: 20px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: white;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .header-actions button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .header-actions button:hover {
+            background-color: #0056b3;
+        }
+
+        .alerts {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .config-options .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .config-options .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1 1 calc(33.333% - 40px);
+            text-align: center;
+        }
+
+        .config-options .card h3 {
+            margin-top: 0;
+        }
+
+        .config-options .card .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .config-options .card .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .progress-bar {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 20px;
+        }
+
+        .progress-fill {
+            background-color: #007bff;
+            height: 100%;
+        }
+
+        .faturamento-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .faturamento-box p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
         /* Estilos para o modal */
         .modal {
             display: none;
@@ -291,6 +435,35 @@ document.getElementById('adquirenteForm').addEventListener('submit', async funct
 
         .modal-content .cancel {
             background-color: #ccc;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .dashboard {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 10px;
+            }
+
+            .main-content {
+                padding: 10px;
+            }
+
+            .config-options .cards {
+                flex-direction: column;
+            }
+
+            .config-options .card {
+                flex: 1 1 100%;
+            }
+
+            .header-actions {
+                justify-content: center;
+            }
         }
     </style>
 </body>
