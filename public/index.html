@@ -16,94 +16,82 @@
             line-height: 1.6;
         }
 
+        /* Cabeçalho fixo */
         header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             background: linear-gradient(90deg, #0f0c29, #302b63, #24243e);
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        nav {
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
-            background: #222;
-            flex-wrap: wrap;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
-        nav .logo img {
-            height: 50px;
+        header .logo img {
+            height: 40px;
         }
 
-        nav .menu {
+        header .menu {
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        nav .menu a {
+        header .menu a {
             color: #fff;
             text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 5px;
             transition: background 0.3s ease;
         }
 
-        nav .menu a:hover {
-            background: #444;
-            border-radius: 5px;
+        header .menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .container {
-            padding: 50px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        h1, h2 {
-            color: #fff;
+        /* Conteúdo principal */
+        .hero {
+            padding: 150px 20px 100px;
             text-align: center;
+            background: linear-gradient(90deg, #0f0c29, #302b63, #24243e);
         }
 
-        h1 {
+        .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
         }
 
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-
-        p {
-            font-size: 1.1rem;
+        .hero p {
+            font-size: 1.2rem;
             color: #ccc;
-            text-align: center;
+            margin-bottom: 30px;
         }
 
-        .btn {
-            display: inline-block;
+        .hero .btn {
             background: #007bff;
             color: white;
             padding: 12px 25px;
             border-radius: 5px;
             text-decoration: none;
             font-size: 18px;
-            margin-top: 20px;
             transition: background 0.3s ease;
         }
 
-        .btn:hover {
+        .hero .btn:hover {
             background: #0056b3;
         }
 
+        /* Estatísticas */
         .stats {
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
-            margin-top: 50px;
+            padding: 50px 20px;
+            background: #222;
         }
 
         .stat {
@@ -122,12 +110,23 @@
             color: #ccc;
         }
 
+        /* Cards de recursos */
+        .features {
+            padding: 50px 20px;
+            background: #111;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
         .cards {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 30px;
         }
 
         .card {
@@ -160,11 +159,11 @@
             color: #ccc;
         }
 
+        /* Rodapé */
         footer {
             background: #222;
             text-align: center;
-            padding: 15px;
-            margin-top: 50px;
+            padding: 20px;
         }
 
         footer p {
@@ -175,14 +174,25 @@
 
         /* Responsividade */
         @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                align-items: center;
+            header .menu {
+                gap: 10px;
             }
 
-            nav .menu {
-                flex-direction: column;
-                align-items: center;
+            header .menu a {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+
+            .hero {
+                padding: 120px 20px 80px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
             }
 
             .stats {
@@ -203,46 +213,42 @@
     </style>
 </head>
 <body>
+    <!-- Cabeçalho fixo -->
     <header>
-        <nav>
-            <div class="logo">
-                <img src="https://bytepaycash.com/images/logo.png" alt="BytePay Logo">
-            </div>
-            <div class="menu">
-                <a href="#sobre">Sobre</a>
-                <a href="#suporte">Suporte</a>
-                <a href="#faq">Perguntas Frequentes</a>
-                <a href="#planos">Planos</a>
-                <a href="https://www.bytepaycheckout.com/login/index.html">Entrar</a>
-                <a href="https://www.bytepaycheckout.com/cadastro/index.html">Criar Conta</a>
-            </div>
-        </nav>
+        <div class="logo">
+            <img src="https://bytepaycash.com/images/logo.png" alt="BytePay Logo">
+        </div>
+        <div class="menu">
+            <a href="https://www.bytepaycheckout.com/login/index.html">Entrar</a>
+            <a href="https://www.bytepaycheckout.com/cadastro/index.html">Cadastrar</a>
+        </div>
     </header>
 
-    <section id="inicio" class="container">
+    <!-- Seção Hero -->
+    <section class="hero">
         <h1>O Checkout Completo para Você Vender Online</h1>
         <p>Mais de 99% de clientes satisfeitos e 87.9% aumentaram sua receita com o BytePay Checkout.</p>
-        <a href="#cadastro" class="btn">Comece Agora</a>
+        <a href="https://www.bytepaycheckout.com/cadastro/index.html" class="btn">Comece Agora</a>
     </section>
 
-    <section id="stats" class="container">
-        <div class="stats">
-            <div class="stat">
-                <h3>+99%</h3>
-                <p>Clientes Satisfeitos</p>
-            </div>
-            <div class="stat">
-                <h3>87.9%</h3>
-                <p>Aumentaram sua Receita</p>
-            </div>
-            <div class="stat">
-                <h3>+95M</h3>
-                <p>Transações Realizadas</p>
-            </div>
+    <!-- Estatísticas -->
+    <section class="stats">
+        <div class="stat">
+            <h3>+99%</h3>
+            <p>Clientes Satisfeitos</p>
+        </div>
+        <div class="stat">
+            <h3>87.9%</h3>
+            <p>Aumentaram sua Receita</p>
+        </div>
+        <div class="stat">
+            <h3>+95M</h3>
+            <p>Transações Realizadas</p>
         </div>
     </section>
 
-    <section id="recursos" class="container">
+    <!-- Recursos -->
+    <section class="features">
         <h2>Por que escolher o BytePay Checkout?</h2>
         <div class="cards">
             <div class="card">
@@ -263,55 +269,7 @@
         </div>
     </section>
 
-    <section id="planos" class="container">
-        <h2>Planos e Preços</h2>
-        <p>Nosso checkout é 100% grátis para quem usa nosso gateway. Confira nossos planos:</p>
-        <div class="cards">
-            <div class="card">
-                <i class="fas fa-star"></i>
-                <h3>Grátis</h3>
-                <p>Ideal para pequenos negócios. Sem custos adicionais para usuários do nosso gateway.</p>
-            </div>
-            <div class="card">
-                <i class="fas fa-gem"></i>
-                <h3>Premium</h3>
-                <p>Recursos avançados para empresas que buscam mais desempenho e suporte prioritário.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="contato" class="container">
-        <h2>Fale Conosco</h2>
-        <p>Entre em contato para saber mais sobre nossos serviços ou tirar dúvidas.</p>
-        <a href="mailto:suporte@bytepay.com" class="btn">Enviar E-mail</a>
-    </section>
-
-    <section id="sobre" class="container">
-        <h2>Sobre Nós</h2>
-        <p>BytePay é uma plataforma inovadora para pagamentos digitais rápidos e seguros, criada para facilitar a vida de empresas e consumidores.</p>
-    </section>
-
-    <section id="faq" class="container">
-        <h2>FAQ</h2>
-        <p>Perguntas frequentes sobre nosso serviço.</p>
-        <div class="cards">
-            <div class="card">
-                <h3>Como faço para começar?</h3>
-                <p>Basta se cadastrar e integrar nosso checkout ao seu site.</p>
-            </div>
-            <div class="card">
-                <h3>É seguro usar o BytePay?</h3>
-                <p>Sim, utilizamos criptografia avançada e sistemas antifraude.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="suporte" class="container">
-        <h2>Suporte</h2>
-        <p>Precisa de ajuda? Nossa equipe está disponível 24/7 para atendê-lo.</p>
-        <a href="https://wa.me/5511999999999" class="btn">Fale Conosco no WhatsApp</a>
-    </section>
-
+    <!-- Rodapé -->
     <footer>
         <p>&copy; 2025 BytePay. Todos os direitos reservados.</p>
     </footer>
