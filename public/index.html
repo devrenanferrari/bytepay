@@ -3,50 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BytePay - Checkout</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>BytePay Checkout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            color: #fff;
+        }
+        header {
+            background: linear-gradient(90deg, #0f0c29, #302b63, #24243e);
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+            background: #222;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+        }
+        nav a:hover {
+            background: #444;
+            border-radius: 5px;
+        }
+        .container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .btn {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        footer {
+            background: #222;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+    </style>
 </head>
 <body>
-    <div class="bg"></div>
-    <div class="star-field">
-        <div class="layer"></div>
-        <div class="layer"></div>
-        <div class="layer"></div>
-    </div>
-    <header>
-        <h1>BytePay Checkout</h1>
-        <nav>
-            <ul>
-                <li><a href="#home">Início</a></li>
-                <li><a href="#features">Recursos</a></li>
-                <li><a href="#pricing">Preços</a></li>
-                <li><a href="#contact">Contato</a></li>
-                <li><a href="https://www.bytepaycheckout.com/login/index.html" class="login-btn">Login</a></li>
-                <li><a href="https://www.bytepaycheckout.com/cadastro/index.html" class="signup-btn">Cadastro</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section id="home">
-            <h2>O Checkout Mais Rápido e Seguro</h2>
-            <p>Experimente a melhor experiência de pagamento com BytePay.</p>
-            <a href="#pricing" class="cta-btn">Comece Agora</a>
-        </section>
-        <section id="features">
-            <h2>Recursos</h2>
-            <p>Pagamentos instantâneos, segurança de ponta e integração fácil.</p>
-        </section>
-        <section id="pricing">
-            <h2>Planos e Preços</h2>
-            <p>Escolha o plano que melhor se adapta ao seu negócio.</p>
-        </section>
-        <section id="contact">
-            <h2>Fale Conosco</h2>
-            <p>Entre em contato para saber mais sobre nossos serviços.</p>
-        </section>
-    </main>
+    <header>BytePay Checkout</header>
+    <nav>
+        <a href="#inicio">Início</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#precos">Preços</a>
+        <a href="#contato">Contato</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#faq">FAQ</a>
+        <a href="#suporte">Suporte</a>
+        <a href="https://www.bytepaycheckout.com/login/index.html">Login</a>
+        <a href="https://www.bytepaycheckout.com/cadastro/index.html">Cadastro</a>
+    </nav>
+
+    <section id="inicio" class="container">
+        <h1>Checkout Grátis e Exclusivo para Usuários do Nosso Gateway</h1>
+        <p>Experimente a solução mais rápida e segura para pagamentos online.</p>
+        <a href="#cadastro" class="btn">Comece Agora</a>
+    </section>
+
+    <section id="recursos" class="container">
+        <h2>Recursos</h2>
+        <p>Pagamentos instantâneos, segurança de ponta e integração fácil.</p>
+    </section>
+
+    <section id="precos" class="container">
+        <h2>Planos e Preços</h2>
+        <p>Nosso checkout é 100% grátis para quem usa nosso gateway.</p>
+    </section>
+
+    <section id="contato" class="container">
+        <h2>Fale Conosco</h2>
+        <p>Entre em contato para saber mais sobre nossos serviços.</p>
+    </section>
+
+    <section id="sobre" class="container">
+        <h2>Sobre Nós</h2>
+        <p>BytePay é uma plataforma inovadora para pagamentos digitais rápidos e seguros.</p>
+    </section>
+
+    <section id="faq" class="container">
+        <h2>FAQ</h2>
+        <p>Perguntas frequentes sobre nosso serviço.</p>
+    </section>
+
+    <section id="suporte" class="container">
+        <h2>Suporte</h2>
+        <p>Precisa de ajuda? Nossa equipe está disponível 24/7.</p>
+    </section>
+
     <footer>
-        <p>&copy; 2025 BytePay. Todos os direitos reservados.</p>
+        &copy; 2025 BytePay. Todos os direitos reservados.
     </footer>
 </body>
 </html>
