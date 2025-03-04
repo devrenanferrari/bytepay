@@ -89,7 +89,27 @@
         </div>
     </div>
 
-    <!-- Janela Modal de Integração com Shopify -->
+
+
+<!-- Janela Modal de Integração com Adquirente -->
+<div id="adquirenteModal" class="modal">
+    <div class="modal-content">
+        <h2>Integração Adquirente</h2>
+        <form id="adquirenteForm">
+            <label for="apiKey">Chave API BytePay:</label>
+            <input type="text" id="apiKey" name="apiKey" required>
+
+            <label for="email">E-mail:</label>
+            <input type="text" id="email" name="email" required>
+            
+            <button type="submit" class="btn">Salvar</button>
+            <button type="button" class="btn cancel" onclick="closeAdquirenteModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+
+        <!-- Janela Modal de Integração com Shopify -->
     <div id="integrationModal" class="modal">
         <div class="modal-content">
             <h2>Integração Shopify</h2>
@@ -108,23 +128,6 @@
             </form>
         </div>
     </div>
-
-<!-- Janela Modal de Integração com Adquirente -->
-<div id="adquirenteModal" class="modal">
-    <div class="modal-content">
-        <h2>Integração Adquirente</h2>
-        <form id="adquirenteForm">
-            <label for="apiKey">Chave API BytePay:</label>
-            <input type="text" id="apiKey" name="apiKey" required>
-
-            <label for="email">E-mail:</label>
-            <input type="text" id="email" name="email" required>
-            
-            <button type="submit" class="btn">Salvar</button>
-            <button type="button" class="btn cancel" onclick="closeAdquirenteModal()">Cancelar</button>
-        </form>
-    </div>
-</div>
 
     <!-- Scripts -->
 <!-- Scripts -->
