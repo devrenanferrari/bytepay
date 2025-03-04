@@ -6,13 +6,16 @@
     <title>BytePay Checkout</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+        /* Estilos globais */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #111;
             color: #fff;
+            line-height: 1.6;
         }
+
         header {
             background: linear-gradient(90deg, #0f0c29, #302b63, #24243e);
             padding: 20px;
@@ -20,27 +23,56 @@
             font-size: 24px;
             font-weight: bold;
         }
+
         nav {
             display: flex;
             justify-content: center;
             gap: 20px;
             padding: 10px;
             background: #222;
+            flex-wrap: wrap;
         }
+
         nav a {
             color: #fff;
             text-decoration: none;
             font-size: 18px;
             padding: 10px 15px;
+            transition: background 0.3s ease;
         }
+
         nav a:hover {
             background: #444;
             border-radius: 5px;
         }
+
         .container {
-            text-align: center;
             padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
+
+        h1, h2 {
+            color: #fff;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #ccc;
+            text-align: center;
+        }
+
         .btn {
             display: inline-block;
             background: #007bff;
@@ -50,15 +82,80 @@
             text-decoration: none;
             font-size: 18px;
             margin-top: 20px;
+            transition: background 0.3s ease;
         }
+
         .btn:hover {
             background: #0056b3;
         }
+
+        .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: #222;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
         footer {
             background: #222;
             text-align: center;
             padding: 15px;
-            margin-top: 30px;
+            margin-top: 50px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 300px;
+            }
         }
     </style>
 </head>
@@ -83,37 +180,77 @@
     </section>
 
     <section id="recursos" class="container">
-        <h2>Recursos</h2>
-        <p>Pagamentos instantâneos, segurança de ponta e integração fácil.</p>
+        <h2>Por que escolher o BytePay Checkout?</h2>
+        <div class="cards">
+            <div class="card">
+                <i class="fas fa-rocket"></i>
+                <h3>Rápido e Eficiente</h3>
+                <p>Processamento de pagamentos em segundos, com alta disponibilidade e confiabilidade.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Segurança de Ponta</h3>
+                <p>Proteção avançada contra fraudes e criptografia de dados para garantir a segurança das transações.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-hand-holding-usd"></i>
+                <h3>Grátis para Usuários</h3>
+                <p>Se você já usa nosso gateway, o checkout é 100% grátis. Sem taxas adicionais!</p>
+            </div>
+        </div>
     </section>
 
     <section id="precos" class="container">
         <h2>Planos e Preços</h2>
-        <p>Nosso checkout é 100% grátis para quem usa nosso gateway.</p>
+        <p>Nosso checkout é 100% grátis para quem usa nosso gateway. Confira nossos planos:</p>
+        <div class="cards">
+            <div class="card">
+                <i class="fas fa-star"></i>
+                <h3>Grátis</h3>
+                <p>Ideal para pequenos negócios. Sem custos adicionais para usuários do nosso gateway.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-gem"></i>
+                <h3>Premium</h3>
+                <p>Recursos avançados para empresas que buscam mais desempenho e suporte prioritário.</p>
+            </div>
+        </div>
     </section>
 
     <section id="contato" class="container">
         <h2>Fale Conosco</h2>
-        <p>Entre em contato para saber mais sobre nossos serviços.</p>
+        <p>Entre em contato para saber mais sobre nossos serviços ou tirar dúvidas.</p>
+        <a href="mailto:suporte@bytepay.com" class="btn">Enviar E-mail</a>
     </section>
 
     <section id="sobre" class="container">
         <h2>Sobre Nós</h2>
-        <p>BytePay é uma plataforma inovadora para pagamentos digitais rápidos e seguros.</p>
+        <p>BytePay é uma plataforma inovadora para pagamentos digitais rápidos e seguros, criada para facilitar a vida de empresas e consumidores.</p>
     </section>
 
     <section id="faq" class="container">
         <h2>FAQ</h2>
         <p>Perguntas frequentes sobre nosso serviço.</p>
+        <div class="cards">
+            <div class="card">
+                <h3>Como faço para começar?</h3>
+                <p>Basta se cadastrar e integrar nosso checkout ao seu site.</p>
+            </div>
+            <div class="card">
+                <h3>É seguro usar o BytePay?</h3>
+                <p>Sim, utilizamos criptografia avançada e sistemas antifraude.</p>
+            </div>
+        </div>
     </section>
 
     <section id="suporte" class="container">
         <h2>Suporte</h2>
-        <p>Precisa de ajuda? Nossa equipe está disponível 24/7.</p>
+        <p>Precisa de ajuda? Nossa equipe está disponível 24/7 para atendê-lo.</p>
+        <a href="https://wa.me/5511999999999" class="btn">Fale Conosco no WhatsApp</a>
     </section>
 
     <footer>
-        &copy; 2025 BytePay. Todos os direitos reservados.
+        <p>&copy; 2025 BytePay. Todos os direitos reservados.</p>
     </footer>
 </body>
 </html>
