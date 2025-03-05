@@ -6,7 +6,7 @@
     <title>BytePay Checkout</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        /* Estilos globais */
+        /* Estilos globais (mantidos do original) */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -16,7 +16,7 @@
             line-height: 1.6;
         }
 
-        /* Cabeçalho fixo */
+        /* Cabeçalho fixo (mantido do original) */
         header {
             position: fixed;
             top: 0;
@@ -53,7 +53,7 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Conteúdo principal */
+        /* Conteúdo principal (mantido do original) */
         .hero {
             padding: 150px 20px 100px;
             text-align: center;
@@ -85,7 +85,7 @@
             background: #0056b3;
         }
 
-        /* Estatísticas */
+        /* Estatísticas (mantido do original) */
         .stats {
             display: flex;
             justify-content: space-around;
@@ -110,7 +110,7 @@
             color: #ccc;
         }
 
-        /* Cards de recursos */
+        /* Cards de recursos (mantido do original) */
         .features {
             padding: 50px 20px;
             background: #111;
@@ -159,7 +159,7 @@
             color: #ccc;
         }
 
-        /* Rodapé */
+        /* Rodapé (mantido do original) */
         footer {
             background: #222;
             text-align: center;
@@ -171,8 +171,12 @@
             font-size: 0.9rem;
             color: #aaa;
         }
+        body, html {
+    overflow: hidden;
+        }
 
-        /* Responsividade */
+
+        /* Responsividade (mantido do original) */
         @media (max-width: 768px) {
             header .menu {
                 gap: 10px;
@@ -210,24 +214,47 @@
                 max-width: 300px;
             }
         }
-        .map-container {
+
+        /* Estilos para o Roadmap */
+        .roadmap-container {
             text-align: center;
             padding: 50px;
             background: #222;
         }
+
+        .roadmap-steps {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
         .step {
-            display: inline-block;
-            margin: 20px;
-            padding: 20px;
             background: #007bff;
             color: white;
-            border-radius: 50%;
+            padding: 20px;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
+
         .step:hover {
             transform: scale(1.1);
+            background: #0056b3;
         }
+
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -238,13 +265,38 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: left;
         }
+
+        .modal h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+
+        .modal ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .modal ul li {
+            margin-bottom: 10px;
+        }
+
         .modal button {
             background: red;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .modal button:hover {
+            background: darkred;
         }
     </style>
 </head>
@@ -305,25 +357,74 @@
         </div>
     </section>
 
-        <section class="map-container">
-        <h2>Mapa do Tesouro</h2>
-        <div class="step" onclick="openModal(1)">1</div>
-        <div class="step" onclick="openModal(2)">2</div>
-        <div class="step" onclick="openModal(3)">3</div>
+    <!-- Roadmap de Integração -->
+    <section class="roadmap-container">
+        <h2>Roadmap de Integração Shopify + BytePay</h2>
+        <div class="roadmap-steps">
+            <div class="step" onclick="openModal(1)">
+                <h3>Fase 1</h3>
+                <p>Configuração da Shopify</p>
+            </div>
+            <div class="step" onclick="openModal(2)">
+                <h3>Fase 2</h3>
+                <p>Configuração da BytePayCash</p>
+            </div>
+            <div class="step" onclick="openModal(3)">
+                <h3>Fase 3</h3>
+                <p>Configuração da BytePayCheckout</p>
+            </div>
+            <div class="step" onclick="openModal(4)">
+                <h3>Fase 4</h3>
+                <p>Integração Shopify + BytePay</p>
+            </div>
+        </div>
     </section>
-    
+
+    <!-- Modais com os detalhes de cada fase -->
     <div id="modal1" class="modal">
-        <p>Passo 1: Configuração Inicial</p>
+        <h2>Fase 1: Configuração da Shopify</h2>
+        <ul>
+            <li><strong>Criar Conta na Shopify:</strong> Acesse <a href="https://www.shopify.com" target="_blank">www.shopify.com</a> e crie uma conta.</li>
+            <li><strong>Criar um App de Desenvolvedor:</strong> Acesse "Configurações" > "Apps e canais de vendas" e crie um novo app com todas as permissões.</li>
+            <li><strong>Instalar o Tema Sabino:</strong> Acesse "Loja Virtual" > "Temas" e faça o upload do arquivo <code>sabinonichado.zip</code>.</li>
+        </ul>
         <button onclick="closeModal(1)">Fechar</button>
     </div>
     <div id="modal2" class="modal">
-        <p>Passo 2: Configuração de Pagamentos</p>
+        <h2>Fase 2: Configuração da BytePayCash</h2>
+        <ul>
+            <li><strong>Criar Conta na BytePayCash:</strong> Acesse <a href="https://www.bytepaycash.com" target="_blank">www.bytepaycash.com</a> e crie uma conta.</li>
+            <li><strong>Confirmar a Conta:</strong> Siga as instruções de confirmação enviadas por e-mail.</li>
+            <li><strong>Pegar o Token:</strong> Após a confirmação, guarde o token gerado.</li>
+        </ul>
         <button onclick="closeModal(2)">Fechar</button>
     </div>
     <div id="modal3" class="modal">
-        <p>Passo 3: Lançamento da Loja</p>
+        <h2>Fase 3: Configuração da BytePayCheckout</h2>
+        <ul>
+            <li><strong>Criar Conta na BytePayCheckout:</strong> Acesse <a href="https://www.bytepaycheckout.com" target="_blank">www.bytepaycheckout.com</a> e crie uma conta com o mesmo e-mail da BytePayCash.</li>
+            <li><strong>Configurar o Adquirente:</strong> Adicione o e-mail e insira o token da BytePayCash.</li>
+        </ul>
         <button onclick="closeModal(3)">Fechar</button>
     </div>
+    <div id="modal4" class="modal">
+        <h2>Fase 4: Integração Shopify + BytePay</h2>
+        <ul>
+            <li><strong>Configurar Integração:</strong> Após configurar o adquirente, preencha o domínio gratuito da Shopify e o token do APP criado ("shpat...").</li>
+            <li><strong>Testar Pagamentos:</strong> Realize testes para validar a operação.</li>
+            <li><strong>🚀 Finalizar e testar a integração!</strong></li>
+        </ul>
+        <button onclick="closeModal(4)">Fechar</button>
+    </div>
+
+    <script>
+        function openModal(step) {
+            document.getElementById('modal' + step).style.display = 'block';
+        }
+        function closeModal(step) {
+            document.getElementById('modal' + step).style.display = 'none';
+        }
+    </script>
 
     <!-- Rodapé -->
     <footer>
