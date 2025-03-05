@@ -210,6 +210,42 @@
                 max-width: 300px;
             }
         }
+        .map-container {
+            text-align: center;
+            padding: 50px;
+            background: #222;
+        }
+        .step {
+            display: inline-block;
+            margin: 20px;
+            padding: 20px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .step:hover {
+            transform: scale(1.1);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .modal button {
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -268,6 +304,26 @@
             </div>
         </div>
     </section>
+
+        <section class="map-container">
+        <h2>Mapa do Tesouro</h2>
+        <div class="step" onclick="openModal(1)">1</div>
+        <div class="step" onclick="openModal(2)">2</div>
+        <div class="step" onclick="openModal(3)">3</div>
+    </section>
+    
+    <div id="modal1" class="modal">
+        <p>Passo 1: Configuração Inicial</p>
+        <button onclick="closeModal(1)">Fechar</button>
+    </div>
+    <div id="modal2" class="modal">
+        <p>Passo 2: Configuração de Pagamentos</p>
+        <button onclick="closeModal(2)">Fechar</button>
+    </div>
+    <div id="modal3" class="modal">
+        <p>Passo 3: Lançamento da Loja</p>
+        <button onclick="closeModal(3)">Fechar</button>
+    </div>
 
     <!-- Rodapé -->
     <footer>
